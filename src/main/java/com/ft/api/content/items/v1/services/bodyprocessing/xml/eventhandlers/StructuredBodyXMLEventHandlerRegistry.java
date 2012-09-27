@@ -1,0 +1,81 @@
+package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
+
+import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
+
+
+public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegistry {
+
+	public StructuredBodyXMLEventHandlerRegistry() {
+		//default is to skip events - any start or end tags not configured below will be excluded, as will comments
+		super.registerDefaultEventHandler(new StripXMLEventHandler());
+		//tags to include
+		super.registerStartAndEndElementEventHandler(new RetainWithoutAttributesXMLEventHandler(), 
+				"h1","h2", "h3", "h4", "h5", "h6",
+				"ol", "ul", "li",
+				"p",
+				"br", "strong", "em", "small", "sub", "sup",
+				"itemBody"); // itemBody included as it will be a root node wrapping the body text so that the xml being written out is valid
+		
+		// to be retained with attributes
+		super.registerStartAndEndElementEventHandler(new SlideshowAssetXMLEventHandler(new LinkTagXMLEventHandler()), "a");
+		super.registerStartAndEndElementEventHandler(new VideoAssetXMLEventHandler(new StripElementAndContentsXMLEventHandler()), "videoPlayer");
+		super.registerStartAndEndElementEventHandler(new ImageRetainWithSpecificAttributesXMLEventHandler(), "img");
+		super.registerStartAndEndElementEventHandler(new PullQuoteXMLEventHandler(new PullQuoteXMLParser(), new AsideElementWriter(), new StAXTransformingBodyProcessor(this)), "web-pull-quote");
+
+		// to be transformed
+		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-underlined"), "u");
+		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-bold"), "b");
+		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-italic"), "i");
+		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("h3",   "class", "ft-subhead"),    "subhead");
+		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("p",    "class", "ft-tagline"),    "tagline");
+		super.registerStartAndEndElementEventHandler(new ImageTransformXMLEventHandler("img", "class", "ft-web-inline-picture"), "web-inline-picture");
+		
+		//html5 tags to remove with all contents
+		super.registerStartElementEventHandler(new StripElementAndContentsXMLEventHandler(), 
+				"applet", "audio", 
+				"base", "basefont", "button", 
+				"canvas", "col", "colgroup", "command", 
+				"datalist", "del", "dir", 
+				"embed", 
+				"fieldset", "form", "frame", "frameset", 
+				"head", 
+				"iframe", "input", 
+				"keygen", 
+				"label", "legend", "link", 
+				"map", "menu", "meta", 
+				"nav", "noframes", "noscript", 
+				"object", "optgroup", 
+				"option", "output", 
+				"param", "progress", 
+				"rp", "rt", "ruby", 
+				"script", "select", "source", "style", 
+				"table", "tbody", "td", "textarea", "tfoot", "th", "thead", "tr", "track", 
+				"video", 
+				"wbr");
+		
+		super.registerStartElementEventHandler(new InlineMediaAssetXMLEventHandler(new StripElementAndContentsXMLEventHandler()), "inlineDwc");
+		
+		//xml elements to remove with all contents
+		super.registerStartElementEventHandler(new StripElementAndContentsXMLEventHandler(), 
+				"byline", 
+				"editor-choice", 
+				"headline", 
+				"interactive-chart", 
+				"lead-body", "lead-text", "ln", 
+				"photo", "photo-caption", "photo-group", 
+				"promo-box", "promo-headline", "promo-image", "promo-intro", "promo-link", "promo-title", "promobox-body", 
+				"pull-quote", "pull-quote-header", "pull-quote-text", 
+				"readthrough", 
+				"short-body", "skybox-body", "stories", "story", "strap",
+				"videoObject",
+				"web-alt-picture", "web-background-news-header", "web-background-news-text", "web-background-news", 
+				"web-picture", "web-pull-quote-source", "web-pull-quote-text",
+				"web-skybox-picture", "web-subhead", 
+				"web-table", "web-thumbnail", 
+				"xref", "xrefs");
+		// characters (i.e. normal text) will be output
+		super.registerCharactersEventHandler(new RetainXMLEventHandler());
+		
+	}
+
+}
