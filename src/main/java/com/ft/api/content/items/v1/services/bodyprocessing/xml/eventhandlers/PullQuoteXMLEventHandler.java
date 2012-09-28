@@ -33,8 +33,6 @@ public class PullQuoteXMLEventHandler extends BaseXMLEventHandler {
         this.pullQuoteXMLParser = pullQuoteXMLParser;
         this.asideElementWriter = asideElementWriter;
         this.stAXTransformingBodyProcessor = stAXTransformingBodyProcessor;
-        
-        // TODO : notNull checks
     }
 
     @Override
@@ -80,7 +78,7 @@ public class PullQuoteXMLEventHandler extends BaseXMLEventHandler {
         if (!StringUtils.isBlank(unprocessedContent)) {
             return stAXTransformingBodyProcessor.process(unprocessedContent, bodyProcessingContext);
         }
-        return StringUtils.EMPTY;
+        return null;
     }
 
     public boolean isAssetWebPullQuote(StartElement event) {
