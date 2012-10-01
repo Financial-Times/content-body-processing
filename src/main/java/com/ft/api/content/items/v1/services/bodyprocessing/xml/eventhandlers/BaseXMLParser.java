@@ -19,19 +19,23 @@ public abstract class BaseXMLParser<T> {
     public T parseElementData(XMLEventReader xmlEventReader) throws XMLStreamException {
         T dataBean = createDataBeanInstance();
         
-        while (xmlEventReader.hasNext()) {
-            XMLEvent nextEvent = xmlEventReader.nextEvent();
-            
-            if(nextEvent.isStartElement()) {
-                StartElement nextStartElement = nextEvent.asStartElement();
-                populateBeanUsingStartElement(dataBean, nextStartElement, xmlEventReader);
+        try {
+            while (xmlEventReader.hasNext()) {
+                XMLEvent nextEvent = xmlEventReader.nextEvent();
                 
-            } else if(nextEvent.isEndElement()) {
-                // Check if it's the closing element of the start element, in which case exit as we should not continue to parse beyond this element.
-                if(isElementNamed(nextEvent.asEndElement().getName(), startElementName)) {
-                    break;
+                if(nextEvent.isStartElement()) {
+                    StartElement nextStartElement = nextEvent.asStartElement();
+                    populateBean(dataBean, nextStartElement, xmlEventReader);
+                } else if(nextEvent.isEndElement()) {
+                    // Check if it's the closing element of the start element, in which case exit as we should not continue to parse beyond this element.
+                    if(isElementNamed(nextEvent.asEndElement().getName(), startElementName)) {
+                        break;
+                    }
                 }
             }
+        } catch (UnexpectedElementStructureException e) {
+            // Ensure that the bean returned is not valid for processing.
+            return createDataBeanInstance();
         }
         return dataBean;
     }
@@ -39,8 +43,8 @@ public abstract class BaseXMLParser<T> {
     abstract T createDataBeanInstance();
 
     protected boolean isElementNamed(QName elementName, String nameToMatch) {
-        return elementName.getLocalPart().toLowerCase().equals(nameToMatch);
+        return elementName.getLocalPart().toLowerCase().equals(nameToMatch.toLowerCase());
     }
-    //TODO: add Throws checked exception for flow/element order issues
-    abstract void populateBeanUsingStartElement(T dataBean, StartElement nextStartElement, XMLEventReader xmlEventReader);
+
+    abstract void populateBean(T dataBean, StartElement nextStartElement, XMLEventReader xmlEventReader) throws UnexpectedElementStructureException;
 }

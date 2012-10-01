@@ -5,8 +5,13 @@ import java.net.URL;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
 
@@ -15,15 +20,15 @@ public class InteractiveGraphicXMLParser extends BaseXMLParser<InteractiveGraphi
 
     private static final String VALID_ID_PREFIX = "ig";
     private static final String SCRIPT_ATTRIBUTE_SRC = "src";
-    private static final String SCRIPT_ELEMENT = "script";
+    private static final String SCRIPT = "script";
     private static final String DIV_ATTRIBUTE_ID = "id";
-    private static final String DIV_ELEMENT = "div";
-    private static final String PLAIN_HTML_ELEMENT = "plainHtml";
+    private static final String DIV = "div";
+    private static final String PLAIN_HTML = "plainHtml";
     private static final String VALID_DATA_ACCESS_TYPE = "interactive-graphic";
     private final QName scriptDataAccessTypeAttribute = new QName("data-asset-type");
 
     protected InteractiveGraphicXMLParser() {
-        super(PLAIN_HTML_ELEMENT);
+        super(PLAIN_HTML);
     }
     
     @Override
@@ -37,19 +42,65 @@ public class InteractiveGraphicXMLParser extends BaseXMLParser<InteractiveGraphi
     }
 
     @Override
-    void populateBeanUsingStartElement(InteractiveGraphicData interactiveGraphicData, StartElement nextStartElement,
+    void populateBean(InteractiveGraphicData interactiveGraphicData, StartElement startElement,
             XMLEventReader xmlEventReader) {
-        // look for a div or a script start element
-        if (isElementNamed(nextStartElement.getName(), DIV_ELEMENT)) {
-            String id = nextStartElement.getAttributeByName(new QName(DIV_ATTRIBUTE_ID)).getValue();
+        
+        QName elementName = startElement.getName();
+        if(isElementNamed(elementName, PLAIN_HTML)) {
+            enforceStrictElementStructure(true, DIV, xmlEventReader);
+        } 
+        else if (isElementNamed(elementName, DIV)) {
+            String id = parseAttribute(DIV_ATTRIBUTE_ID, startElement);
             interactiveGraphicData.setId(extractId(id));
-        }
-        if (isElementNamed(nextStartElement.getName(), SCRIPT_ELEMENT)) {
-            if (isScriptCorrectType(nextStartElement)) {
-                String src = nextStartElement.getAttributeByName(new QName(SCRIPT_ATTRIBUTE_SRC)).getValue();
+            enforceStrictElementStructure(true, SCRIPT, xmlEventReader);
+        } 
+        else if (isElementNamed(elementName, SCRIPT)) {
+            if (isScriptCorrectType(startElement)) {
+                String src = parseAttribute(SCRIPT_ATTRIBUTE_SRC, startElement);
                 interactiveGraphicData.setSrc(extractSrc(src));
+                enforceStrictElementStructure(false, SCRIPT, xmlEventReader);
             }
+        } // check if the end element has been reached
+        else if(!isElementNamed(elementName, PLAIN_HTML)) {
+            // otherwise throw an exception since it's not an element that's expected for Interactive Graphics
+            throw new UnexpectedElementStructureException(String.format("Found unsupported element [%s] while parsing the Interactive Graphic element", elementName));
         }
+    }
+
+    private void enforceStrictElementStructure(boolean isStartElementExpected, String expectedElementName, XMLEventReader xmlEventReader) {
+       XMLEvent xmlEvent = peekNextElement(xmlEventReader);
+       if(isStartElementExpected && xmlEvent.isStartElement()) {
+           StartElement startElement = xmlEvent.asStartElement();
+           validateElementName(expectedElementName, startElement.getName());
+       } else if(!isStartElementExpected && xmlEvent.isEndElement()) {
+           EndElement endtElement = xmlEvent.asEndElement();
+           validateElementName(expectedElementName, endtElement.getName());
+       } else {
+           throw new UnexpectedElementStructureException(String.format("Found unsupported element while parsing the Interactive Graphic element"));
+       }
+        
+    }
+
+    private void validateElementName(String expectedElementName, QName actualElementName) {
+       if(!isElementNamed(actualElementName, expectedElementName)) {
+           throw new UnexpectedElementStructureException(String.format("Found unsupported element while parsing the Interactive Graphic element Expected[%s] Actual[%s]", expectedElementName, actualElementName.getLocalPart().toString()));
+       }
+    }
+
+    private XMLEvent peekNextElement(XMLEventReader xmlEventReader) {
+        try {
+            return xmlEventReader.peek();
+        } catch (XMLStreamException e) {
+           throw new UnexpectedElementStructureException(e.getMessage());
+        }
+    }
+
+    private String parseAttribute(String attributeName, StartElement startElement) {
+      Attribute attributeValue = startElement.getAttributeByName(new QName(attributeName));
+      if(attributeValue == null || StringUtils.isBlank(attributeValue.getValue())) {
+          throw new UnexpectedElementStructureException(String.format("Failed to parse attribute [%s]", attributeName));
+      }
+      return attributeValue.getValue();
     }
 
     /**
