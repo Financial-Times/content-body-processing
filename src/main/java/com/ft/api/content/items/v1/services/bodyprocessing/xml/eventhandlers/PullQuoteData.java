@@ -6,11 +6,10 @@ import com.ft.unifiedContentModel.model.Asset;
 import com.ft.unifiedContentModel.model.PullQuote;
 import com.ft.unifiedContentModel.model.PullQuoteFields;
 
-public class PullQuoteData implements AssetAware {
+public class PullQuoteData extends BaseData implements AssetAware {
 
-    // Initialised with null values
-    private String quoteText = null;
-    private String quoteSource = null;
+    private String quoteText;
+    private String quoteSource;
 
     public String getQuoteText() {
         return quoteText;
@@ -38,7 +37,7 @@ public class PullQuoteData implements AssetAware {
        PullQuote pullQuote = null;
        if(this.isOkToRender()) {
            pullQuote = new PullQuote();
-           PullQuoteFields fields = new PullQuoteFields(this.quoteText, this.quoteSource);
+           PullQuoteFields fields = new PullQuoteFields(nullIfEmpty(this.quoteText), nullIfEmpty(this.quoteSource));
            pullQuote.setFields(fields);
            return pullQuote;
        }

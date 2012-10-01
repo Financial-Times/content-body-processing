@@ -6,7 +6,7 @@ import com.ft.unifiedContentModel.model.Asset;
 import com.ft.unifiedContentModel.model.InteractiveGraphic;
 import com.ft.unifiedContentModel.model.InteractiveGraphicFields;
 
-public class InteractiveGraphicData implements AssetAware {
+public class InteractiveGraphicData extends BaseData implements AssetAware {
 
     private String id;
     private String src;
@@ -36,7 +36,7 @@ public class InteractiveGraphicData implements AssetAware {
         InteractiveGraphic interactiveGraphic = null;
         if(this.isOkToRender()) {
             interactiveGraphic = new InteractiveGraphic();
-            InteractiveGraphicFields fields = new InteractiveGraphicFields(this.src, this.id);
+            InteractiveGraphicFields fields = new InteractiveGraphicFields(nullIfEmpty(this.src), nullIfEmpty(this.id));
             interactiveGraphic.setFields(fields);
             return interactiveGraphic;
         }
