@@ -4,19 +4,12 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
-import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
-import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
-import com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.AsideElementWriter;
-import com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.PullQuoteData;
-import com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.PullQuoteXMLEventHandler;
-import com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.PullQuoteXMLParser;
-import com.ft.unifiedContentModel.model.Asset;
-import com.ft.unifiedContentModel.model.PullQuote;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
+
 import org.codehaus.stax2.XMLEventReader2;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +17,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
+import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
+import com.ft.unifiedContentModel.model.Asset;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
@@ -38,14 +36,11 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
     @Mock private StAXTransformingBodyProcessor mockStAXTransformingBodyProcessor;
     
     private StartElement startElement;
-
     private PullQuoteXMLEventHandler pullQuoteXMLEventHandler;
     
     @Before
     public void setup() {
-        pullQuoteXMLEventHandler = new PullQuoteXMLEventHandler(mockPullQuoteXMLParser, 
-                                                                mockAsideElementWriter,
-                                                                mockStAXTransformingBodyProcessor);
+        pullQuoteXMLEventHandler = new PullQuoteXMLEventHandler(mockPullQuoteXMLParser, mockAsideElementWriter);
     }
 
     @Test(expected=XMLStreamException.class)
@@ -63,13 +58,14 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
         when(mockPullQuoteXMLParser.parseElementData(mockXmlEventReader)).thenReturn(mockPullQuoteData);
         when(mockStAXTransformingBodyProcessor.process(Mockito.anyString(), Mockito.eq(mockBodyProcessingContext))).thenReturn("some content");
         when(mockPullQuoteData.isOkToRender()).thenReturn(true);
+        when(mockPullQuoteData.getAsset()).thenReturn(mockAsset);
         when(mockAsset.getName()).thenReturn(elementName);
-        when(mockBodyProcessingContext.addAsset(Mockito.isA(PullQuote.class))).thenReturn(mockAsset);
+        when(mockBodyProcessingContext.addAsset(Mockito.isA(Asset.class))).thenReturn(mockAsset);
         
         pullQuoteXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
         verify(mockAsideElementWriter).writeAsideElement(mockEventWriter, elementName, "pullquote", true);
-        
+        verify(mockPullQuoteXMLParser).transformFieldContentToStructuredFormat(mockPullQuoteData, mockBodyProcessingContext);
     }
    
    @Test
@@ -86,6 +82,7 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
        pullQuoteXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
        verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "pullquote", true);
+       verify(mockPullQuoteXMLParser, never()).transformFieldContentToStructuredFormat(mockPullQuoteData, mockBodyProcessingContext);
    }
    
    @Test
@@ -106,21 +103,17 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
        pullQuoteXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
        verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "pullquote", true);
-       verify(mockStAXTransformingBodyProcessor).process(quoteText, mockBodyProcessingContext);
+       verify(mockStAXTransformingBodyProcessor, never()).process(quoteText, mockBodyProcessingContext);
+       verify(mockPullQuoteXMLParser, never()).transformFieldContentToStructuredFormat(mockPullQuoteData, mockBodyProcessingContext);
    }
    
    @Test(expected = IllegalArgumentException.class) 
    public void testWithNullPullQuoteXMLParser() {
-       new PullQuoteXMLEventHandler(null, mockAsideElementWriter, mockStAXTransformingBodyProcessor);
+       new PullQuoteXMLEventHandler(null, mockAsideElementWriter);
    }
    
    @Test(expected = IllegalArgumentException.class) 
    public void testWithNullAsideElementWriter() {
-       new PullQuoteXMLEventHandler(mockPullQuoteXMLParser, null, mockStAXTransformingBodyProcessor);
-   }
-   
-   @Test(expected = IllegalArgumentException.class) 
-   public void testWithNullStAXTransformingBodyProcessor() {
-       new PullQuoteXMLEventHandler(mockPullQuoteXMLParser, mockAsideElementWriter, null);
+       new PullQuoteXMLEventHandler(mockPullQuoteXMLParser, null);
    }
 }

@@ -20,8 +20,9 @@ public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegist
 		super.registerStartAndEndElementEventHandler(new SlideshowAssetXMLEventHandler(new LinkTagXMLEventHandler()), "a");
 		super.registerStartAndEndElementEventHandler(new VideoAssetXMLEventHandler(new StripElementAndContentsXMLEventHandler()), "videoPlayer");
 		super.registerStartAndEndElementEventHandler(new ImageRetainWithSpecificAttributesXMLEventHandler(), "img");
-		super.registerStartAndEndElementEventHandler(new PullQuoteXMLEventHandler(new PullQuoteXMLParser(), new AsideElementWriter(), new StAXTransformingBodyProcessor(this)), "web-pull-quote");
-
+		super.registerStartAndEndElementEventHandler(new PullQuoteXMLEventHandler(new PullQuoteXMLParser(new StAXTransformingBodyProcessor(this)), new AsideElementWriter()), "web-pull-quote");
+		super.registerStartAndEndElementEventHandler(new InteractiveGraphicXMLEventHandler(new InteractiveGraphicXMLParser(), new AsideElementWriter()), "plainHtml");
+		
 		// to be transformed
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-underlined"), "u");
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-bold"), "b");

@@ -1,49 +1,66 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
-import javax.xml.namespace.QName;
+import static org.springframework.util.Assert.notNull;
+
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
-import javax.xml.stream.events.XMLEvent;
 
-public class PullQuoteXMLParser {
+import org.apache.commons.lang.StringUtils;
+
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
+
+public class PullQuoteXMLParser extends BaseXMLParser<PullQuoteData> implements XmlParser<PullQuoteData> {
 
     private static final String QUOTE_SOURCE = "web-pull-quote-source";
     private static final String QUOTE_TEXT = "web-pull-quote-text";
     private static final String PULL_QUOTE = "web-pull-quote";
     private ElementRawDataParser rawDataParser = new ElementRawDataParser();
+    private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
 
-    public PullQuoteData parseElementData(XMLEventReader xmlEventReader) throws XMLStreamException {
-        PullQuoteData pullQuoteData = new PullQuoteData();
-        
-        while (xmlEventReader.hasNext()) {
-            XMLEvent nextEvent = xmlEventReader.nextEvent();
-            
-            if(nextEvent.isStartElement()) {
-                StartElement nextStartElement = nextEvent.asStartElement();
-                populateBeanWithStartElement(pullQuoteData, nextStartElement, xmlEventReader);
-                
-            } else if(nextEvent.isEndElement()) {
-                // Check if it's the closing element of the web-pull-quote, in which case exit as we should not continue to parse beyond this element.
-                if(isElementNamed(nextEvent.asEndElement().getName(), PULL_QUOTE)) {
-                    break;
-                }
-            }
-        }
-        return pullQuoteData;
+    public PullQuoteXMLParser(StAXTransformingBodyProcessor stAXTransformingBodyProcessor) {
+        super(PULL_QUOTE);
+        notNull(stAXTransformingBodyProcessor, "The StAXTransformingBodyProcessor cannot be null.");
+        this.stAXTransformingBodyProcessor = stAXTransformingBodyProcessor;
     }
 
-    private void populateBeanWithStartElement(PullQuoteData pullQuoteData, StartElement nextStartElement, XMLEventReader xmlEventReader) throws XMLStreamException {
+    @Override
+    public void transformFieldContentToStructuredFormat(PullQuoteData pullQuoteData, BodyProcessingContext bodyProcessingContext) {
+        pullQuoteData.setQuoteText(transformRawContentToStructuredFormat(pullQuoteData.getQuoteText(), bodyProcessingContext));
+        pullQuoteData.setQuoteSource(transformRawContentToStructuredFormat(pullQuoteData.getQuoteSource(), bodyProcessingContext));
+    }
+
+    @Override
+    protected PullQuoteData createDataBeanInstance() {
+        return new PullQuoteData();
+    }
+
+    private String transformRawContentToStructuredFormat(String unprocessedContent, BodyProcessingContext bodyProcessingContext) {
+        if (!StringUtils.isBlank(unprocessedContent)) {
+            return stAXTransformingBodyProcessor.process(unprocessedContent, bodyProcessingContext);
+        }
+        return null;
+    }
+
+    @Override
+    protected void populateBeanUsingStartElement(PullQuoteData pullQuoteData, StartElement nextStartElement,
+            XMLEventReader xmlEventReader) {
         // look for either web-pull-quote-text or web-pull-quote-source
-        if(isElementNamed(nextStartElement.getName(), QUOTE_TEXT)) {
-            pullQuoteData.setQuoteText(rawDataParser.parse(QUOTE_TEXT, xmlEventReader));
+        if (isElementNamed(nextStartElement.getName(), QUOTE_TEXT)) {
+            pullQuoteData.setQuoteText(parseRawContent(QUOTE_TEXT, xmlEventReader));
         }
-        if(isElementNamed(nextStartElement.getName(), QUOTE_SOURCE)) {
-            pullQuoteData.setQuoteSource(rawDataParser.parse(QUOTE_SOURCE, xmlEventReader));
+        if (isElementNamed(nextStartElement.getName(), QUOTE_SOURCE)) {
+            pullQuoteData.setQuoteSource(parseRawContent(QUOTE_SOURCE, xmlEventReader));
         }
     }
 
-    private boolean isElementNamed(QName elementName, String nameToMatch) {
-        return elementName.getLocalPart().toLowerCase().equals(nameToMatch);
+    private String parseRawContent(String elementName, XMLEventReader xmlEventReader) {
+        try {
+            return rawDataParser.parse(elementName, xmlEventReader);
+        } catch (XMLStreamException e) {
+            return null;
+        }
     }
+
 }
