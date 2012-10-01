@@ -2,6 +2,7 @@ package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Assert;
@@ -65,5 +66,18 @@ public class PullQuoteDataTest {
     @Test(expected = IllegalStateException.class)
     public void testGetAssetWhenNotOkToRender() {
         pullQuoteData.getAsset();
+    }
+    
+    @Test
+    public void testEmptyFieldsAreNull() {
+        pullQuoteData.setQuoteSource("");
+        pullQuoteData.setQuoteText(" ");
+        Asset actualAsset = pullQuoteData.getAsset();
+        assertNotNull("The asset should not be null.", actualAsset);
+        
+        PullQuoteFields actualFields = ((PullQuote)actualAsset).getFields();
+        assertNotNull("The fields should not be null.", actualFields);
+        assertNull("The attribution was not as expected.", actualFields.getAttribution());
+        assertNull("The body was not as expected.", actualFields.getBody());
     }
 }
