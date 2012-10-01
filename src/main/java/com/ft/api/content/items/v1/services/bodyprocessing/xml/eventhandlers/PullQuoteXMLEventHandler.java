@@ -10,7 +10,7 @@ import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext
 public class PullQuoteXMLEventHandler extends AsideBaseXMLEventHandler<PullQuoteData> {
 
     private static final String WEB_PULL_QUOTE_ELEMENT_NAME = "web-pull-quote";
-    private static final String WEB_PULL_QUOTE_TYPE = "pullquote";
+    private static final String WEB_PULL_QUOTE_TYPE = "pullQuote";
 
     private XmlParser<PullQuoteData> pullQuoteXMLParser;
 
