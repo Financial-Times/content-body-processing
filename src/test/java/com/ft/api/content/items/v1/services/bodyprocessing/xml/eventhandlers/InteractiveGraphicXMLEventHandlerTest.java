@@ -37,23 +37,22 @@ public class InteractiveGraphicXMLEventHandlerTest extends BaseXMLEventHandlerTe
     
     private StartElement startElement;
     private InteractiveGraphicXMLEventHandler interactiveGraphicXMLEventHandler;
+    private String elementName = "someElementName";
     
     @Before
-    public void setup() {
+    public void setup() throws XMLStreamException {
         interactiveGraphicXMLEventHandler = new InteractiveGraphicXMLEventHandler(mockInteractiveGraphicXMLParser, mockAsideElementWriter);
+        when(mockInteractiveGraphicXMLParser.parseElementData(mockXmlEventReader)).thenReturn(mockInteractiveGraphicData);
+        when(mockAsset.getName()).thenReturn(elementName);
     }
     
     @Test
     public void shouldPassStartElementIfValidTag() throws XMLStreamException{
-        String elementName = "asset1";
         Map<String,String> attributes =  new HashMap<String,String>();
         startElement = getStartElementWithAttributes("plainHtml", attributes);
         
-        when(mockInteractiveGraphicXMLParser.parseElementData(mockXmlEventReader)).thenReturn(mockInteractiveGraphicData);
-        when(mockStAXTransformingBodyProcessor.process(Mockito.anyString(), Mockito.eq(mockBodyProcessingContext))).thenReturn("some content");
         when(mockInteractiveGraphicData.isOkToRender()).thenReturn(true);
         when(mockInteractiveGraphicData.getAsset()).thenReturn(mockAsset);
-        when(mockAsset.getName()).thenReturn(elementName);
         when(mockBodyProcessingContext.addAsset(Mockito.isA(Asset.class))).thenReturn(mockAsset);
         
         interactiveGraphicXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
@@ -64,14 +63,11 @@ public class InteractiveGraphicXMLEventHandlerTest extends BaseXMLEventHandlerTe
     
     @Test
     public void shouldNotWriteTheAsideTag() throws XMLStreamException {
-        String elementName = "someElementName";
+        
         Map<String,String> attributes =  new HashMap<String,String>();
         startElement = getStartElementWithAttributes("plainHtml", attributes);
         
-        when(mockInteractiveGraphicXMLParser.parseElementData(mockXmlEventReader)).thenReturn(mockInteractiveGraphicData);
-        when(mockStAXTransformingBodyProcessor.process(Mockito.anyString(), Mockito.eq(mockBodyProcessingContext))).thenReturn("some content");
         when(mockInteractiveGraphicData.isOkToRender()).thenReturn(false);
-        when(mockAsset.getName()).thenReturn(elementName);
         
         interactiveGraphicXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
@@ -85,14 +81,10 @@ public class InteractiveGraphicXMLEventHandlerTest extends BaseXMLEventHandlerTe
         Map<String,String> attributes =  new HashMap<String,String>();
         startElement = getStartElementWithAttributes("plainHtml", attributes);
         
-        when(mockInteractiveGraphicXMLParser.parseElementData(mockXmlEventReader)).thenReturn(mockInteractiveGraphicData);
-        when(mockStAXTransformingBodyProcessor.process(Mockito.anyString(), Mockito.eq(mockBodyProcessingContext))).thenReturn("some content");
-        
         when(mockInteractiveGraphicData.getId()).thenReturn(null);
         String srcText = "some text";
         when(mockInteractiveGraphicData.getSrc()).thenReturn(srcText);
         when(mockInteractiveGraphicData.isOkToRender()).thenReturn(false);
-        when(mockAsset.getName()).thenReturn(elementName);
         
         interactiveGraphicXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 

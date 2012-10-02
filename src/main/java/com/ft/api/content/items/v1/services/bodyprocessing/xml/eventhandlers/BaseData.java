@@ -8,7 +8,7 @@ public abstract class BaseData {
         if(StringUtils.isBlank(value)) {
             return null;
         }
-        return value;
+        return value.trim();
     }
 
 }

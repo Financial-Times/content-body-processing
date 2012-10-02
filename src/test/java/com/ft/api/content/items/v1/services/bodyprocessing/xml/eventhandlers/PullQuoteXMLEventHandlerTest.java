@@ -39,8 +39,9 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
     private PullQuoteXMLEventHandler pullQuoteXMLEventHandler;
     
     @Before
-    public void setup() {
+    public void setup() throws XMLStreamException {
         pullQuoteXMLEventHandler = new PullQuoteXMLEventHandler(mockPullQuoteXMLParser, mockAsideElementWriter);
+        when(mockPullQuoteXMLParser.parseElementData(mockXmlEventReader)).thenReturn(mockPullQuoteData);
     }
 
     @Test(expected=XMLStreamException.class)
@@ -55,8 +56,6 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
         Map<String,String> attributes =  new HashMap<String,String>();
         startElement = getStartElementWithAttributes("web-pull-quote", attributes);
         
-        when(mockPullQuoteXMLParser.parseElementData(mockXmlEventReader)).thenReturn(mockPullQuoteData);
-        when(mockStAXTransformingBodyProcessor.process(Mockito.anyString(), Mockito.eq(mockBodyProcessingContext))).thenReturn("some content");
         when(mockPullQuoteData.isOkToRender()).thenReturn(true);
         when(mockPullQuoteData.getAsset()).thenReturn(mockAsset);
         when(mockAsset.getName()).thenReturn(elementName);
@@ -73,9 +72,7 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
        String elementName = "someElementName";
        Map<String,String> attributes =  new HashMap<String,String>();
        startElement = getStartElementWithAttributes("web-pull-quote", attributes);
-       
-       when(mockPullQuoteXMLParser.parseElementData(mockXmlEventReader)).thenReturn(mockPullQuoteData);
-       when(mockStAXTransformingBodyProcessor.process(Mockito.anyString(), Mockito.eq(mockBodyProcessingContext))).thenReturn("some content");
+
        when(mockPullQuoteData.isOkToRender()).thenReturn(false);
        when(mockAsset.getName()).thenReturn(elementName);
        
@@ -90,9 +87,6 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
        String elementName = "someElementName";
        Map<String,String> attributes =  new HashMap<String,String>();
        startElement = getStartElementWithAttributes("web-pull-quote", attributes);
-       
-       when(mockPullQuoteXMLParser.parseElementData(mockXmlEventReader)).thenReturn(mockPullQuoteData);
-       when(mockStAXTransformingBodyProcessor.process(Mockito.anyString(), Mockito.eq(mockBodyProcessingContext))).thenReturn("some content");
        
        when(mockPullQuoteData.getQuoteSource()).thenReturn(null);
        String quoteText = "some text";

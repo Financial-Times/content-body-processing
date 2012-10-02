@@ -63,6 +63,20 @@ public class PullQuoteDataTest {
         Assert.assertEquals("The body was not as expected.", actualFields.getBody(), quoteText);
     }
     
+    @Test
+    public void testGetAssetIsValidNoTrailingSpaces() {
+        pullQuoteData.setQuoteSource(quoteSource.concat(" "));
+        pullQuoteData.setQuoteText(quoteText.concat("      "));
+        Asset actualAsset = pullQuoteData.getAsset();
+        assertNotNull("The asset should not be null.", actualAsset);
+        
+        assertTrue("The asset is not of the expected type.", actualAsset instanceof PullQuote);
+        PullQuoteFields actualFields = ((PullQuote)actualAsset).getFields();
+        assertNotNull("The fields should not be null.", actualFields);
+        Assert.assertEquals("The attribution was not as expected.", actualFields.getAttribution(), quoteSource);
+        Assert.assertEquals("The body was not as expected.", actualFields.getBody(), quoteText);
+    }
+    
     @Test(expected = IllegalStateException.class)
     public void testGetAssetWhenNotOkToRender() {
         pullQuoteData.getAsset();
