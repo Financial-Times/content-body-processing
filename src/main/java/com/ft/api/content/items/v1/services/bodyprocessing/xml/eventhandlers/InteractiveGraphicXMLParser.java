@@ -7,6 +7,7 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
@@ -69,6 +70,12 @@ public class InteractiveGraphicXMLParser extends BaseXMLParser<InteractiveGraphi
 
     private void enforceStrictElementStructure(boolean isStartElementExpected, String expectedElementName, XMLEventReader xmlEventReader) {
        XMLEvent xmlEvent = peekNextElement(xmlEventReader);
+       
+       // Check for spaces, such events should be ignored and not fail the processing of the element
+       if(xmlEvent.isCharacters() && isWhiteSpace(xmlEvent.asCharacters())) {
+           return;
+       }
+       
        if(isStartElementExpected && xmlEvent.isStartElement()) {
            StartElement startElement = xmlEvent.asStartElement();
            validateElementName(expectedElementName, startElement.getName());
@@ -81,6 +88,12 @@ public class InteractiveGraphicXMLParser extends BaseXMLParser<InteractiveGraphi
         
     }
 
+    private boolean isWhiteSpace(Characters characters) {
+        String parsedText = characters.asCharacters().getData();
+        return parsedText.trim().equals(StringUtils.EMPTY);
+    }
+
+    
     private void validateElementName(String expectedElementName, QName actualElementName) {
        if(!isElementNamed(actualElementName, expectedElementName)) {
            throw new UnexpectedElementStructureException(String.format("Found unsupported element while parsing the Interactive Graphic element Expected[%s] Actual[%s]", expectedElementName, actualElementName.getLocalPart().toString()));

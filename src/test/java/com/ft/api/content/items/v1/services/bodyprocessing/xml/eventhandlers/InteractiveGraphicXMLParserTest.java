@@ -29,7 +29,7 @@ public class InteractiveGraphicXMLParserTest {
     private String xmlWithMissingDivId = "<plainHtml><div><script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\"></script></div></plainHtml>";
     private String xmlWithExtraElementsAfterDiv = "<plainHtml><div id=\"ig1234\"><td></td><script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\"></script></div></plainHtml>";
     private String xmlWithExtraElementsAfterPlainHtml = "<plainHtml><td></td><div id=\"ig1234\"><script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\"></script></div></plainHtml>";
-    
+    private String validXmlWithSpaces = "<plainHtml>      <div id=\"ig1234\">   <script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\">   </script> </div> </plainHtml>";
     
     private InteractiveGraphicXMLParser interactiveGraphicXMLParser;
     
@@ -41,6 +41,17 @@ public class InteractiveGraphicXMLParserTest {
     @Test
     public void testParseElementData() throws XMLStreamException {
         xmlEventReader = createReaderForXml(validXml);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(xmlEventReader);
+        
+        assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
+        assertTrue(interactiveGraphicData.isOkToRender());
+        assertEquals("Id was not as expected",EXPECTED_ID, interactiveGraphicData.getId());
+        assertEquals("Src was not as expected", EXPECTED_SRC, interactiveGraphicData.getSrc());
+    }
+    
+    @Test
+    public void testParseElementDataWithSpaces() throws XMLStreamException {
+        xmlEventReader = createReaderForXml(validXmlWithSpaces);
         InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(xmlEventReader);
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
