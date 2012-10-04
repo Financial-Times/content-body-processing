@@ -23,10 +23,10 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
     public void handleStartElementEvent(StartElement event, XMLEventReader xmlEventReader, BodyWriter eventWriter,
             BodyProcessingContext bodyProcessingContext) throws XMLStreamException {
 
-        // Confirm that the startEvent is a pull quote
+        // Confirm that the startEvent is of the correct type
         if (isElementOfCorrectType(event)) {
 
-            // Parse the pull quote data
+            // Parse the xml needed to create a bean
             T dataBean = parseElementData(xmlEventReader);
 
             // Add asset to the context and create the aside element if all required data is present
@@ -45,15 +45,19 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
         }
 
     }
-
+    // Whether the element is nested in a <p> tag that needs a closing </p> tag
     abstract boolean needPTag();
 
+    // Return the name of the start element - the element that the extending class is registered with
     abstract String getElementName();
 
+    // Return the type that will be used to render the aside element
     abstract String getType();
 
+    // Transform the data bean's contents as they can contain html that needs transforming. Any assets as part of the transformation are added to the context
     abstract void transformFieldContentToStructuredFormat(T dataBean, BodyProcessingContext bodyProcessingContext);
 
+    // Parse and populate a data bean
     abstract T parseElementData(XMLEventReader xmlEventReader) throws XMLStreamException;
 
     private String addAssetToContextAndReturnAssetName(BodyProcessingContext bodyProcessingContext, Asset asset) {
