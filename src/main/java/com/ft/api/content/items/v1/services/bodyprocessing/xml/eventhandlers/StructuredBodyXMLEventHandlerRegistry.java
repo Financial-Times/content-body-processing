@@ -22,7 +22,8 @@ public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegist
 		super.registerStartAndEndElementEventHandler(new ImageRetainWithSpecificAttributesXMLEventHandler(), "img");
 		super.registerStartAndEndElementEventHandler(new PullQuoteXMLEventHandler(new PullQuoteXMLParser(new StAXTransformingBodyProcessor(this)), new AsideElementWriter()), "web-pull-quote");
 		super.registerStartAndEndElementEventHandler(new InteractiveGraphicXMLEventHandler(new InteractiveGraphicXMLParser(), new AsideElementWriter()), "plainHtml");
-		
+		super.registerStartAndEndElementEventHandler(new BackgroundNewsXMLEventHandler(new BackgroundNewsXMLParser(new StAXTransformingBodyProcessor(this)), new AsideElementWriter()), "web-background-news");
+
 		// to be transformed
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-underlined"), "u");
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-bold"), "b");
@@ -69,7 +70,7 @@ public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegist
 				"readthrough", 
 				"short-body", "skybox-body", "stories", "story", "strap",
 				"videoObject",
-				"web-alt-picture", "web-background-news-header", "web-background-news-text", "web-background-news", 
+				"web-alt-picture",
 				"web-picture", "web-pull-quote-source", "web-pull-quote-text",
 				"web-skybox-picture", "web-subhead", 
 				"web-table", "web-thumbnail", 

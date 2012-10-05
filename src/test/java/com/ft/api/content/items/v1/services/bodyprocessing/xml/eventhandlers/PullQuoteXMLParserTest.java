@@ -63,7 +63,7 @@ public class PullQuoteXMLParserTest {
         assertEquals("Text was not as expected",EXPECTED_TEXT, pullQuoteData.getQuoteText());
         assertEquals("Source was not as expected", EXPECTED_SOURCE, pullQuoteData.getQuoteSource());
     }
-    
+
     @Test
     public void testParseChildElementDataWithMissingQuoteTextElement() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlMissingQuoteTextElement);

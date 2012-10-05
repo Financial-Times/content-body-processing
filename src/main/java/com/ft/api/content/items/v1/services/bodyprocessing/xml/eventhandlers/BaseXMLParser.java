@@ -1,6 +1,8 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
 import static org.springframework.util.Assert.notNull;
+
+import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
@@ -10,8 +12,9 @@ import javax.xml.stream.events.XMLEvent;
 public abstract class BaseXMLParser<T> {
     
     private String startElementName;
+	public StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
 
-    protected BaseXMLParser(String startElementName) {
+	protected BaseXMLParser(String startElementName) {
         notNull(startElementName, "The startElementName cannot be null!");
         this.startElementName = startElementName;
     }
