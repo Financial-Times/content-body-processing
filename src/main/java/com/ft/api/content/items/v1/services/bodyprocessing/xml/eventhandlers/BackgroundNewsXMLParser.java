@@ -15,6 +15,7 @@ public class BackgroundNewsXMLParser extends BaseXMLParser<BackgroundNewsData> i
 	private static final String WEB_BACKGROUND_NEWS_HEADER = "web-background-news-header";
 	private static final String WEB_BACKGROUND_NEWS = "web-background-news";
 	private ElementRawDataParser rawDataParser = new ElementRawDataParser();
+	private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
 
 	public BackgroundNewsXMLParser(StAXTransformingBodyProcessor stAXTransformingBodyProcessor) {
 		 super(WEB_BACKGROUND_NEWS);
