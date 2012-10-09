@@ -26,17 +26,25 @@ public class ElementRawDataParserTest extends BaseXMLParserTest {
     }
 
 	@Test
-	    public void shouldParseElementContentsIncludingRootElement() throws XMLStreamException {
-	        xmlEventReader = createReaderForXml(validXml);
-	        //moveReaderToElement(xmlEventReader, "html");
+    public void shouldParseElementContentsIncludingRootElement() throws XMLStreamException {
+        xmlEventReader = createReaderForXml(validXml);
+        ElementRawDataParser elementRawDataParser = new ElementRawDataParser();
 
-	        ElementRawDataParser elementRawDataParser = new ElementRawDataParser();
+		StartElement startElement = getStartElement(xmlEventReader);
+        String actualRawContent = elementRawDataParser.parse("some-element", xmlEventReader, startElement);
+        Assert.assertEquals(validXml, actualRawContent);
+    }
 
-			StartElement startElement = getStartElement(xmlEventReader);
-	        String actualRawContent = elementRawDataParser.parse("some-element", xmlEventReader, startElement);
-	        Assert.assertEquals(validXml, actualRawContent);
-	    }
+	 @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionWithMismatchStartElementAndEndElementName() throws XMLStreamException {
+        xmlEventReader = createReaderForXml(validXml);
+        ElementRawDataParser elementRawDataParser = new ElementRawDataParser();
 
+        StartElement startElement = getStartElement(xmlEventReader);
+        elementRawDataParser.parse("p", xmlEventReader, startElement);
+    }
+	
+	
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWithMismatchElementName() throws XMLStreamException {
         xmlEventReader = createReaderForXml(validXml);

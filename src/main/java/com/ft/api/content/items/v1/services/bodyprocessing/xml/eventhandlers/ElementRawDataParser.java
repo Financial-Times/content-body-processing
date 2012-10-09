@@ -11,20 +11,32 @@ public class ElementRawDataParser {
 
     /**
      * Extracts the contents of an element until its end element is reached. It assumes that the XMLElementReader is pointing to the start element.
-     * @param elementName
+     * @param endElementName
      * @param xmlEventReader
      * @return
      * @throws XMLStreamException
      */
-    public String parse(String elementName, XMLEventReader xmlEventReader) throws XMLStreamException {
-        return this.parse(elementName, xmlEventReader, null);
+    public String parse(String endElementName, XMLEventReader xmlEventReader) throws XMLStreamException {
+        return this.parse(endElementName, xmlEventReader, null);
     }
 
-	public String parse(String elementName, XMLEventReader xmlEventReader, StartElement startElement) throws XMLStreamException {
+    /**
+     * Parses the contents starting at the next element in the XML Reader until the end tag (endElementName) if found.
+     * Should the end element itself need to be included, the startElement should be provided which is used to wrap the contents and 
+     * an end tag is written to ensure the content parsed is valid XML.
+     * @param endElementName
+     * @param xmlEventReader
+     * @param startElement
+     * @return
+     * @throws XMLStreamException
+     */
+	public String parse(String endElementName, XMLEventReader xmlEventReader, StartElement startElement) throws XMLStreamException {
 		StringWriter writer = new StringWriter();
 		        boolean hasReachedEndElement = false;
-
-				if(startElement != null) {
+		        ensureEndElementNameMatchesStartElement(endElementName, startElement);
+		        
+				// Wrap with start element based on the startElement
+		        if(needsRootElementWrapping(startElement)) {
 					startElement.writeAsEncodedUnicode(writer);
 				}
 
@@ -33,24 +45,43 @@ public class ElementRawDataParser {
 
 		            // Check if the closing element reached
 		            if(childEvent.isEndElement()) {
-		                if(isElementNamed(childEvent.asEndElement().getName(), elementName)) {
+		                if(isElementNamed(childEvent.asEndElement().getName(), endElementName)) {
 		                    hasReachedEndElement = true;
-							if(startElement != null) {
-								childEvent.writeAsEncodedUnicode(writer);
+							
+		                    if(needsRootElementWrapping(startElement)) {
+								// Wrap end element based on the endElement
+		                        childEvent.writeAsEncodedUnicode(writer);
 							}
 		                    continue;
 		                }
 		            }
-
 		            childEvent.writeAsEncodedUnicode(writer);
 		        }
 		        if(!hasReachedEndElement) {
-		            throw new IllegalArgumentException(String.format("Element name mismatch, could not find the end element for %s", elementName));
+		            throw new IllegalArgumentException(String.format("Element name mismatch, could not find the end element for %s", endElementName));
 		        }
 		        return writer.toString();
 	}
 
     
+    private void ensureEndElementNameMatchesStartElement(String endElementName, StartElement startElement) {
+        String startElementName = parseStartElementName(startElement);
+        if(startElementName != null && !startElementName.equals(endElementName.toLowerCase())) {
+            throw new IllegalArgumentException("The endElementName and the StartElement must match!");
+        }
+    }
+
+    private String parseStartElementName(StartElement startElement) {
+        if(startElement !=null) {
+            return  startElement.getName().getLocalPart().toLowerCase();
+        }
+        return null;
+    }
+
+    private boolean needsRootElementWrapping(StartElement startElement) {
+        return startElement != null;
+    }
+
     private boolean isElementNamed(QName elementName, String nameToMatch) {
         return elementName.getLocalPart().toLowerCase().equals(nameToMatch.toLowerCase());
     }
