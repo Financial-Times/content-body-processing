@@ -20,14 +20,14 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
     }
     
     @Override
-    public void handleStartElementEvent(StartElement event, XMLEventReader xmlEventReader, BodyWriter eventWriter,
+    public void handleStartElementEvent(StartElement startElement, XMLEventReader xmlEventReader, BodyWriter eventWriter,
             BodyProcessingContext bodyProcessingContext) throws XMLStreamException {
 
         // Confirm that the startEvent is of the correct type
-        if (isElementOfCorrectType(event)) {
+        if (isElementOfCorrectType(startElement)) {
 
             // Parse the xml needed to create a bean
-            T dataBean = parseElementData(xmlEventReader);
+            T dataBean = parseElementData(startElement, xmlEventReader);
 
             // Add asset to the context and create the aside element if all required data is present
             if (dataBean.isOkToRender()) {
@@ -58,7 +58,7 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
     abstract void transformFieldContentToStructuredFormat(T dataBean, BodyProcessingContext bodyProcessingContext);
 
     // Parse and populate a data bean
-    abstract T parseElementData(XMLEventReader xmlEventReader) throws XMLStreamException;
+    abstract T parseElementData(StartElement startElement, XMLEventReader xmlEventReader) throws XMLStreamException;
 
     private String addAssetToContextAndReturnAssetName(BodyProcessingContext bodyProcessingContext, Asset asset) {
         bodyProcessingContext.addAsset(asset);

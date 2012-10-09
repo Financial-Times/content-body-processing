@@ -41,7 +41,7 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
     @Before
     public void setup() throws XMLStreamException {
         pullQuoteXMLEventHandler = new PullQuoteXMLEventHandler(mockPullQuoteXMLParser, mockAsideElementWriter);
-        when(mockPullQuoteXMLParser.parseElementData(mockXmlEventReader)).thenReturn(mockPullQuoteData);
+        when(mockPullQuoteXMLParser.parseElementData(Mockito.isA(StartElement.class), Mockito.eq(mockXmlEventReader))).thenReturn(mockPullQuoteData);
     }
 
     @Test(expected=XMLStreamException.class)

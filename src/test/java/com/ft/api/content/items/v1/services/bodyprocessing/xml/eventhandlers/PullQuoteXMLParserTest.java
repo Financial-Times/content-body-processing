@@ -7,13 +7,10 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.io.StringReader;
-
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.StartElement;
 
-import org.codehaus.stax2.XMLInputFactory2;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +21,7 @@ import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext
 import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PullQuoteXMLParserTest {
+public class PullQuoteXMLParserTest extends BaseXMLParserTest {
 
     private static final String EXPECTED_SOURCE = "highest rainfall recorded in one hour, Maidenhead, July 12 1901";
     private static final String EXPECTED_TEXT = "<p>92 mm</p>";
@@ -56,7 +53,8 @@ public class PullQuoteXMLParserTest {
     @Test
     public void testParseChildElementData() throws XMLStreamException {
         xmlEventReader = createReaderForXml(validXml);
-        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         
         assertNotNull("PullQuoteData should not be null", pullQuoteData);
         assertTrue(pullQuoteData.isOkToRender());
@@ -67,7 +65,8 @@ public class PullQuoteXMLParserTest {
     @Test
     public void testParseChildElementDataWithMissingQuoteTextElement() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlMissingQuoteTextElement);
-        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull("PullQuoteData should not be null", pullQuoteData);
         assertTrue(pullQuoteData.isOkToRender());
         assertNull("Text was not as expected", pullQuoteData.getQuoteText());
@@ -77,7 +76,8 @@ public class PullQuoteXMLParserTest {
     @Test
     public void testParseChildElementDataWithMissingQuoteSourceElement() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlMissingQuoteSourceElement);
-        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull("PullQuoteData should not be null", pullQuoteData);
         assertTrue(pullQuoteData.isOkToRender());
         assertEquals("Text was not as expected",EXPECTED_TEXT, pullQuoteData.getQuoteText());
@@ -87,7 +87,8 @@ public class PullQuoteXMLParserTest {
     @Test
     public void testParseChildElementDataWithMissingQuoteTextAndSourceElements() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlMissingQuoteTextAndSourceElements);
-        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull(pullQuoteData);
         assertFalse(pullQuoteData.isOkToRender());
     }
@@ -95,7 +96,8 @@ public class PullQuoteXMLParserTest {
     @Test
     public void testParseChildElementDataWithMissingQuoteTextAndSourceData() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlEmptyQuoteAndSourceText);
-        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull(pullQuoteData);
         assertFalse(pullQuoteData.isOkToRender());
     }
@@ -103,7 +105,8 @@ public class PullQuoteXMLParserTest {
     @Test
     public void testParseChildElementDataWithEmptyTextData() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlEmptyQuoteText);
-        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull("PullQuoteData should not be null", pullQuoteData);
         assertTrue(pullQuoteData.isOkToRender());
         assertEquals("Text was not as expected", "", pullQuoteData.getQuoteText());
@@ -113,16 +116,11 @@ public class PullQuoteXMLParserTest {
     @Test
     public void testParseChildElementDataWithEmptySourceData() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlEmptySourceText);
-        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull("PullQuoteData should not be null", pullQuoteData);
         assertTrue(pullQuoteData.isOkToRender());
         assertEquals("Text was not as expected",EXPECTED_TEXT, pullQuoteData.getQuoteText());
         assertEquals("Source was not as expected", "", pullQuoteData.getQuoteSource());
-    }
-    
-    private XMLEventReader createReaderForXml(String xml) throws XMLStreamException {
-        XMLInputFactory newInstance = XMLInputFactory2.newInstance();
-        StringReader reader = new StringReader(xml);
-        return newInstance.createXMLEventReader(reader);
     }
 }

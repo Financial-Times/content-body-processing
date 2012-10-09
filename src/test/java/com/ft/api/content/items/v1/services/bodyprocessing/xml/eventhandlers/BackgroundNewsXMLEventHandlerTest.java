@@ -4,14 +4,12 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
-import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
-import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
-import com.ft.unifiedContentModel.model.Asset;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
+
 import org.codehaus.stax2.XMLEventReader2;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +17,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
+import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
+import com.ft.unifiedContentModel.model.Asset;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BackgroundNewsXMLEventHandlerTest extends BaseXMLEventHandlerTest {
@@ -39,7 +42,7 @@ public class BackgroundNewsXMLEventHandlerTest extends BaseXMLEventHandlerTest {
 	@Before
 	public void setup() throws XMLStreamException {
 	  backgroundNewsXMLEventHandler = new BackgroundNewsXMLEventHandler(mockBackgroundNewsXMLParser, mockAsideElementWriter);
-	  when(mockBackgroundNewsXMLParser.parseElementData(mockXmlEventReader)).thenReturn(mockBackgroundNewsData);
+	  when(mockBackgroundNewsXMLParser.parseElementData(Mockito.any(StartElement.class), Mockito.eq(mockXmlEventReader))).thenReturn(mockBackgroundNewsData);
 	}
 
 	@Test(expected=XMLStreamException.class)

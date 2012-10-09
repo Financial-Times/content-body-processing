@@ -10,13 +10,14 @@ import java.io.StringReader;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.StartElement;
 
 import org.codehaus.stax2.XMLInputFactory2;
 import org.junit.Before;
 import org.junit.Test;
 
 
-public class InteractiveGraphicXMLParserTest {
+public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
     
     private static final String EXPECTED_SRC = "http://interactive.ftdata.co.uk/interactive-graphic-1234.js";
     private static final String EXPECTED_ID = "1234";
@@ -41,7 +42,8 @@ public class InteractiveGraphicXMLParserTest {
     @Test
     public void testParseElementData() throws XMLStreamException {
         xmlEventReader = createReaderForXml(validXml);
-        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(startElement, xmlEventReader);
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertTrue(interactiveGraphicData.isOkToRender());
@@ -52,7 +54,8 @@ public class InteractiveGraphicXMLParserTest {
     @Test
     public void testParseElementDataWithSpaces() throws XMLStreamException {
         xmlEventReader = createReaderForXml(validXmlWithSpaces);
-        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(startElement, xmlEventReader);
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertTrue(interactiveGraphicData.isOkToRender());
@@ -63,7 +66,8 @@ public class InteractiveGraphicXMLParserTest {
     @Test
     public void testParseElementDataNoIGPrefix() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlWithIdNotPrefixedWithIG);
-        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(startElement, xmlEventReader);
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
@@ -72,7 +76,8 @@ public class InteractiveGraphicXMLParserTest {
     @Test
     public void testParseElementScriptDataAccessTypeNotInteractiveGraphic() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlWithScriptDataAccessTypeNotInteractiveGraphic);
-        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(startElement, xmlEventReader);
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
@@ -81,7 +86,8 @@ public class InteractiveGraphicXMLParserTest {
     @Test
     public void testParseElementWithAnInvalidSrc() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlWithAnInvalidSrc);
-        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(startElement, xmlEventReader);
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
@@ -90,7 +96,8 @@ public class InteractiveGraphicXMLParserTest {
     @Test
     public void testParseWithMissingDivId() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlWithMissingDivId);
-        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(startElement, xmlEventReader);
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
@@ -99,7 +106,8 @@ public class InteractiveGraphicXMLParserTest {
     @Test
     public void testParseWithElementsNotInOrderDivDivScript() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlWithElementsNotInOrderDivDivScript);
-        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(startElement, xmlEventReader);
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
@@ -108,7 +116,8 @@ public class InteractiveGraphicXMLParserTest {
     @Test
     public void testParseWithExtraElementsAfterPlainHtml() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlWithExtraElementsAfterPlainHtml);
-        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(startElement, xmlEventReader);
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
@@ -117,15 +126,10 @@ public class InteractiveGraphicXMLParserTest {
     @Test
     public void testParseWithExtraElementsAfterDiv() throws XMLStreamException {
         xmlEventReader = createReaderForXml(xmlWithExtraElementsAfterDiv);
-        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(xmlEventReader);
+        StartElement startElement = getStartElement(xmlEventReader);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(startElement, xmlEventReader);
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
-    }
-    
-    private XMLEventReader createReaderForXml(String xml) throws XMLStreamException {
-        XMLInputFactory newInstance = XMLInputFactory2.newInstance();
-        StringReader reader = new StringReader(xml);
-        return newInstance.createXMLEventReader(reader);
     }
 }

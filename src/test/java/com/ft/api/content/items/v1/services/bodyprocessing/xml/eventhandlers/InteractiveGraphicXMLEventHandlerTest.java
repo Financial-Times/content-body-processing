@@ -42,7 +42,7 @@ public class InteractiveGraphicXMLEventHandlerTest extends BaseXMLEventHandlerTe
     @Before
     public void setup() throws XMLStreamException {
         interactiveGraphicXMLEventHandler = new InteractiveGraphicXMLEventHandler(mockInteractiveGraphicXMLParser, mockAsideElementWriter);
-        when(mockInteractiveGraphicXMLParser.parseElementData(mockXmlEventReader)).thenReturn(mockInteractiveGraphicData);
+        when(mockInteractiveGraphicXMLParser.parseElementData(Mockito.isA(StartElement.class), Mockito.eq(mockXmlEventReader))).thenReturn(mockInteractiveGraphicData);
         when(mockAsset.getName()).thenReturn(elementName);
     }
     

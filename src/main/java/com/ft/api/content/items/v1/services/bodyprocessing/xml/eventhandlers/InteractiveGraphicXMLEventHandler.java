@@ -4,6 +4,7 @@ import static org.springframework.util.Assert.notNull;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.StartElement;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
 
@@ -41,7 +42,7 @@ public class InteractiveGraphicXMLEventHandler extends AsideBaseXMLEventHandler<
     }
 
     @Override
-    InteractiveGraphicData parseElementData(XMLEventReader xmlEventReader) throws XMLStreamException {
-        return interactiveGraphicXMLParser.parseElementData(xmlEventReader);
+    InteractiveGraphicData parseElementData(StartElement startElement, XMLEventReader xmlEventReader) throws XMLStreamException {
+        return interactiveGraphicXMLParser.parseElementData(startElement, xmlEventReader);
     }
 }

@@ -4,6 +4,7 @@ import static org.springframework.util.Assert.notNull;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.StartElement;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
 
@@ -42,8 +43,8 @@ public class PullQuoteXMLEventHandler extends AsideBaseXMLEventHandler<PullQuote
     }
 
     @Override
-    PullQuoteData parseElementData(XMLEventReader xmlEventReader) throws XMLStreamException {
-        return pullQuoteXMLParser.parseElementData(xmlEventReader);
+    PullQuoteData parseElementData(StartElement startElement, XMLEventReader xmlEventReader) throws XMLStreamException {
+        return pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
     }
 
 }

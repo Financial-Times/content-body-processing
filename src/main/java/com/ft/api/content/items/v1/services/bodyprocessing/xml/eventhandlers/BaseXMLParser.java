@@ -17,10 +17,13 @@ public abstract class BaseXMLParser<T> {
         this.startElementName = startElementName;
     }
     
-    public T parseElementData(XMLEventReader xmlEventReader) throws XMLStreamException {
+    public T parseElementData(StartElement startElement, XMLEventReader xmlEventReader) throws XMLStreamException {
         T dataBean = createDataBeanInstance();
         
         try {
+            // Use the start element (trigger element) to populate the bean as some types require parsing to start from the starting element
+            populateBean(dataBean, startElement, xmlEventReader);
+            
             while (xmlEventReader.hasNext()) {
                 XMLEvent nextEvent = xmlEventReader.nextEvent();
                 
