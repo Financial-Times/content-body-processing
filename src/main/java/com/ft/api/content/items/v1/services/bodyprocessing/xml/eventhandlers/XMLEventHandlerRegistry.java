@@ -88,8 +88,6 @@ public class XMLEventHandlerRegistry {
 		notEmpty(names, "names cannot be empty");
 		for(String name: names) {
 			startElementEventHandlers.put(name.toLowerCase(), eventHandler);
-		}
-		for(String name: names) {
 			endElementEventHandlers.put(name.toLowerCase(), eventHandler);
 		}
 		

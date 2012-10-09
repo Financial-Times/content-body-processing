@@ -5,6 +5,8 @@ import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingB
 
 public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegistry {
 
+
+
 	public StructuredBodyXMLEventHandlerRegistry() {
 		//default is to skip events - any start or end tags not configured below will be excluded, as will comments
 		super.registerDefaultEventHandler(new StripXMLEventHandler());
@@ -23,6 +25,7 @@ public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegist
 		super.registerStartAndEndElementEventHandler(new PullQuoteXMLEventHandler(new PullQuoteXMLParser(new StAXTransformingBodyProcessor(this)), new AsideElementWriter()), "web-pull-quote");
 		super.registerStartAndEndElementEventHandler(new InteractiveGraphicXMLEventHandler(new InteractiveGraphicXMLParser(), new AsideElementWriter()), "plainHtml");
 		super.registerStartAndEndElementEventHandler(new BackgroundNewsXMLEventHandler(new BackgroundNewsXMLParser(new StAXTransformingBodyProcessor(this)), new AsideElementWriter()), "web-background-news");
+		super.registerStartAndEndElementEventHandler(new DataTableXMLEventHandler(new DataTableXMLParser(new StAXTransformingBodyProcessor(new StructuredBodyXMLEventHandlerRegistryInnerTable(this))), new AsideElementWriter(), new StripElementAndContentsXMLEventHandler()), "table");
 
 		// to be transformed
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-underlined"), "u");
@@ -51,8 +54,8 @@ public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegist
 				"param", "progress", 
 				"rp", "rt", "ruby", 
 				"script", "select", "source", "style", 
-				"table", "tbody", "td", "textarea", "tfoot", "th", "thead", "tr", "track", 
-				"video", 
+				"tbody", "td", "textarea", "tfoot", "th", "thead", "tr", "track",
+				"video",
 				"wbr");
 		
 		super.registerStartElementEventHandler(new InlineMediaAssetXMLEventHandler(new StripElementAndContentsXMLEventHandler()), "inlineDwc");
@@ -73,7 +76,7 @@ public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegist
 				"web-alt-picture",
 				"web-picture", "web-pull-quote-source", "web-pull-quote-text",
 				"web-skybox-picture", "web-subhead", 
-				"web-table", "web-thumbnail", 
+				 "web-thumbnail",
 				"xref", "xrefs");
 		// characters (i.e. normal text) will be output
 		super.registerCharactersEventHandler(new RetainXMLEventHandler());

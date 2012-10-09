@@ -41,10 +41,15 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
                 asideElementWriter.writeAsideElement(eventWriter, assetName, getType(), needPTag());
             }
         } else {
-            throw new XMLStreamException("event must correspond to" + getElementName() + " tag");
+            processFallBack(startElement, xmlEventReader, eventWriter, bodyProcessingContext);
         }
 
     }
+
+	protected void processFallBack(StartElement startElement, XMLEventReader xmlEventReader, BodyWriter eventWriter, BodyProcessingContext bodyProcessingContext) throws XMLStreamException {
+		throw new XMLStreamException("event must correspond to" + getElementName() + " tag");
+	}
+
     // Whether the element is nested in a <p> tag that needs a closing </p> tag
     abstract boolean needPTag();
 
@@ -65,7 +70,7 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
         return asset.getName();
     }
     
-    private boolean isElementOfCorrectType(StartElement event) {
+    protected boolean isElementOfCorrectType(StartElement event) {
         return event.getName().getLocalPart().toLowerCase().equals(getElementName().toLowerCase());
     }
 }
