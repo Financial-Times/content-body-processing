@@ -15,10 +15,12 @@ public class DataTableXMLEventHandler extends AsideBaseXMLEventHandler<DataTable
 	private XmlParser<DataTableData> dataTableDataXmlParser;
 	private StripElementAndContentsXMLEventHandler stripElementAndContentsXMLEventHandler;
 
-	public DataTableXMLEventHandler(XmlParser<DataTableData> dataTableDataXmlParser, AsideElementWriter asideElementWriter, StripElementAndContentsXMLEventHandler stripElementAndContentsXMLEventHandler){
+	public DataTableXMLEventHandler(XmlParser<DataTableData> dataTableDataXmlParser, AsideElementWriter asideElementWriter, 
+	                                StripElementAndContentsXMLEventHandler stripElementAndContentsXMLEventHandler){
 		super(asideElementWriter);
 		notNull(dataTableDataXmlParser, "dataTableDataXmlParser cannot be null");
-
+		notNull(stripElementAndContentsXMLEventHandler, "stripElementAndContentsXMLEventHandler cannot be null");
+		
 		this.dataTableDataXmlParser = dataTableDataXmlParser;
 		this.stripElementAndContentsXMLEventHandler = stripElementAndContentsXMLEventHandler;
 	}
