@@ -20,7 +20,7 @@ public class DataTableData extends BaseData implements AssetAware {
 
 	@Override
 	public boolean isOkToRender() {
-		return !StringUtils.isEmpty(this.body);
+		return !StringUtils.isBlank(this.body);
 	}
 
 	@Override

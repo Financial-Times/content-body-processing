@@ -1,5 +1,7 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
+import static org.springframework.util.Assert.notNull;
+
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
 import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
 import javax.xml.stream.XMLEventReader;
@@ -12,13 +14,11 @@ public class DataTableXMLParser extends BaseXMLParser<DataTableData> implements 
 	private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
 	private ElementRawDataParser rawDataParser = new ElementRawDataParser();
 
-	public DataTableXMLParser(String startElementName) {
-		super(startElementName);
-	}
-
 	public DataTableXMLParser(StAXTransformingBodyProcessor stAXTransformingBodyProcessor) {
 		super("web-table");
-		this.stAXTransformingBodyProcessor = stAXTransformingBodyProcessor;
+				
+		notNull(stAXTransformingBodyProcessor, "The StAXTransformingBodyProcessor cannot be null.");
+        this.stAXTransformingBodyProcessor = stAXTransformingBodyProcessor;
 	}
 
 	@Override
