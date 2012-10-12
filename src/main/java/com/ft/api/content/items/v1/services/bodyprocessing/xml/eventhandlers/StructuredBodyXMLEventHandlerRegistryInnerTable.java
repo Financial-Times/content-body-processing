@@ -20,9 +20,11 @@ public class StructuredBodyXMLEventHandlerRegistryInnerTable extends XMLEventHan
 		this.handlerRegistry = structuredBodyXMLEventHandlerRegistry;
 
 		this.registerStartAndEndElementEventHandlerWrapper(new RetainWithSpecificAttributesXMLEventHandler("colspan", "rowspan"),
-				"table", "thead", "tbody",
-				"tfoot", "tr", "caption",
-				"td", "th");
+				"tr","td", "th");
+
+		this.registerStartAndEndElementEventHandlerWrapper(new RetainWithoutAttributesXMLEventHandler(),
+						"table", "thead", "tbody",
+						"tfoot", "caption");
 	}
 
 	@Override
