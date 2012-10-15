@@ -16,7 +16,7 @@ public class PullQuoteXMLParser extends BaseXMLParser<PullQuoteData> implements 
     private static final String QUOTE_SOURCE = "web-pull-quote-source";
     private static final String QUOTE_TEXT = "web-pull-quote-text";
     private static final String PULL_QUOTE = "web-pull-quote";
-    private ElementRawDataParser rawDataParser = new ElementRawDataParser();
+    private ElementRawDataParser rawDataParser;
     private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
 
     public PullQuoteXMLParser(StAXTransformingBodyProcessor stAXTransformingBodyProcessor) {
@@ -56,6 +56,7 @@ public class PullQuoteXMLParser extends BaseXMLParser<PullQuoteData> implements 
     }
 
     private String parseRawContent(String elementName, XMLEventReader xmlEventReader) {
+        rawDataParser = new ElementRawDataParser();
         try {
             return rawDataParser.parse(elementName, xmlEventReader);
         } catch (XMLStreamException e) {
