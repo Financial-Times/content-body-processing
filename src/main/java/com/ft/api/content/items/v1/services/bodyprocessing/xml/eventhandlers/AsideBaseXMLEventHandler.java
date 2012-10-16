@@ -38,7 +38,7 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
                 String assetName = addAssetToContextAndReturnAssetName(bodyProcessingContext, dataBean.getAsset());
 
                 // build aside element and skip until end of tag
-                asideElementWriter.writeAsideElement(eventWriter, assetName, getType(), needPTag());
+                asideElementWriter.writeAsideElement(eventWriter, assetName, getType());
             }
         } else {
             processFallBack(startElement, xmlEventReader, eventWriter, bodyProcessingContext);

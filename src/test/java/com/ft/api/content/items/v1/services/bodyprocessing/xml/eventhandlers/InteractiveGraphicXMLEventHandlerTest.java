@@ -57,7 +57,7 @@ public class InteractiveGraphicXMLEventHandlerTest extends BaseXMLEventHandlerTe
         
         interactiveGraphicXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
-        verify(mockAsideElementWriter).writeAsideElement(mockEventWriter, elementName, "interactiveGraphic", false);
+        verify(mockAsideElementWriter).writeAsideElement(mockEventWriter, elementName, "interactiveGraphic");
         verify(mockInteractiveGraphicXMLParser).transformFieldContentToStructuredFormat(mockInteractiveGraphicData, mockBodyProcessingContext);
     }
     
@@ -71,7 +71,7 @@ public class InteractiveGraphicXMLEventHandlerTest extends BaseXMLEventHandlerTe
         
         interactiveGraphicXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
-        verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "interactiveGraphic", true);
+        verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "interactiveGraphic");
         verify(mockInteractiveGraphicXMLParser, never()).transformFieldContentToStructuredFormat(mockInteractiveGraphicData, mockBodyProcessingContext);
     }
     
@@ -88,7 +88,7 @@ public class InteractiveGraphicXMLEventHandlerTest extends BaseXMLEventHandlerTe
         
         interactiveGraphicXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
-        verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "interactiveGraphic", true);
+        verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "interactiveGraphic");
         verify(mockStAXTransformingBodyProcessor, never()).process(srcText, mockBodyProcessingContext);
         verify(mockInteractiveGraphicXMLParser, never()).transformFieldContentToStructuredFormat(mockInteractiveGraphicData, mockBodyProcessingContext);
     }

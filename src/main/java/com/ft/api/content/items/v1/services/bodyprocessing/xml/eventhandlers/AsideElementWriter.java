@@ -14,20 +14,21 @@ public class AsideElementWriter {
     protected static final String DATA_ASSET_NAME_NAME = "data-asset-name";
     protected static final String DATA_ASSET_TYPE_NAME = "data-asset-type";
     
-    public void writeAsideElement(BodyWriter eventWriter, String name, String type, boolean needsPTag) {
+    @Deprecated
+    public void writeAsideElement(BodyWriter bodyWriter, String name, String type, boolean needsPTag) {
         if (needsPTag) {
-            writeEndTag(eventWriter, P_TAG_QNAME);
+            writeEndTag(bodyWriter, P_TAG_QNAME);
         }
         
         Map<String, String> validAttributes  = new HashMap<String, String>();
         validAttributes.put(DATA_ASSET_NAME_NAME, name);
         validAttributes.put(DATA_ASSET_TYPE_NAME, type);
         
-        writeStartTag(eventWriter, ASIDE_TAG_QNAME, validAttributes);
-        writeEndTag(eventWriter, ASIDE_TAG_QNAME);
+        writeStartTag(bodyWriter, ASIDE_TAG_QNAME, validAttributes);
+        writeEndTag(bodyWriter, ASIDE_TAG_QNAME);
         
         if (needsPTag) {
-            writeStartTag(eventWriter, P_TAG_QNAME, new HashMap<String, String>());
+            writeStartTag(bodyWriter, P_TAG_QNAME, new HashMap<String, String>());
         }
     }
 
@@ -37,5 +38,11 @@ public class AsideElementWriter {
 
     private void writeEndTag(BodyWriter eventWriter, QName pTagQname) {
         eventWriter.writeEndTag(pTagQname.getLocalPart());
+    }
+
+    public void writeAsideElement(BodyWriter bodyWriter, String name, String type) {
+        boolean needsPTag = bodyWriter.isPTagCurrentlyOpen();
+        writeAsideElement(bodyWriter, name, type, needsPTag);
+        
     }
 }

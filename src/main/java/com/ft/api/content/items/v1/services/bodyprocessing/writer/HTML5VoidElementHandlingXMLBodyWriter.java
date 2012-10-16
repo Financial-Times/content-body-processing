@@ -31,13 +31,17 @@ import com.ft.api.content.items.v1.services.bodyprocessing.regex.RegexRemoverBod
  */
 public class HTML5VoidElementHandlingXMLBodyWriter implements BodyWriter {
 	
-	private static List<String> VOID_ELEMENTS = Arrays.asList(
+	private static final String P_TAG_NAME = "p";
+
+    private static List<String> VOID_ELEMENTS = Arrays.asList(
 			"area", "base", "br", "col", "command", "embed", 
 			"hr", "img", "input", "keygen", "link", "meta", 
 			"param", "source", "track", "wbr");
 	
     private StringWriter stringWriter;
     private XMLStreamWriter2 xmlStreamWriter2;
+
+    private boolean isPTagCurrentlyOpen;
 	
 	public HTML5VoidElementHandlingXMLBodyWriter(XMLOutputFactory2 xmlOutputFactory) throws IOException, XMLStreamException {
         
@@ -82,7 +86,10 @@ public class HTML5VoidElementHandlingXMLBodyWriter implements BodyWriter {
 	public void writeStartTag(String name, Map<String, String> validAttributesAndValues) {
 		try {
 		    xmlStreamWriter2.writeStartElement(name);
-			if(validAttributesAndValues != null) {
+			if(isPTAg(name)) {
+			    this.isPTagCurrentlyOpen = true;
+			}
+		    if(validAttributesAndValues != null) {
 				for (Entry<String,String> entry: validAttributesAndValues.entrySet()) {
 				    xmlStreamWriter2.writeAttribute(entry.getKey(), entry.getValue());
 				} 
@@ -101,12 +108,15 @@ public class HTML5VoidElementHandlingXMLBodyWriter implements BodyWriter {
 			    xmlStreamWriter2.writeCharacters("");
 			}	
 			xmlStreamWriter2.writeEndElement();
+			if(isPTAg(name)){
+                this.isPTagCurrentlyOpen = false;
+            }
 		} catch (XMLStreamException e) {
 			throw new BodyProcessingException(e);
 		}
 	}
-	
-	@Override
+
+    @Override
 	public String asString() {
 	    try {
             xmlStreamWriter2.writeEndElement();
@@ -118,7 +128,16 @@ public class HTML5VoidElementHandlingXMLBodyWriter implements BodyWriter {
 	    return removeRootElement(stringWriter.toString());
 	}
 	
-	// TODO: Performance!
+    @Override
+    public boolean isPTagCurrentlyOpen() {
+        return this.isPTagCurrentlyOpen;
+    }
+    
+    private boolean isPTAg(String name) {
+        return name.toLowerCase().equals(P_TAG_NAME);
+    }
+    
+    // TODO: Performance! Check for a more efficient way to remove HTML elements
     private String removeRootElement(String theString) {
         RegexRemoverBodyProcessor removeRootNodeProcessor = new RegexRemoverBodyProcessor("<html/>|<html>|</html>|<html");
         return removeRootNodeProcessor.process(theString, null);

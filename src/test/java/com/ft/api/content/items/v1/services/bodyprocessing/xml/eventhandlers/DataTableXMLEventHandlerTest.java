@@ -67,7 +67,7 @@ public class DataTableXMLEventHandlerTest extends BaseXMLEventHandlerTest  {
 
         dataTableXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
-        verify(mockAsideElementWriter).writeAsideElement(mockEventWriter, elementName, "dataTable", false);
+        verify(mockAsideElementWriter).writeAsideElement(mockEventWriter, elementName, "dataTable");
         verify(mockDataTableXMLParser).transformFieldContentToStructuredFormat(mockDataTableData, mockBodyProcessingContext);
     }
 
@@ -101,7 +101,7 @@ public class DataTableXMLEventHandlerTest extends BaseXMLEventHandlerTest  {
 
         dataTableXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
-       verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "dataTable", false);
+       verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "dataTable");
        verify(mockStAXTransformingBodyProcessor, never()).process(quoteText, mockBodyProcessingContext);
        verify(mockDataTableXMLParser, never()).transformFieldContentToStructuredFormat(mockDataTableData, mockBodyProcessingContext);
    }

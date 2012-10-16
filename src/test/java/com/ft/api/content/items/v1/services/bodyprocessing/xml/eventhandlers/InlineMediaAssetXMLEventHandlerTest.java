@@ -119,24 +119,11 @@ public class InlineMediaAssetXMLEventHandlerTest extends BaseXMLEventHandlerTest
 		}};
 		when(mockXmlEventReader.peek()).thenReturn(getStartElementWithAttributes("a", attributes));
 		startElement = getStartElement(INLINE_DWC_TAG_QNAME.getLocalPart());
-		ArgumentCaptor<Map> attributesCaptor = ArgumentCaptor.forClass(Map.class);
-		ArgumentCaptor<String> tagCaptor = ArgumentCaptor.forClass(String.class);
 		
 		inlineMediaAssetXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
 		verify(mockFallbackXmlEventHandler, Mockito.never()).handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 		verify(mockBodyProcessingContext).assignAssetNameToExistingAsset("1234567890");
-		verify(mockEventWriter, times(2)).writeStartTag(tagCaptor.capture(), attributesCaptor.capture());
-		// for slideshows, we have to handle the enclosing p tag which isn't valid round an aside tag
-		List<String> tagsWritten = tagCaptor.getAllValues();
-		assertEquals("aside", tagsWritten.get(0));
-		assertEquals("p", tagsWritten.get(1));
-		List<Map> attributesWritten = attributesCaptor.getAllValues();
-		assertEquals(NAME_1, attributesWritten.get(0).get("data-asset-name"));
-		assertEquals("slideshow", attributesWritten.get(0).get("data-asset-type"));
-		assertEquals(null, attributesWritten.get(1));
-		verify(mockEventWriter).writeEndTag("p");
-		verify(mockEventWriter).writeEndTag("aside");
 	}
 	
 }

@@ -16,4 +16,6 @@ public interface BodyWriter {
 	String asString();
 
 	void flush();
+	
+    boolean isPTagCurrentlyOpen();
 }

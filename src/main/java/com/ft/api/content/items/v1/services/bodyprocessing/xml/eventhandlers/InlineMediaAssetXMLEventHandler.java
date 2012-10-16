@@ -1,15 +1,14 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
-import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
-import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
-import com.ft.unifiedContentModel.model.Asset;
-import java.util.HashMap;
-import java.util.Map;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
+import com.ft.unifiedContentModel.model.Asset;
 
 public class InlineMediaAssetXMLEventHandler extends AssetXMLEventHandler {
 
@@ -21,7 +20,7 @@ public class InlineMediaAssetXMLEventHandler extends AssetXMLEventHandler {
 	}
 
 	@Override
-	public void handleStartElementEvent(StartElement event, XMLEventReader xmlEventReader, BodyWriter eventWriter,
+	public void handleStartElementEvent(StartElement event, XMLEventReader xmlEventReader, BodyWriter bodyWriter,
 			BodyProcessingContext bodyProcessingContext) throws XMLStreamException {
 		
 		if(!isValidElement(event)){
@@ -36,21 +35,17 @@ public class InlineMediaAssetXMLEventHandler extends AssetXMLEventHandler {
 				Asset asset = assetManager.createValidAttributesForMediaAsset(nextStart, bodyProcessingContext, getAssetType());
 
 				if(asset != null){
-					Map<String, String> validAttributes = new HashMap<String, String>();
-					validAttributes.put(DATA_ASSET_TYPE_NAME, getAssetType());
-					validAttributes.put(DATA_ASSET_NAME_NAME, asset.getName());
-
 					xmlEventReader.nextEvent();
-					eventWriter.writeEndTag(P_TAG_QNAME.getLocalPart());
-					eventWriter.writeStartTag(ASIDE_TAG_QNAME.getLocalPart(), validAttributes);
-					eventWriter.writeEndTag(ASIDE_TAG_QNAME.getLocalPart());
-					eventWriter.writeStartTag(P_TAG_QNAME.getLocalPart(), null);
+					
+					AsideElementWriter asideWriter = new AsideElementWriter();
+					asideWriter.writeAsideElement(bodyWriter, asset.getName(), getAssetType());
+					
 					skipUntilMatchingEndTag(INLINE_DWC_TAG_QNAME.getLocalPart(), xmlEventReader);
 					return;
 				}
 			}
 		}
-		fallbackEventHandler.handleStartElementEvent(event, xmlEventReader, eventWriter, bodyProcessingContext);
+		fallbackEventHandler.handleStartElementEvent(event, xmlEventReader, bodyWriter, bodyProcessingContext);
 	}
 
 	@Override

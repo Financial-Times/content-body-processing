@@ -63,7 +63,7 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
         
         pullQuoteXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
-        verify(mockAsideElementWriter).writeAsideElement(mockEventWriter, elementName, "pullQuote", true);
+        verify(mockAsideElementWriter).writeAsideElement(mockEventWriter, elementName, "pullQuote");
         verify(mockPullQuoteXMLParser).transformFieldContentToStructuredFormat(mockPullQuoteData, mockBodyProcessingContext);
     }
    
@@ -78,7 +78,7 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
        
        pullQuoteXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
-       verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "pullquote", true);
+       verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "pullquote");
        verify(mockPullQuoteXMLParser, never()).transformFieldContentToStructuredFormat(mockPullQuoteData, mockBodyProcessingContext);
    }
    
@@ -96,7 +96,7 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
        
        pullQuoteXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
-       verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "pullquote", true);
+       verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "pullquote");
        verify(mockStAXTransformingBodyProcessor, never()).process(quoteText, mockBodyProcessingContext);
        verify(mockPullQuoteXMLParser, never()).transformFieldContentToStructuredFormat(mockPullQuoteData, mockBodyProcessingContext);
    }
