@@ -22,11 +22,6 @@ public class InteractiveGraphicXMLEventHandler extends AsideBaseXMLEventHandler<
     }
 
     @Override
-    boolean needPTag() {
-        return false;
-    }
-
-    @Override
     String getElementName() {
         return INTERACTIVE_GRAPHIC_ELEMENT_NAME;
     }

@@ -23,11 +23,6 @@ public class PullQuoteXMLEventHandler extends AsideBaseXMLEventHandler<PullQuote
     }
 
     @Override
-    boolean needPTag() {
-        return true;
-    }
-
-    @Override
     String getElementName() {
        return WEB_PULL_QUOTE_ELEMENT_NAME;
     }

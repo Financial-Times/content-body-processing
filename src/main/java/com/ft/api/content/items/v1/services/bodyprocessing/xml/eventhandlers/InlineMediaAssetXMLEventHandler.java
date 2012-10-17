@@ -57,9 +57,4 @@ public class InlineMediaAssetXMLEventHandler extends AssetXMLEventHandler {
 	public String getAssetType() {
 		return "slideshow";
 	}
-
-	@Override
-	protected boolean isInsidePTag() {
-		return true;
-	}
 }

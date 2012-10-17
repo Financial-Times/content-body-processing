@@ -1,15 +1,14 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
-import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
-import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
-import com.ft.unifiedContentModel.model.Asset;
-import java.util.HashMap;
-import java.util.Map;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
+
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
+import com.ft.unifiedContentModel.model.Asset;
 
 public abstract class AssetXMLEventHandler extends BaseXMLEventHandler implements AssetXMLEventHandlable {
 
@@ -37,18 +36,9 @@ public abstract class AssetXMLEventHandler extends BaseXMLEventHandler implement
 		if(isAssetLink(event) ){
 			Asset asset = assetManager.createValidAttributesForMediaAsset(event, bodyProcessingContext, getAssetType());
 			if(asset != null){
-				Map<String, String> validAttributes = new HashMap<String, String>();
-				validAttributes.put(DATA_ASSET_NAME_NAME, asset.getName());
-				validAttributes.put(DATA_ASSET_TYPE_NAME, getAssetType());
-
-				if (isInsidePTag()) {
-					closePTag(eventWriter);
-					writeAside(eventWriter, validAttributes);
-					openPTag(eventWriter);
-					
-				} else {
-					writeAside(eventWriter, validAttributes);
-				}
+			    
+			    AsideElementWriter asideElementWriter = new AsideElementWriter();
+			    asideElementWriter.writeAsideElement(eventWriter, asset.getName(), getAssetType());
 
  				skipUntilMatchingEndTag(START_TAG_QNAME.getLocalPart(), xmlEventReader);
 				return;
@@ -57,22 +47,6 @@ public abstract class AssetXMLEventHandler extends BaseXMLEventHandler implement
 
 		fallbackEventHandler.handleStartElementEvent(event, xmlEventReader, eventWriter, bodyProcessingContext);
 	}
-
-	private void closePTag(BodyWriter eventWriter) {
-		eventWriter.writeEndTag(P_TAG_QNAME.getLocalPart());
-	}
-
-	private void writeAside(BodyWriter eventWriter, Map<String, String> validAttributes) {
-		eventWriter.writeStartTag(ASIDE_TAG_QNAME.getLocalPart(), validAttributes);
-		eventWriter.writeEndTag(ASIDE_TAG_QNAME.getLocalPart());
-	}
-
-	private void openPTag(BodyWriter eventWriter) {
-		eventWriter.writeStartTag(P_TAG_QNAME.getLocalPart(), null);
-	}
-
-	// whether this type of asset is found inside a p tag or not
-	protected abstract boolean isInsidePTag(); 
 
 	@Override
 	public void handleEndElementEvent(EndElement event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException {

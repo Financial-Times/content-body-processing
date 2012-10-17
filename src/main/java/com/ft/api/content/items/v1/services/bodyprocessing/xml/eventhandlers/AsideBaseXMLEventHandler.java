@@ -50,9 +50,6 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
 		throw new XMLStreamException("event must correspond to" + getElementName() + " tag");
 	}
 
-    // Whether the element is nested in a <p> tag that needs a closing </p> tag
-    abstract boolean needPTag();
-
     // Return the name of the start element - the element that the extending class is registered with
     abstract String getElementName();
 

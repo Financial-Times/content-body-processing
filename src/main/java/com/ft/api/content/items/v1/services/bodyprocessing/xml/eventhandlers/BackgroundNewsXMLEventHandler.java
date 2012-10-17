@@ -21,11 +21,6 @@ public class BackgroundNewsXMLEventHandler extends AsideBaseXMLEventHandler<Back
 	}
 
 	@Override
-	boolean needPTag() {
-		return true;
-	}
-
-	@Override
 	String getElementName() {
 		return WEB_BACKGROUND_NEWS_ELEMENT_NAME;
 	}

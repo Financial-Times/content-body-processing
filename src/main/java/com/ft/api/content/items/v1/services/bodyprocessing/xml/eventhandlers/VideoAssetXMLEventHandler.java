@@ -27,9 +27,4 @@ public class VideoAssetXMLEventHandler extends AssetXMLEventHandler implements A
 	public boolean isAssetLink(StartElement event) {
 		return event.getAttributeByName(QName.valueOf(VIDEO_ID)) != null;
 	}
-
-	@Override
-	protected boolean isInsidePTag() {
-		return false;
-	}
 }

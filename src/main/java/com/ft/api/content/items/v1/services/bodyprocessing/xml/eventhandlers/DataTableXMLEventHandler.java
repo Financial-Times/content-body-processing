@@ -26,11 +26,6 @@ public class DataTableXMLEventHandler extends AsideBaseXMLEventHandler<DataTable
 	}
 
 	@Override
-	boolean needPTag() {
-		return false;
-	}
-
-	@Override
 	String getElementName() {
 		return "table";
 	}

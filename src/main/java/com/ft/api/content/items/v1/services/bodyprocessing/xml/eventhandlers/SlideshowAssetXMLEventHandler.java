@@ -25,9 +25,4 @@ public class SlideshowAssetXMLEventHandler extends AssetXMLEventHandler{
 	public String getAssetType() {
 		return TYPE_SLIDESHOW;
 	}
-
-	@Override
-	protected boolean isInsidePTag() {
-		return true;
-	}
 }
