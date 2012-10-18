@@ -136,7 +136,7 @@ public class InteractiveGraphicXMLParser extends BaseXMLParser<InteractiveGraphi
 
     private boolean isScriptCorrectType(StartElement nextStartElement) {
         Attribute dataAccessType = nextStartElement.getAttributeByName(scriptDataAccessTypeAttribute);
-        return dataAccessType.getValue().equals(VALID_DATA_ACCESS_TYPE);
+        return dataAccessType != null && dataAccessType.getValue().equals(VALID_DATA_ACCESS_TYPE);
     }
 
     private String extractId(String id) {

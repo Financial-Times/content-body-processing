@@ -5,6 +5,7 @@ import static org.springframework.util.Assert.notNull;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
@@ -38,6 +39,8 @@ public abstract class BaseXMLParser<T> {
                 }
             }
         } catch (UnexpectedElementStructureException e) {
+        	// Something went wrong - read til the end of this element to get rid of the whole thing
+        	skipUntilMatchingEndTag(startElementName, xmlEventReader);
             // Ensure that the bean returned is not valid for processing.
             return createDataBeanInstance();
         }
@@ -51,4 +54,28 @@ public abstract class BaseXMLParser<T> {
     }
 
     abstract void populateBean(T dataBean, StartElement nextStartElement, XMLEventReader xmlEventReader) throws UnexpectedElementStructureException;
+    
+    private void skipUntilMatchingEndTag(String nameToMatch, XMLEventReader xmlEventReader) throws XMLStreamException {
+		int count = 0;
+		while (xmlEventReader.hasNext()) {
+			XMLEvent event = xmlEventReader.nextEvent();
+			if (event.isStartElement()) {
+				StartElement newStartElement = event.asStartElement();
+				if (nameToMatch
+						.equals(newStartElement.getName().getLocalPart())) {
+					count++;
+				}
+			}
+			if (event.isEndElement()) {
+				EndElement endElement = event.asEndElement();
+				String localName = endElement.getName().getLocalPart();
+				if (nameToMatch.equals(localName)) {
+					if (count == 0) {
+						return;
+					}
+					count--;
+				}
+			}
+		}
+	}
 }

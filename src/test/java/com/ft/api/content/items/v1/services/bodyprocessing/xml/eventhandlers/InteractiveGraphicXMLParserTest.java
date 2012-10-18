@@ -5,14 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.StringReader;
-
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 
-import org.codehaus.stax2.XMLInputFactory2;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +19,9 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
     private static final String EXPECTED_ID = "1234";
     private XMLEventReader xmlEventReader;
     private String validXml = "<plainHtml><div id=\"ig1234\"><script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\"></script></div></plainHtml>";
+    private String xmlWithNoDivOrScriptTag = "<plainHtml> <h1>This is a heading</h1> <h2>This is a heading</h2> <h3>This is a heading</h3></plainHtml>";
     private String xmlWithIdNotPrefixedWithIG = "<plainHtml><div id=\"1234\"><script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\"></script></div></plainHtml>";
+    private String xmlWithNoScriptDataAccessType = "<plainHtml><div id=\"ig1234\"><script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\"></script></div></plainHtml>";
     private String xmlWithScriptDataAccessTypeNotInteractiveGraphic = "<plainHtml><div id=\"ig1234\"><script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"SOME_OTHER_TYPE\"></script></div></plainHtml>";
     private String xmlWithAnInvalidSrc = "<plainHtml><div id=\"ig1234\"><script type=\"text/javascript\" src=\"not a valid url\" data-asset-type=\"interactive-graphic\"></script></div></plainHtml>";
     private String xmlWithElementsNotInOrderDivDivScript = "<plainHtml><div id=\"ig1234\"><div id=\"ig1234\"></div><script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\"></script></div></plainHtml>";
@@ -49,6 +47,7 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
         assertTrue(interactiveGraphicData.isOkToRender());
         assertEquals("Id was not as expected",EXPECTED_ID, interactiveGraphicData.getId());
         assertEquals("Src was not as expected", EXPECTED_SRC, interactiveGraphicData.getSrc());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
     
     @Test
@@ -61,6 +60,29 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
         assertTrue(interactiveGraphicData.isOkToRender());
         assertEquals("Id was not as expected",EXPECTED_ID, interactiveGraphicData.getId());
         assertEquals("Src was not as expected", EXPECTED_SRC, interactiveGraphicData.getSrc());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
+    }
+    
+    @Test
+    public void testParseElementDataNoScriptTag() throws XMLStreamException {
+        xmlEventReader = createReaderForXml(xmlWithNoDivOrScriptTag);
+        StartElement startElement = getStartElement(xmlEventReader);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(startElement, xmlEventReader);
+        
+        assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
+        assertFalse(interactiveGraphicData.isOkToRender());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
+    }
+    
+    @Test
+    public void testParseElementDataNoScriptDataAccessType() throws XMLStreamException {
+        xmlEventReader = createReaderForXml(xmlWithNoScriptDataAccessType);
+        StartElement startElement = getStartElement(xmlEventReader);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser.parseElementData(startElement, xmlEventReader);
+        
+        assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
+        assertFalse(interactiveGraphicData.isOkToRender());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
     
     @Test
@@ -71,6 +93,7 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
     
     @Test
@@ -81,6 +104,7 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
     
     @Test
@@ -91,6 +115,7 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
     
     @Test
@@ -101,6 +126,7 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
     
     @Test
@@ -111,6 +137,7 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
     
     @Test
@@ -121,6 +148,7 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
     
     @Test
@@ -131,5 +159,6 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isOkToRender());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
 }
