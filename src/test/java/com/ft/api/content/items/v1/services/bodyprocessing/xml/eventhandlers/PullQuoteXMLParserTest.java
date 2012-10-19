@@ -26,13 +26,13 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
     private static final String EXPECTED_SOURCE = "highest rainfall recorded in one hour, Maidenhead, July 12 1901";
     private static final String EXPECTED_TEXT = "<p>92 mm</p>";
     private XMLEventReader xmlEventReader;
-    private String validXml = "<p><web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><web-pull-quote-text><p>92 mm</p></web-pull-quote-text></td></tr><tr><td><web-pull-quote-source>highest rainfall recorded in one hour, Maidenhead, July 12 1901</web-pull-quote-source></td></tr></table></web-pull-quote></p>";
-    private String xmlMissingQuoteTextElement = "<p><web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td></td></tr><tr><td><web-pull-quote-source>highest rainfall recorded in one hour, Maidenhead, July 12 1901</web-pull-quote-source></td></tr></table></web-pull-quote></p>";
-    private String xmlMissingQuoteSourceElement = "<p><web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><web-pull-quote-text><p>92 mm</p></web-pull-quote-text></td></tr><tr><td></td></tr></table></web-pull-quote></p>";
-    private String xmlMissingQuoteTextAndSourceElements = "<p><web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td></td></tr><tr><td></td></tr></table></web-pull-quote></p><web-pull-quote-text><p>92 mm</p></web-pull-quote-text>";
-    private String xmlEmptyQuoteText = "<p><web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><web-pull-quote-text></web-pull-quote-text></td></tr><tr><td><web-pull-quote-source>highest rainfall recorded in one hour, Maidenhead, July 12 1901</web-pull-quote-source></td></tr></table></web-pull-quote></p>";
-    private String xmlEmptySourceText = "<p><web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><web-pull-quote-text><p>92 mm</p></web-pull-quote-text></td></tr><tr><td><web-pull-quote-source></web-pull-quote-source></td></tr></table></web-pull-quote></p>";
-    private String xmlEmptyQuoteAndSourceText = "<p><web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><web-pull-quote-text></web-pull-quote-text></td></tr><tr><td><web-pull-quote-source></web-pull-quote-source></td></tr></table></web-pull-quote></p>";
+    private String validXml = "<web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><web-pull-quote-text><p>92 mm</p></web-pull-quote-text></td></tr><tr><td><web-pull-quote-source>highest rainfall recorded in one hour, Maidenhead, July 12 1901</web-pull-quote-source></td></tr></table></web-pull-quote>";
+    private String xmlMissingQuoteTextElement = "<web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td></td></tr><tr><td><web-pull-quote-source>highest rainfall recorded in one hour, Maidenhead, July 12 1901</web-pull-quote-source></td></tr></table></web-pull-quote>";
+    private String xmlMissingQuoteSourceElement = "<web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><web-pull-quote-text><p>92 mm</p></web-pull-quote-text></td></tr><tr><td></td></tr></table></web-pull-quote>";
+    private String xmlMissingQuoteTextAndSourceElements = "<web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td></td></tr><tr><td></td></tr></table></web-pull-quote>";
+    private String xmlEmptyQuoteText = "<web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><web-pull-quote-text></web-pull-quote-text></td></tr><tr><td><web-pull-quote-source>highest rainfall recorded in one hour, Maidenhead, July 12 1901</web-pull-quote-source></td></tr></table></web-pull-quote>";
+    private String xmlEmptySourceText = "<web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><web-pull-quote-text><p>92 mm</p></web-pull-quote-text></td></tr><tr><td><web-pull-quote-source></web-pull-quote-source></td></tr></table></web-pull-quote>";
+    private String xmlEmptyQuoteAndSourceText = "<web-pull-quote align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><web-pull-quote-text></web-pull-quote-text></td></tr><tr><td><web-pull-quote-source></web-pull-quote-source></td></tr></table></web-pull-quote>";
     
     private PullQuoteXMLParser pullQuoteXMLParser;
     @Mock private StAXTransformingBodyProcessor mockStAXTransformingBodyProcessor;
@@ -60,6 +60,7 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         assertTrue(pullQuoteData.isOkToRender());
         assertEquals("Text was not as expected",EXPECTED_TEXT, pullQuoteData.getQuoteText());
         assertEquals("Source was not as expected", EXPECTED_SOURCE, pullQuoteData.getQuoteSource());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
 
     @Test
@@ -71,6 +72,7 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         assertTrue(pullQuoteData.isOkToRender());
         assertNull("Text was not as expected", pullQuoteData.getQuoteText());
         assertEquals("Source was not as expected", EXPECTED_SOURCE, pullQuoteData.getQuoteSource());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
     
     @Test
@@ -91,6 +93,7 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull(pullQuoteData);
         assertFalse(pullQuoteData.isOkToRender());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
     
     @Test
@@ -111,6 +114,7 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         assertTrue(pullQuoteData.isOkToRender());
         assertEquals("Text was not as expected", "", pullQuoteData.getQuoteText());
         assertEquals("Source was not as expected", EXPECTED_SOURCE, pullQuoteData.getQuoteSource());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
     
     @Test
@@ -122,5 +126,6 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         assertTrue(pullQuoteData.isOkToRender());
         assertEquals("Text was not as expected",EXPECTED_TEXT, pullQuoteData.getQuoteText());
         assertEquals("Source was not as expected", "", pullQuoteData.getQuoteSource());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
 }

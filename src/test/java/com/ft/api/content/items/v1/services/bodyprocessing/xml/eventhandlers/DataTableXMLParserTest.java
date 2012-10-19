@@ -52,6 +52,7 @@ public class DataTableXMLParserTest extends BaseXMLParserTest {
         assertNotNull("DataTableData should not be null", dataTableData);
         assertTrue(dataTableData.isOkToRender());
         assertEquals("Body was not as expected", validXml, dataTableData.getBody().trim());
+        assertFalse("xmlReader should have no more events", xmlEventReader.hasNext());
     }
     
     @Test
@@ -63,11 +64,11 @@ public class DataTableXMLParserTest extends BaseXMLParserTest {
         assertNotNull("DataTableData should not be null", dataTableData);
         assertTrue(dataTableData.isOkToRender());
         assertEquals("Body was not as expected", validXmlNoContents, dataTableData.getBody().trim());
+        assertFalse("xmlReader should have no more events", xmlEventReader.hasNext());
     }
     
     @Test
     public void testTransformFieldContentToStructuredFormat() throws XMLStreamException {
-        xmlEventReader = createReaderForXml(validXmlNoContents);
         DataTableData dataTableData = new DataTableData();
         dataTableData.setBody(validXml);
         dataTableXMLParser.transformFieldContentToStructuredFormat(dataTableData, mockBodyProcessingContext);
@@ -79,7 +80,6 @@ public class DataTableXMLParserTest extends BaseXMLParserTest {
     
     @Test
     public void testTransformFieldContentToStructuredFormatNoContent() throws XMLStreamException {
-        xmlEventReader = createReaderForXml(validXmlNoContents);
         DataTableData dataTableData = new DataTableData();
         dataTableData.setBody(null);
         dataTableXMLParser.transformFieldContentToStructuredFormat(dataTableData, mockBodyProcessingContext);
