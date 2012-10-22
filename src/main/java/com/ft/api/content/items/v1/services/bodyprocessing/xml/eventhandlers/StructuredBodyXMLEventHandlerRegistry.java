@@ -26,7 +26,8 @@ public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegist
 		super.registerStartAndEndElementEventHandler(new InteractiveGraphicXMLEventHandler(new InteractiveGraphicXMLParser(), new AsideElementWriter()), "plainHtml");
 		super.registerStartAndEndElementEventHandler(new BackgroundNewsXMLEventHandler(new BackgroundNewsXMLParser(new StAXTransformingBodyProcessor(this)), new AsideElementWriter()), "web-background-news");
 		super.registerStartAndEndElementEventHandler(new DataTableXMLEventHandler(new DataTableXMLParser(new StAXTransformingBodyProcessor(new StructuredBodyXMLEventHandlerRegistryInnerTable(this))), new AsideElementWriter(), new StripElementAndContentsXMLEventHandler()), "table");
-
+		super.registerStartAndEndElementEventHandler(new PromoBoxXMLEventHandler(new PromoBoxXMLParser(new StAXTransformingBodyProcessor(this)), new AsideElementWriter()), "promo-box");
+				
 		// to be transformed
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-underlined"), "u");
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-bold"), "b");
@@ -68,7 +69,8 @@ public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegist
 				"interactive-chart", 
 				"lead-body", "lead-text", "ln", 
 				"photo", "photo-caption", "photo-group", 
-				"promo-box", "promo-headline", "promo-image", "promo-intro", "promo-link", "promo-title", "promobox-body", 
+				//"promo-box", 
+				"promo-headline", "promo-image", "promo-intro", "promo-link", "promo-title", "promobox-body", 
 				"pull-quote", "pull-quote-header", "pull-quote-text", 
 				"readthrough", 
 				"short-body", "skybox-body", "stories", "story", "strap",
