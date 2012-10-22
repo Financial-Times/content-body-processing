@@ -1,5 +1,6 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -86,6 +87,29 @@ public class PromoBoxDataTest {
         Assert.assertEquals("The image height was not as expected.", actualPromoBoxImage.getHeight(), imageHeight);
         Assert.assertEquals("The image width was not as expected.", actualPromoBoxImage.getWidth(), imageWidth);
         Assert.assertEquals("The image alt was not as expected.", actualPromoBoxImage.getAlt(), imageAlt);
+    }
+    
+    @Test
+    public void testGetAssetIsValidNoImage() {
+        promoBoxData.setTitle(title);
+        promoBoxData.setImageFileRef(imageFileRef);
+        promoBoxData.setHeadline(headline);
+        promoBoxData.setIntro(intro);
+        promoBoxData.setLink(link);
+       
+        Asset actualAsset = promoBoxData.getAsset();
+        assertNotNull("The asset should not be null.", actualAsset);
+        
+        assertTrue("The asset is not of the expected type.", actualAsset instanceof PromoBox);
+        PromoBoxFields actualFields = ((PromoBox)actualAsset).getFields();
+        assertNotNull("The fields should not be null.", actualFields);
+        Assert.assertEquals("The title was not as expected.", actualFields.getTitle(), title);
+        Assert.assertEquals("The headline was not as expected.", actualFields.getHeadline(), headline);
+        Assert.assertEquals("The headline was not as expected.", actualFields.getIntro(), intro);
+        Assert.assertEquals("The headline was not as expected.", actualFields.getLink(), link);
+        
+        PromoBoxImage actualPromoBoxImage = actualFields.getImage();
+        assertNull("The PromoBoxImage should be null.", actualPromoBoxImage);
     }
 
     @Test(expected = IllegalStateException.class)

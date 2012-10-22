@@ -113,8 +113,7 @@ public class PromoBoxData extends BaseData implements AssetAware {
         PromoBox promoBox = null;
         if(this.isOkToRender()) {
             promoBox = new PromoBox();
-            PromoBoxImage promoImage = new PromoBoxImage(nullIfEmpty(this.imageUrl), nullIfEmpty(this.imageType), nullIfEmpty(this.imageHeight), 
-                                                        nullIfEmpty(this.imageWidth), nullIfEmpty(this.imageAlt));
+            PromoBoxImage promoImage = createPromoImage();
             
             PromoBoxFields fields = new PromoBoxFields(nullIfEmpty(this.title), nullIfEmpty(this.headline), 
                                                        nullIfEmpty(intro), nullIfEmpty(this.link), promoImage);
@@ -123,4 +122,12 @@ public class PromoBoxData extends BaseData implements AssetAware {
         }
         throw new IllegalStateException("The object does not have sufficient data to render a valid asset. Only if the method isOkToRender is true will this method return a valid asset.");
      }
+
+    private PromoBoxImage createPromoImage() {
+        if(!StringUtils.isBlank(this.imageUrl)) {
+            return new PromoBoxImage(nullIfEmpty(this.imageUrl), nullIfEmpty(this.imageType), nullIfEmpty(this.imageHeight), 
+                    nullIfEmpty(this.imageWidth), nullIfEmpty(this.imageAlt));
+        }
+        return null;
+    }
 }

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
@@ -38,6 +39,8 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
     private static final String EXPECTED_TRANSFORMED_LINK = "transformedLink";
 
     private static final String EXPECTED_PARSED_IMAGE_FILE_REF = "/FT/Graphics/Online/Secondary_%26_Triplet_167x96/2011/06/SEC_ft500.jpg?uuid=432b5632-9e79-11e0-9469-00144feabdc0";
+    private static final String EXPECTED_PARSED_IMAGE_FILE_REF_NO_UUID = "/FT/Graphics/Online/Secondary_%26_Triplet_167x96/2011/06/SEC_ft500.jpg?XXXX";
+    
     private static final String EXPECTED_IMAGE_URL = "http://someImageUrl";
     private static final String EXPECTED_IMAGE_TYPE = "promo";
     private static final String EXPECTED_IMAGE_HEIGHT = "100";
@@ -50,15 +53,12 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
     private String invalidXmlNoFileref = "<promo-box align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><promo-title><p><a href=\"http://www.ft.com/reports/ft-500-2011\" title=\"www.ft.com\">FT 500</a></p></promo-title></td></tr><tr><td><promo-headline><p>someheadline</p></promo-headline></td></tr><tr><td><promo-image /></td></tr><tr><td><promo-intro><p>The risers and fallers in our annual list of the world’s biggest companies</p></promo-intro></td></tr><tr><td><promo-link><p>somelink</p></promo-link></td></tr></table></promo-box>";
     private String invalidXmlEmptyFileref = "<promo-box align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><promo-title><p><a href=\"http://www.ft.com/reports/ft-500-2011\" title=\"www.ft.com\">FT 500</a></p></promo-title></td></tr><tr><td><promo-headline><p>someheadline</p></promo-headline></td></tr><tr><td><promo-image fileref=\"\"/></td></tr><tr><td><promo-intro><p>The risers and fallers in our annual list of the world’s biggest companies</p></promo-intro></td></tr><tr><td><promo-link><p>somelink</p></promo-link></td></tr></table></promo-box>";
     private String invalidXmlSpacesOnlyFileref = "<promo-box align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><promo-title><p><a href=\"http://www.ft.com/reports/ft-500-2011\" title=\"www.ft.com\">FT 500</a></p></promo-title></td></tr><tr><td><promo-headline><p>someheadline</p></promo-headline></td></tr><tr><td><promo-image fileref=\"        \"/></td></tr><tr><td><promo-intro><p>The risers and fallers in our annual list of the world’s biggest companies</p></promo-intro></td></tr><tr><td><promo-link><p>somelink</p></promo-link></td></tr></table></promo-box>";
-    
+        
     private PromoBoxXMLParser promoBoxXMLParser;
 
-    @Mock
-    private StAXTransformingBodyProcessor mockStAXTransformingBodyProcessor;
-    @Mock
-    private BodyProcessingContext mockBodyProcessingContext;
-    @Mock
-    private PromoBoxData mockPromoBoxData;
+    @Mock private StAXTransformingBodyProcessor mockStAXTransformingBodyProcessor;
+    @Mock private BodyProcessingContext mockBodyProcessingContext;
+    @Mock private PromoBoxData mockPromoBoxData;
 
     @Before
     public void setUp() {
@@ -115,6 +115,28 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         verify(mockPromoBoxData).setImageWidth(EXPECTED_IMAGE_WIDTH);
         verify(mockPromoBoxData).setImageAlt(EXPECTED_IMAGE_ALT);
         verify(mockBodyProcessingContext, Mockito.never()).getAttributeForImage("type", uuid);
+    }
+    
+    @Test
+    public void testTransformFieldContentToStructuredFormatNoImageUuid() {
+        when(mockPromoBoxData.getTitle()).thenReturn(EXPECTED_PARSED_TITLE);
+        when(mockPromoBoxData.getHeadline()).thenReturn(EXPECTED_PARSED_HEADLINE);
+        when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
+        when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
+        when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF_NO_UUID);
+
+        promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
+
+        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
+        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
+        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_INTRO), Mockito.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_LINK), Mockito.eq(mockBodyProcessingContext));
+
+        verify(mockPromoBoxData, never()).setImageType(EXPECTED_IMAGE_TYPE);
+        verify(mockPromoBoxData, never()).setImageHeight(EXPECTED_IMAGE_HEIGHT);
+        verify(mockPromoBoxData, never()).setImageWidth(EXPECTED_IMAGE_WIDTH);
+        verify(mockPromoBoxData, never()).setImageAlt(EXPECTED_IMAGE_ALT);
+        verify(mockBodyProcessingContext, never()).getAttributeForImage("type", uuid);
     }
     
     @Test

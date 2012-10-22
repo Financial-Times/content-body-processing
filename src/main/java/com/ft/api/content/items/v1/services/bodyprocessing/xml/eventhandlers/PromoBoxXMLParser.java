@@ -46,11 +46,13 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
         
         // populate image attributes
         String imageUuid = parseImageUuid(dataBean.getImageFileRef());
-        dataBean.setImageType(PROMO_TYPE);
-        dataBean.setImageHeight(bodyProcessingContext.getAttributeForImage("height", imageUuid));
-        dataBean.setImageWidth(bodyProcessingContext.getAttributeForImage("width", imageUuid));
-        dataBean.setImageAlt(bodyProcessingContext.getAttributeForImage("alt", imageUuid));
-        dataBean.setImageUrl(bodyProcessingContext.getAttributeForImage("src", imageUuid));
+        if(!StringUtils.isEmpty(imageUuid)) {
+            dataBean.setImageType(PROMO_TYPE);
+            dataBean.setImageHeight(bodyProcessingContext.getAttributeForImage("height", imageUuid));
+            dataBean.setImageWidth(bodyProcessingContext.getAttributeForImage("width", imageUuid));
+            dataBean.setImageAlt(bodyProcessingContext.getAttributeForImage("alt", imageUuid));
+            dataBean.setImageUrl(bodyProcessingContext.getAttributeForImage("src", imageUuid));
+        }
     }
     
     private String parseImageUuid(String imageFileRef) {
