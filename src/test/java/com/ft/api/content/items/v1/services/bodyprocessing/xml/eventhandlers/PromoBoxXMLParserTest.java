@@ -47,7 +47,10 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
     private XMLEventReader xmlEventReader;
     private String uuid = "432b5632-9e79-11e0-9469-00144feabdc0";
     private String validXml = "<promo-box align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><promo-title><p><a href=\"http://www.ft.com/reports/ft-500-2011\" title=\"www.ft.com\">FT 500</a></p></promo-title></td></tr><tr><td><promo-headline><p>someheadline</p></promo-headline></td></tr><tr><td><promo-image fileref=\"/FT/Graphics/Online/Secondary_%26_Triplet_167x96/2011/06/SEC_ft500.jpg?uuid=432b5632-9e79-11e0-9469-00144feabdc0\"/></td></tr><tr><td><promo-intro><p>The risers and fallers in our annual list of the world’s biggest companies</p></promo-intro></td></tr><tr><td><promo-link><p>somelink</p></promo-link></td></tr></table></promo-box>";
-
+    private String invalidXmlNoFileref = "<promo-box align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><promo-title><p><a href=\"http://www.ft.com/reports/ft-500-2011\" title=\"www.ft.com\">FT 500</a></p></promo-title></td></tr><tr><td><promo-headline><p>someheadline</p></promo-headline></td></tr><tr><td><promo-image /></td></tr><tr><td><promo-intro><p>The risers and fallers in our annual list of the world’s biggest companies</p></promo-intro></td></tr><tr><td><promo-link><p>somelink</p></promo-link></td></tr></table></promo-box>";
+    private String invalidXmlEmptyFileref = "<promo-box align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><promo-title><p><a href=\"http://www.ft.com/reports/ft-500-2011\" title=\"www.ft.com\">FT 500</a></p></promo-title></td></tr><tr><td><promo-headline><p>someheadline</p></promo-headline></td></tr><tr><td><promo-image fileref=\"\"/></td></tr><tr><td><promo-intro><p>The risers and fallers in our annual list of the world’s biggest companies</p></promo-intro></td></tr><tr><td><promo-link><p>somelink</p></promo-link></td></tr></table></promo-box>";
+    private String invalidXmlSpacesOnlyFileref = "<promo-box align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><promo-title><p><a href=\"http://www.ft.com/reports/ft-500-2011\" title=\"www.ft.com\">FT 500</a></p></promo-title></td></tr><tr><td><promo-headline><p>someheadline</p></promo-headline></td></tr><tr><td><promo-image fileref=\"        \"/></td></tr><tr><td><promo-intro><p>The risers and fallers in our annual list of the world’s biggest companies</p></promo-intro></td></tr><tr><td><promo-link><p>somelink</p></promo-link></td></tr></table></promo-box>";
+    
     private PromoBoxXMLParser promoBoxXMLParser;
 
     @Mock
@@ -112,5 +115,29 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         verify(mockPromoBoxData).setImageWidth(EXPECTED_IMAGE_WIDTH);
         verify(mockPromoBoxData).setImageAlt(EXPECTED_IMAGE_ALT);
         verify(mockBodyProcessingContext, Mockito.never()).getAttributeForImage("type", uuid);
+    }
+    
+    @Test
+    public void testParseElementDataWithInvalidXmlNoFileref() throws XMLStreamException {
+        xmlEventReader = createReaderForXml(invalidXmlNoFileref);
+        StartElement startElement = getStartElement(xmlEventReader);
+        PromoBoxData promoBoxData = promoBoxXMLParser.parseElementData(startElement, xmlEventReader);
+        assertFalse(promoBoxData.isOkToRender());
+    }
+    
+    @Test
+    public void testParseElementDataWithInvalidXmlEmptyFileref() throws XMLStreamException {
+        xmlEventReader = createReaderForXml(invalidXmlEmptyFileref);
+        StartElement startElement = getStartElement(xmlEventReader);
+        PromoBoxData promoBoxData = promoBoxXMLParser.parseElementData(startElement, xmlEventReader);
+        assertFalse(promoBoxData.isOkToRender());
+    }
+    
+    @Test
+    public void testParseElementDataWithInvalidXmlSpacesOnlyFileref() throws XMLStreamException {
+        xmlEventReader = createReaderForXml(invalidXmlSpacesOnlyFileref);
+        StartElement startElement = getStartElement(xmlEventReader);
+        PromoBoxData promoBoxData = promoBoxXMLParser.parseElementData(startElement, xmlEventReader);
+        assertFalse(promoBoxData.isOkToRender());
     }
 }

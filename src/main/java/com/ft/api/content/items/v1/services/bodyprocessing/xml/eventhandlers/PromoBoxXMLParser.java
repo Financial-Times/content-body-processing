@@ -2,9 +2,13 @@ package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
 import static org.springframework.util.Assert.notNull;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,18 +18,16 @@ import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingB
 
 public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements XmlParser<PromoBoxData> {
 
+    private static final String UUID_REGEX = "[\\w]{8}-[\\w]{4}-[\\w]{4}-[\\w]{4}-[\\w]{12}";
     private static final String PROMO_TYPE = "promo";
     private static final String PROMO_BOX = "promo-box";
-    private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
-    
     private static final String PROMO_TITLE = "promo-title";
     private static final String PROMO_HEADLINE = "promo-headline";
     private static final String PROMO_INTRO = "promo-intro";
     private static final String PROMO_LINK= "promo-link";
     private static final String PROMO_IMAGE= "promo-image";
-    private static final String UUIDPREFIX = "uuid=";
-    
-    
+
+    private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
     private ElementRawDataParser rawDataParser;
     
     protected PromoBoxXMLParser(StAXTransformingBodyProcessor stAXTransformingBodyProcessor) {
@@ -51,13 +53,14 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
         dataBean.setImageUrl(bodyProcessingContext.getAttributeForImage("src", imageUuid));
     }
     
-    //TODO: Refactor to use a regex
     private String parseImageUuid(String imageFileRef) {
-        int indexOfUuid= imageFileRef.indexOf("uuid=");
-        if (indexOfUuid == -1) {
-            return "";
+        Pattern p = Pattern.compile(UUID_REGEX);
+        Matcher m = p.matcher(imageFileRef);
+
+        if (m.find()) {
+            return m.group(0);
         }
-        return imageFileRef.substring(imageFileRef.indexOf(UUIDPREFIX) + UUIDPREFIX.length());
+        return StringUtils.EMPTY;
     }
 
     private String transformRawContentToStructuredFormat(String unprocessedContent, BodyProcessingContext bodyProcessingContext) {
@@ -89,10 +92,20 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
             promoBoxData.setLink(parseRawContent(PROMO_LINK, xmlEventReader));
         } 
         else if (isElementNamed(nextStartElement.getName(), PROMO_IMAGE)) {
-            promoBoxData.setImageFileRef(nextStartElement.getAttributeByName(QName.valueOf("fileref")).getValue());
+            String fileRef = parseAttribute("fileref", nextStartElement);
+            promoBoxData.setImageFileRef(fileRef);
         }
     }
     
+    private String parseAttribute(String attributeName, StartElement startElement) {
+        Attribute fileref = startElement.getAttributeByName(QName.valueOf(attributeName));
+        
+        if(fileref != null) {
+            return fileref.getValue();
+        }
+        return null;
+    }
+
     private String parseRawContent(String elementName, XMLEventReader xmlEventReader) {
         rawDataParser = new ElementRawDataParser();
         try {
