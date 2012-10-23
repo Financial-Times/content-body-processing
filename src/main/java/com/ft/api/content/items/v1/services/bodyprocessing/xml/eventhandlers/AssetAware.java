@@ -4,6 +4,9 @@ import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingExcepti
 import com.ft.unifiedContentModel.model.Asset;
 
 public interface AssetAware {
+    
+    String GET_ASSET_NO_VALID_EXCEPTION_MESSAGE = "The object does not have sufficient data to render a valid asset. Only if the method isAllRequiredDataPresent is true will this method return a valid asset.";
+    
     boolean isAllRequiredDataPresent();
     
     /**

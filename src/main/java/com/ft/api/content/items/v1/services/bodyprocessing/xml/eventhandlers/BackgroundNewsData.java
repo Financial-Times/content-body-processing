@@ -41,6 +41,6 @@ public class BackgroundNewsData extends BaseData implements AssetAware {
 			backgroundNews.setFields(backgroundNewsFields);
 			return backgroundNews;
 		}
-		throw new BodyProcessingException("The object does not have sufficient data to render a valid asset. Only if the method isOkToRender is true will this method return a valid asset.");
+		throw new BodyProcessingException(GET_ASSET_NO_VALID_EXCEPTION_MESSAGE);
 	}
 }

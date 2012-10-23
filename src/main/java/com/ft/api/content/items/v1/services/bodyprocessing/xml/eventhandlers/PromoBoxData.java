@@ -121,7 +121,7 @@ public class PromoBoxData extends BaseData implements AssetAware {
             promoBox.setFields(fields);
             return promoBox;
         }
-        throw new BodyProcessingException("The object does not have sufficient data to render a valid asset. Only if the method isOkToRender is true will this method return a valid asset.");
+        throw new BodyProcessingException(GET_ASSET_NO_VALID_EXCEPTION_MESSAGE);
      }
 
     private PromoBoxImage createPromoImage() {
