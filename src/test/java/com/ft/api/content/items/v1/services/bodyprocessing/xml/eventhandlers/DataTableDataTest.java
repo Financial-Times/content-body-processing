@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.unifiedContentModel.model.Asset;
 import com.ft.unifiedContentModel.model.DataTable;
 import com.ft.unifiedContentModel.model.DataTableFields;
@@ -58,7 +59,7 @@ public class DataTableDataTest {
         assertEquals(BODY_TEXT, fields.getBody());
     }
     
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BodyProcessingException.class)
     public void shouldNotReturnAnAsset() {
         DataTableData dataTableData = new DataTableData();
         dataTableData.setBody("");

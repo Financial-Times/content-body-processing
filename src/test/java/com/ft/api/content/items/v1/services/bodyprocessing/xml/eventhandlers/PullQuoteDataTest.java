@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.unifiedContentModel.model.Asset;
 import com.ft.unifiedContentModel.model.PullQuote;
 import com.ft.unifiedContentModel.model.PullQuoteFields;
@@ -84,7 +85,7 @@ public class PullQuoteDataTest {
         Assert.assertEquals("The body was not as expected.", actualFields.getBody(), quoteText);
     }
     
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BodyProcessingException.class)
     public void testGetAssetWhenNotOkToRender() {
         pullQuoteData.getAsset();
     }

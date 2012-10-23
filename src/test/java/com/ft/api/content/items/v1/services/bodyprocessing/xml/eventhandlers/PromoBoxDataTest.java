@@ -1,14 +1,15 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.unifiedContentModel.model.Asset;
 import com.ft.unifiedContentModel.model.PromoBox;
 import com.ft.unifiedContentModel.model.PromoBoxFields;
@@ -112,7 +113,7 @@ public class PromoBoxDataTest {
         assertNull("The PromoBoxImage should be null.", actualPromoBoxImage);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = BodyProcessingException.class)
     public void testGetAssetWhenNotOkToRender() {
         promoBoxData.getAsset();
     }

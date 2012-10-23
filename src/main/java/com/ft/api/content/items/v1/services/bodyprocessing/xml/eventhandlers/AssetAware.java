@@ -1,5 +1,6 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.unifiedContentModel.model.Asset;
 
 public interface AssetAware {
@@ -11,5 +12,5 @@ public interface AssetAware {
      * @return
      * @throws IllegalStateException
      */
-    Asset getAsset() throws IllegalStateException;
+    Asset getAsset() throws BodyProcessingException;
 }

@@ -1,5 +1,6 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.unifiedContentModel.model.Asset;
 import com.ft.unifiedContentModel.model.BackgroundNews;
 import com.ft.unifiedContentModel.model.BackgroundNewsFields;
@@ -32,7 +33,7 @@ public class BackgroundNewsData extends BaseData implements AssetAware {
 	}
 
 	@Override
-	public Asset getAsset() throws IllegalStateException {
+	public Asset getAsset() throws BodyProcessingException {
 		BackgroundNews backgroundNews = null;
 		if(isAllRequiredDataPresent()){
 			backgroundNews = new BackgroundNews();
@@ -40,6 +41,6 @@ public class BackgroundNewsData extends BaseData implements AssetAware {
 			backgroundNews.setFields(backgroundNewsFields);
 			return backgroundNews;
 		}
-		throw new IllegalStateException("The object does not have sufficient data to render a valid asset. Only if the method isOkToRender is true will this method return a valid asset.");
+		throw new BodyProcessingException("The object does not have sufficient data to render a valid asset. Only if the method isOkToRender is true will this method return a valid asset.");
 	}
 }

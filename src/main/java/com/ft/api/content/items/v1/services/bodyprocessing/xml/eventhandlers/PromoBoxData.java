@@ -2,6 +2,7 @@ package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.unifiedContentModel.model.Asset;
 import com.ft.unifiedContentModel.model.PromoBox;
 import com.ft.unifiedContentModel.model.PromoBoxFields;
@@ -109,7 +110,7 @@ public class PromoBoxData extends BaseData implements AssetAware {
     }
 
     @Override
-    public Asset getAsset() throws IllegalStateException {
+    public Asset getAsset() throws BodyProcessingException {
         PromoBox promoBox = null;
         if(this.isAllRequiredDataPresent()) {
             promoBox = new PromoBox();
@@ -120,7 +121,7 @@ public class PromoBoxData extends BaseData implements AssetAware {
             promoBox.setFields(fields);
             return promoBox;
         }
-        throw new IllegalStateException("The object does not have sufficient data to render a valid asset. Only if the method isOkToRender is true will this method return a valid asset.");
+        throw new BodyProcessingException("The object does not have sufficient data to render a valid asset. Only if the method isOkToRender is true will this method return a valid asset.");
      }
 
     private PromoBoxImage createPromoImage() {
