@@ -3,6 +3,7 @@ package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 import static org.springframework.util.Assert.notNull;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -56,7 +57,7 @@ public class DataTableXMLEventHandler extends AsideBaseXMLEventHandler<DataTable
 	}
 
 	@Override
-	protected void processFallBack(StartElement startElement, XMLEventReader xmlEventReader, BodyWriter eventWriter, BodyProcessingContext bodyProcessingContext) throws XMLStreamException {
+	protected void processFallBack(StartElement startElement, XMLEventReader xmlEventReader, BodyWriter eventWriter, BodyProcessingContext bodyProcessingContext) throws BodyProcessingException, XMLStreamException {
 		stripElementAndContentsXMLEventHandler.handleStartElementEvent(startElement, xmlEventReader, eventWriter, bodyProcessingContext);
 	}
 }

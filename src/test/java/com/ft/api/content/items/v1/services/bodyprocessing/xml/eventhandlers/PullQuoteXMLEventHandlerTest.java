@@ -19,6 +19,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
 import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
 import com.ft.unifiedContentModel.model.Asset;
@@ -44,7 +45,7 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
         when(mockPullQuoteXMLParser.parseElementData(Mockito.isA(StartElement.class), Mockito.eq(mockXmlEventReader))).thenReturn(mockPullQuoteData);
     }
 
-    @Test(expected=XMLStreamException.class)
+    @Test(expected=BodyProcessingException.class)
     public void failStartElementNotPullQuote() throws XMLStreamException {
         startElement = getStartElement("p");
         pullQuoteXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);

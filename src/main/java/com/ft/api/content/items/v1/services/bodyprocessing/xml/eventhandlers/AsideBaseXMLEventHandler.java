@@ -7,6 +7,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
 import com.ft.unifiedContentModel.model.Asset;
 
@@ -49,8 +50,8 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
 
     }
 
-	protected void processFallBack(StartElement startElement, XMLEventReader xmlEventReader, BodyWriter eventWriter, BodyProcessingContext bodyProcessingContext) throws XMLStreamException {
-		throw new XMLStreamException("event must correspond to" + getElementName() + " tag");
+	protected void processFallBack(StartElement startElement, XMLEventReader xmlEventReader, BodyWriter eventWriter, BodyProcessingContext bodyProcessingContext) throws BodyProcessingException, XMLStreamException {
+		throw new BodyProcessingException("event must correspond to" + getElementName() + " tag");
 	}
 
     // Return the name of the start element - the element that the extending class is registered with

@@ -19,6 +19,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
 import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
 import com.ft.unifiedContentModel.model.Asset;
@@ -45,7 +46,7 @@ public class BackgroundNewsXMLEventHandlerTest extends BaseXMLEventHandlerTest {
 	  when(mockBackgroundNewsXMLParser.parseElementData(Mockito.any(StartElement.class), Mockito.eq(mockXmlEventReader))).thenReturn(mockBackgroundNewsData);
 	}
 
-	@Test(expected=XMLStreamException.class)
+	@Test(expected=BodyProcessingException.class)
 	public void failStartElementNotBackgroundNews() throws XMLStreamException {
 	  startElement = getStartElement("p");
 	  backgroundNewsXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
