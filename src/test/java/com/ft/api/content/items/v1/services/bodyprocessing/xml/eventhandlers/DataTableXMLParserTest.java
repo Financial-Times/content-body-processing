@@ -50,7 +50,7 @@ public class DataTableXMLParserTest extends BaseXMLParserTest {
         DataTableData dataTableData = dataTableXMLParser.parseElementData(startElement, xmlEventReader);
 
         assertNotNull("DataTableData should not be null", dataTableData);
-        assertTrue(dataTableData.isOkToRender());
+        assertTrue(dataTableData.isAllRequiredDataPresent());
         assertEquals("Body was not as expected", validXml, dataTableData.getBody().trim());
         assertFalse("xmlReader should have no more events", xmlEventReader.hasNext());
     }
@@ -62,7 +62,7 @@ public class DataTableXMLParserTest extends BaseXMLParserTest {
         DataTableData dataTableData = dataTableXMLParser.parseElementData(startElement, xmlEventReader);
 
         assertNotNull("DataTableData should not be null", dataTableData);
-        assertTrue(dataTableData.isOkToRender());
+        assertTrue(dataTableData.isAllRequiredDataPresent());
         assertEquals("Body was not as expected", validXmlNoContents, dataTableData.getBody().trim());
         assertFalse("xmlReader should have no more events", xmlEventReader.hasNext());
     }
@@ -74,7 +74,7 @@ public class DataTableXMLParserTest extends BaseXMLParserTest {
         dataTableXMLParser.transformFieldContentToStructuredFormat(dataTableData, mockBodyProcessingContext);
 
         assertNotNull("DataTableData should not be null", dataTableData);
-        assertTrue(dataTableData.isOkToRender());
+        assertTrue(dataTableData.isAllRequiredDataPresent());
         assertEquals("Body was not as expected", validXml, dataTableData.getBody().trim());
     }
     
@@ -85,7 +85,7 @@ public class DataTableXMLParserTest extends BaseXMLParserTest {
         dataTableXMLParser.transformFieldContentToStructuredFormat(dataTableData, mockBodyProcessingContext);
 
         assertNotNull("DataTableData should not be null", dataTableData);
-        assertFalse(dataTableData.isOkToRender());
+        assertFalse(dataTableData.isAllRequiredDataPresent());
         assertEquals("Body was not as expected", null, dataTableData.getBody());
     }
 

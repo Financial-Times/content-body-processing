@@ -25,28 +25,28 @@ public class InteractiveGraphicDataTest {
     }
     
     @Test
-    public void testIsOkToRenderWhenIdAndSrcPresent() {
-        interactiveGraphicData.setId(id);
-        interactiveGraphicData.setSrc(src);
-        assertTrue(interactiveGraphicData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenIdAndSrcPresent() {
+            interactiveGraphicData.setId(id);
+            interactiveGraphicData.setSrc(src);
+            assertTrue(interactiveGraphicData.isAllRequiredDataPresent());
+        }
     
     @Test
-    public void testIsOkToRenderWhenOnlyIdPresent() {
-        interactiveGraphicData.setId(id);        
-        assertFalse(interactiveGraphicData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenOnlyIdPresent() {
+            interactiveGraphicData.setId(id);        
+            assertFalse(interactiveGraphicData.isAllRequiredDataPresent());
+        }
     
     @Test
-    public void testIsOkToRenderWhenOnlySrcPresent() {
-        interactiveGraphicData.setSrc(src);
-        assertFalse(interactiveGraphicData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenOnlySrcPresent() {
+            interactiveGraphicData.setSrc(src);
+            assertFalse(interactiveGraphicData.isAllRequiredDataPresent());
+        }
     
     @Test
-    public void testIsOkToRenderWhenNoDataPresent() {
-        assertFalse(interactiveGraphicData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenNoDataPresent() {
+            assertFalse(interactiveGraphicData.isAllRequiredDataPresent());
+        }
     
     @Test
     public void testGetAssetIsValid() {

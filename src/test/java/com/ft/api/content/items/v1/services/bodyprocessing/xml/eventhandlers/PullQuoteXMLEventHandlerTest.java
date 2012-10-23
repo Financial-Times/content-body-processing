@@ -56,7 +56,7 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
         Map<String,String> attributes =  new HashMap<String,String>();
         startElement = getStartElementWithAttributes("web-pull-quote", attributes);
         
-        when(mockPullQuoteData.isOkToRender()).thenReturn(true);
+        when(mockPullQuoteData.isAllRequiredDataPresent()).thenReturn(true);
         when(mockPullQuoteData.getAsset()).thenReturn(mockAsset);
         when(mockAsset.getName()).thenReturn(elementName);
         when(mockBodyProcessingContext.addAsset(Mockito.isA(Asset.class))).thenReturn(mockAsset);
@@ -73,7 +73,7 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
        Map<String,String> attributes =  new HashMap<String,String>();
        startElement = getStartElementWithAttributes("web-pull-quote", attributes);
 
-       when(mockPullQuoteData.isOkToRender()).thenReturn(false);
+       when(mockPullQuoteData.isAllRequiredDataPresent()).thenReturn(false);
        when(mockAsset.getName()).thenReturn(elementName);
        
        pullQuoteXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
@@ -91,7 +91,7 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
        when(mockPullQuoteData.getQuoteSource()).thenReturn(null);
        String quoteText = "some text";
        when(mockPullQuoteData.getQuoteText()).thenReturn(quoteText);
-       when(mockPullQuoteData.isOkToRender()).thenReturn(false);
+       when(mockPullQuoteData.isAllRequiredDataPresent()).thenReturn(false);
        when(mockAsset.getName()).thenReturn(elementName);
        
        pullQuoteXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
@@ -99,6 +99,27 @@ public class PullQuoteXMLEventHandlerTest extends BaseXMLEventHandlerTest {
        verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "pullquote");
        verify(mockStAXTransformingBodyProcessor, never()).process(quoteText, mockBodyProcessingContext);
        verify(mockPullQuoteXMLParser, never()).transformFieldContentToStructuredFormat(mockPullQuoteData, mockBodyProcessingContext);
+   }
+   
+   @Test
+   public void shouldNotWriteAsideTagNoValidDataAfterTransformParsedData() throws XMLStreamException {
+       String elementName = "someElementName";
+       Map<String,String> attributes =  new HashMap<String,String>();
+       startElement = getStartElementWithAttributes("web-pull-quote", attributes);
+       
+       String sourceText = "some source text";
+       when(mockPullQuoteData.getQuoteSource()).thenReturn(sourceText);
+       String quoteText = "some text";
+       when(mockPullQuoteData.getQuoteText()).thenReturn(quoteText);
+       when(mockPullQuoteData.isAllRequiredDataPresent()).thenReturn(true).thenReturn(false);
+       
+       when(mockAsset.getName()).thenReturn(elementName);
+       
+       pullQuoteXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
+
+       verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "pullquote");
+       verify(mockStAXTransformingBodyProcessor, never()).process(quoteText, mockBodyProcessingContext);
+       verify(mockPullQuoteXMLParser).transformFieldContentToStructuredFormat(mockPullQuoteData, mockBodyProcessingContext);
    }
    
    @Test(expected = IllegalArgumentException.class) 

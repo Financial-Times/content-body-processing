@@ -49,7 +49,7 @@ public class PromoBoxXMLEventHandlerTest extends BaseXMLEventHandlerTest {
         Map<String,String> attributes =  new HashMap<String,String>();
         startElement = getStartElementWithAttributes("promo-box", attributes);
         
-        when(mockPromoBox.isOkToRender()).thenReturn(true);
+        when(mockPromoBox.isAllRequiredDataPresent()).thenReturn(true);
         when(mockPromoBox.getAsset()).thenReturn(mockAsset);
         when(mockBodyProcessingContext.addAsset(Mockito.isA(Asset.class))).thenReturn(mockAsset);
         
@@ -65,7 +65,7 @@ public class PromoBoxXMLEventHandlerTest extends BaseXMLEventHandlerTest {
         Map<String,String> attributes =  new HashMap<String,String>();
         startElement = getStartElementWithAttributes("promo-box", attributes);
         
-        when(mockPromoBox.isOkToRender()).thenReturn(false);
+        when(mockPromoBox.isAllRequiredDataPresent()).thenReturn(false);
         
         promoBoxXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
@@ -79,12 +79,26 @@ public class PromoBoxXMLEventHandlerTest extends BaseXMLEventHandlerTest {
         Map<String,String> attributes =  new HashMap<String,String>();
         startElement = getStartElementWithAttributes("promo-box", attributes);
         
-        when(mockPromoBox.isOkToRender()).thenReturn(false);
+        when(mockPromoBox.isAllRequiredDataPresent()).thenReturn(false);
         
         promoBoxXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
         verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "promoBox");
         verify(mockPromoBoxXMLParser, never()).transformFieldContentToStructuredFormat(mockPromoBox, mockBodyProcessingContext);
+    }
+    
+    @Test
+    public void shouldNotWriteTheAsideTagMissingIdElementAfterTransformation() throws XMLStreamException {
+        String elementName = "someElementName";
+        Map<String,String> attributes =  new HashMap<String,String>();
+        startElement = getStartElementWithAttributes("promo-box", attributes);
+        
+        when(mockPromoBox.isAllRequiredDataPresent()).thenReturn(true).thenReturn(false);
+        
+        promoBoxXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
+
+        verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "promoBox");
+        verify(mockPromoBoxXMLParser).transformFieldContentToStructuredFormat(mockPromoBox, mockBodyProcessingContext);
     }
     
     @Test(expected = IllegalArgumentException.class) 

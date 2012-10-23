@@ -60,7 +60,7 @@ public class DataTableXMLEventHandlerTest extends BaseXMLEventHandlerTest  {
         attributes.put("class", "data-table");
         startElement = getStartElementWithAttributes("table", attributes);
 
-        when(mockDataTableData.isOkToRender()).thenReturn(true);
+        when(mockDataTableData.isAllRequiredDataPresent()).thenReturn(true);
         when(mockDataTableData.getAsset()).thenReturn(mockAsset);
         when(mockAsset.getName()).thenReturn(elementName);
         when(mockBodyProcessingContext.addAsset(Mockito.isA(Asset.class))).thenReturn(mockAsset);
@@ -78,7 +78,7 @@ public class DataTableXMLEventHandlerTest extends BaseXMLEventHandlerTest  {
         attributes.put("class", "data-table");
         startElement = getStartElementWithAttributes("table", attributes);
 
-       when(mockDataTableData.isOkToRender()).thenReturn(false);
+       when(mockDataTableData.isAllRequiredDataPresent()).thenReturn(false);
        when(mockAsset.getName()).thenReturn(elementName);
 
         dataTableXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
@@ -96,7 +96,7 @@ public class DataTableXMLEventHandlerTest extends BaseXMLEventHandlerTest  {
 
        when(mockDataTableData.getBody()).thenReturn(null);
        String quoteText = "some text";
-       when(mockDataTableData.isOkToRender()).thenReturn(false);
+       when(mockDataTableData.isAllRequiredDataPresent()).thenReturn(false);
        when(mockAsset.getName()).thenReturn(elementName);
 
         dataTableXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
@@ -104,6 +104,26 @@ public class DataTableXMLEventHandlerTest extends BaseXMLEventHandlerTest  {
        verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "dataTable");
        verify(mockStAXTransformingBodyProcessor, never()).process(quoteText, mockBodyProcessingContext);
        verify(mockDataTableXMLParser, never()).transformFieldContentToStructuredFormat(mockDataTableData, mockBodyProcessingContext);
+   }
+   
+   @Test
+   public void shouldNotWriteTheAsideTagMissingBodyElementAfterTransformation() throws XMLStreamException {
+       String elementName = "asset1";
+       Map<String,String> attributes =  new HashMap<String,String>();
+       attributes.put("class", "data-table");
+       startElement = getStartElementWithAttributes("table", attributes);
+
+       String bodyText = "some body text";
+       when(mockDataTableData.getBody()).thenReturn(bodyText);
+       String quoteText = "some text";
+       when(mockDataTableData.isAllRequiredDataPresent()).thenReturn(true).thenReturn(false);
+       when(mockAsset.getName()).thenReturn(elementName);
+
+        dataTableXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
+
+       verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "dataTable");
+       verify(mockStAXTransformingBodyProcessor, never()).process(quoteText, mockBodyProcessingContext);
+       verify(mockDataTableXMLParser).transformFieldContentToStructuredFormat(mockDataTableData, mockBodyProcessingContext);
    }
 
    @Test(expected = IllegalArgumentException.class)

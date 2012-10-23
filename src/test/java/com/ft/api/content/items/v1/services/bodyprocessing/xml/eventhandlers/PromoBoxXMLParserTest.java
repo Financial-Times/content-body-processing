@@ -86,7 +86,7 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         PromoBoxData promoBoxData = promoBoxXMLParser.parseElementData(startElement, xmlEventReader);
 
         assertNotNull("PromoBoxData should not be null", promoBoxData);
-        assertTrue(promoBoxData.isOkToRender());
+        assertTrue(promoBoxData.isAllRequiredDataPresent());
         assertEquals("Title was not as expected", EXPECTED_PARSED_TITLE, promoBoxData.getTitle());
         assertEquals("Headline was not as expected", EXPECTED_PARSED_HEADLINE, promoBoxData.getHeadline());
         assertEquals("Intro was not as expected", EXPECTED_PARSED_INTRO, promoBoxData.getIntro());
@@ -144,7 +144,7 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         xmlEventReader = createReaderForXml(invalidXmlNoFileref);
         StartElement startElement = getStartElement(xmlEventReader);
         PromoBoxData promoBoxData = promoBoxXMLParser.parseElementData(startElement, xmlEventReader);
-        assertFalse(promoBoxData.isOkToRender());
+        assertFalse(promoBoxData.isAllRequiredDataPresent());
     }
     
     @Test
@@ -152,7 +152,7 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         xmlEventReader = createReaderForXml(invalidXmlEmptyFileref);
         StartElement startElement = getStartElement(xmlEventReader);
         PromoBoxData promoBoxData = promoBoxXMLParser.parseElementData(startElement, xmlEventReader);
-        assertFalse(promoBoxData.isOkToRender());
+        assertFalse(promoBoxData.isAllRequiredDataPresent());
     }
     
     @Test
@@ -160,6 +160,6 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         xmlEventReader = createReaderForXml(invalidXmlSpacesOnlyFileref);
         StartElement startElement = getStartElement(xmlEventReader);
         PromoBoxData promoBoxData = promoBoxXMLParser.parseElementData(startElement, xmlEventReader);
-        assertFalse(promoBoxData.isOkToRender());
+        assertFalse(promoBoxData.isAllRequiredDataPresent());
     }
 }

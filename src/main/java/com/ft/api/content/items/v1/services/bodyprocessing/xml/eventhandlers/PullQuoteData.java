@@ -28,7 +28,7 @@ public class PullQuoteData extends BaseData implements AssetAware {
     }
 
     @Override
-    public boolean isOkToRender() {
+    public boolean isAllRequiredDataPresent() {
        return containsValidData(this.quoteText) || containsValidData(this.quoteSource);
     }
 
@@ -39,7 +39,7 @@ public class PullQuoteData extends BaseData implements AssetAware {
     @Override
     public Asset getAsset() {
        PullQuote pullQuote = null;
-       if(this.isOkToRender()) {
+       if(this.isAllRequiredDataPresent()) {
            pullQuote = new PullQuote();
            PullQuoteFields fields = new PullQuoteFields(nullIfEmpty(this.quoteText), nullIfEmpty(this.quoteSource));
            pullQuote.setFields(fields);

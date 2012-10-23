@@ -101,7 +101,7 @@ public class PromoBoxData extends BaseData implements AssetAware {
     }
     
     @Override
-    public boolean isOkToRender() {
+    public boolean isAllRequiredDataPresent() {
         if(!StringUtils.isBlank(this.title) && !StringUtils.isBlank(this.imageFileRef)) {
             return true;
         }
@@ -111,7 +111,7 @@ public class PromoBoxData extends BaseData implements AssetAware {
     @Override
     public Asset getAsset() throws IllegalStateException {
         PromoBox promoBox = null;
-        if(this.isOkToRender()) {
+        if(this.isAllRequiredDataPresent()) {
             promoBox = new PromoBox();
             PromoBoxImage promoImage = createPromoImage();
             

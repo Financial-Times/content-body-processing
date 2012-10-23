@@ -33,28 +33,28 @@ public class PromoBoxDataTest {
     }
     
     @Test
-    public void testIsOkToRenderWhenSourceAndTextPresent() {
-        promoBoxData.setTitle(title);
-        promoBoxData.setImageFileRef(imageFileRef);
-        assertTrue(promoBoxData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenSourceAndTextPresent() {
+            promoBoxData.setTitle(title);
+            promoBoxData.setImageFileRef(imageFileRef);
+            assertTrue(promoBoxData.isAllRequiredDataPresent());
+        }
     
     @Test
-    public void testIsOkToRenderWhenTitlePresent() {
-        promoBoxData.setTitle(title);     
-        assertFalse(promoBoxData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenTitlePresent() {
+            promoBoxData.setTitle(title);     
+            assertFalse(promoBoxData.isAllRequiredDataPresent());
+        }
     
     @Test
-    public void testIsOkToRenderWhenImageFileRefPresent() {
-        promoBoxData.setImageFileRef(imageFileRef);
-        assertFalse(promoBoxData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenImageFileRefPresent() {
+            promoBoxData.setImageFileRef(imageFileRef);
+            assertFalse(promoBoxData.isAllRequiredDataPresent());
+        }
     
     @Test
-    public void testIsOkToRenderWhenNoDataPresent() {
-        assertFalse(promoBoxData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenNoDataPresent() {
+            assertFalse(promoBoxData.isAllRequiredDataPresent());
+        }
     
     @Test
     public void testGetAssetIsValid() {

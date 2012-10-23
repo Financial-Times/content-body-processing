@@ -57,7 +57,7 @@ public class BackgroundNewsXMLParserTest extends BaseXMLParserTest {
         BackgroundNewsData backgroundNewsData = backgroundNewsXMLParser.parseElementData(startElement, xmlEventReader);
 
         assertNotNull("BackgroundNewsData should not be null", backgroundNewsData);
-        assertTrue(backgroundNewsData.isOkToRender());
+        assertTrue(backgroundNewsData.isAllRequiredDataPresent());
         assertEquals("Text was not as expected", EXPECTED_HEADER, backgroundNewsData.getHeader().trim());
         assertEquals("Source was not as expected", EXPECTED_TEXT, backgroundNewsData.getText().trim());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
@@ -70,7 +70,7 @@ public class BackgroundNewsXMLParserTest extends BaseXMLParserTest {
         BackgroundNewsData backgroundNewsData = backgroundNewsXMLParser.parseElementData(startElement, xmlEventReader);
 
         assertNotNull("PullQuoteData should not be null", backgroundNewsData);
-        assertTrue(backgroundNewsData.isOkToRender());
+        assertTrue(backgroundNewsData.isAllRequiredDataPresent());
         assertNull("Text was not as expected", backgroundNewsData.getText());
         assertEquals("Source was not as expected", EXPECTED_HEADER, backgroundNewsData.getHeader());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
@@ -83,7 +83,7 @@ public class BackgroundNewsXMLParserTest extends BaseXMLParserTest {
         BackgroundNewsData backgroundNewsData = backgroundNewsXMLParser.parseElementData(startElement, xmlEventReader);
 
         assertNotNull("PullQuoteData should not be null", backgroundNewsData);
-        assertTrue(backgroundNewsData.isOkToRender());
+        assertTrue(backgroundNewsData.isAllRequiredDataPresent());
         assertEquals("Text was not as expected", EXPECTED_TEXT, backgroundNewsData.getText());
         assertNull("Source was not as expected", backgroundNewsData.getHeader());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
@@ -96,7 +96,7 @@ public class BackgroundNewsXMLParserTest extends BaseXMLParserTest {
         BackgroundNewsData backgroundNewsData = backgroundNewsXMLParser.parseElementData(startElement, xmlEventReader);
 
         assertNotNull(backgroundNewsData);
-        assertFalse(backgroundNewsData.isOkToRender());
+        assertFalse(backgroundNewsData.isAllRequiredDataPresent());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
 
@@ -107,7 +107,7 @@ public class BackgroundNewsXMLParserTest extends BaseXMLParserTest {
         BackgroundNewsData backgroundNewsData = backgroundNewsXMLParser.parseElementData(startElement, xmlEventReader);
 
         assertNotNull("PullQuoteData should not be null", backgroundNewsData);
-        assertTrue(backgroundNewsData.isOkToRender());
+        assertTrue(backgroundNewsData.isAllRequiredDataPresent());
         assertEquals("Text was not as expected", "", backgroundNewsData.getText());
         assertEquals("Source was not as expected", EXPECTED_HEADER, backgroundNewsData.getHeader());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
@@ -120,7 +120,7 @@ public class BackgroundNewsXMLParserTest extends BaseXMLParserTest {
         BackgroundNewsData backgroundNewsData = backgroundNewsXMLParser.parseElementData(startElement, xmlEventReader);
 
         assertNotNull("PullQuoteData should not be null", backgroundNewsData);
-        assertTrue(backgroundNewsData.isOkToRender());
+        assertTrue(backgroundNewsData.isAllRequiredDataPresent());
         assertEquals("Text was not as expected", EXPECTED_TEXT, backgroundNewsData.getText());
         assertEquals("Source was not as expected", "", backgroundNewsData.getHeader());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());

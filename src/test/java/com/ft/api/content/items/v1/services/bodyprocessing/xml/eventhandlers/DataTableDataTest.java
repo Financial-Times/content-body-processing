@@ -20,28 +20,28 @@ public class DataTableDataTest {
     public void shouldBeTrueIsOkToRender() {
         DataTableData dataTableData = new DataTableData();
         dataTableData.setBody(BODY_TEXT);
-        assertTrue(dataTableData.isOkToRender());
+        assertTrue(dataTableData.isAllRequiredDataPresent());
     }
     
     @Test
     public void shouldNotBeTrueIsOkToRenderWithSpaces() {
         DataTableData dataTableData = new DataTableData();
         dataTableData.setBody("  ");
-        assertFalse(dataTableData.isOkToRender());
+        assertFalse(dataTableData.isAllRequiredDataPresent());
     }
     
     @Test
     public void shouldNotBeTrueIsOkToRenderWithEmptyString() {
         DataTableData dataTableData = new DataTableData();
         dataTableData.setBody("");
-        assertFalse(dataTableData.isOkToRender());
+        assertFalse(dataTableData.isAllRequiredDataPresent());
     }
     
     @Test
     public void shouldNotBeTrueIsOkToRenderWithNull() {
         DataTableData dataTableData = new DataTableData();
         dataTableData.setBody(null);
-        assertFalse(dataTableData.isOkToRender());
+        assertFalse(dataTableData.isAllRequiredDataPresent());
     }
     
     @Test

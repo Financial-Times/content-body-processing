@@ -26,35 +26,35 @@ public class PullQuoteDataTest {
     }
     
     @Test
-    public void testIsOkToRenderWhenSourceAndTextPresent() {
-        pullQuoteData.setQuoteSource(quoteSource);
-        pullQuoteData.setQuoteText(quoteText);
-        assertTrue(pullQuoteData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenSourceAndTextPresent() {
+            pullQuoteData.setQuoteSource(quoteSource);
+            pullQuoteData.setQuoteText(quoteText);
+            assertTrue(pullQuoteData.isAllRequiredDataPresent());
+        }
     
     @Test
-    public void testIsOkToRenderWhenSourcePresent() {
-        pullQuoteData.setQuoteSource(quoteSource);        
-        assertTrue(pullQuoteData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenSourcePresent() {
+            pullQuoteData.setQuoteSource(quoteSource);        
+            assertTrue(pullQuoteData.isAllRequiredDataPresent());
+        }
     
     @Test
-    public void testIsOkToRenderWhenTextPresent() {
-        pullQuoteData.setQuoteText(quoteText);
-        assertTrue(pullQuoteData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenTextPresent() {
+            pullQuoteData.setQuoteText(quoteText);
+            assertTrue(pullQuoteData.isAllRequiredDataPresent());
+        }
     
     @Test
-    public void testIsOkToRenderWhenNoDataPresent() {
-        assertFalse(pullQuoteData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenNoDataPresent() {
+            assertFalse(pullQuoteData.isAllRequiredDataPresent());
+        }
     
     @Test
-    public void testIsOkToRenderWhenNewLineDataIsOnlyPresent() {
-        pullQuoteData.setQuoteSource("\n");
-        pullQuoteData.setQuoteText("\n");
-        assertFalse(pullQuoteData.isOkToRender());
-    }
+        public void testIsAllRequiredDataPresentWhenNewLineDataIsOnlyPresent() {
+            pullQuoteData.setQuoteSource("\n");
+            pullQuoteData.setQuoteText("\n");
+            assertFalse(pullQuoteData.isAllRequiredDataPresent());
+        }
     
     @Test
     public void testGetAssetIsValid() {

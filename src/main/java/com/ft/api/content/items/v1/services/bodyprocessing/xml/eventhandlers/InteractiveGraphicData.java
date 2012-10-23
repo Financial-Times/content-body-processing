@@ -27,14 +27,14 @@ public class InteractiveGraphicData extends BaseData implements AssetAware {
        this.src = src;
     }
 
-    public boolean isOkToRender() {
+    public boolean isAllRequiredDataPresent() {
         return !StringUtils.isEmpty(this.id) && !StringUtils.isEmpty(this.src);
     }
 
     @Override
     public Asset getAsset() throws IllegalStateException {
         InteractiveGraphic interactiveGraphic = null;
-        if(this.isOkToRender()) {
+        if(this.isAllRequiredDataPresent()) {
             interactiveGraphic = new InteractiveGraphic();
             InteractiveGraphicFields fields = new InteractiveGraphicFields(nullIfEmpty(this.src), nullIfEmpty(this.id));
             interactiveGraphic.setFields(fields);

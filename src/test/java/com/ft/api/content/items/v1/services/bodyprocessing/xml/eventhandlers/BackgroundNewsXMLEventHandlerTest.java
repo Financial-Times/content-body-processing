@@ -57,7 +57,7 @@ public class BackgroundNewsXMLEventHandlerTest extends BaseXMLEventHandlerTest {
         Map<String,String> attributes =  new HashMap<String,String>();
         startElement = getStartElementWithAttributes("web-background-news", attributes);
 
-        when(mockBackgroundNewsData.isOkToRender()).thenReturn(true);
+        when(mockBackgroundNewsData.isAllRequiredDataPresent()).thenReturn(true);
         when(mockBackgroundNewsData.getAsset()).thenReturn(mockAsset);
         when(mockAsset.getName()).thenReturn(elementName);
         when(mockBodyProcessingContext.addAsset(Mockito.isA(Asset.class))).thenReturn(mockAsset);
@@ -74,7 +74,7 @@ public class BackgroundNewsXMLEventHandlerTest extends BaseXMLEventHandlerTest {
        Map<String,String> attributes =  new HashMap<String,String>();
        startElement = getStartElementWithAttributes("web-background-news", attributes);
 
-       when(mockBackgroundNewsData.isOkToRender()).thenReturn(false);
+       when(mockBackgroundNewsData.isAllRequiredDataPresent()).thenReturn(false);
        when(mockAsset.getName()).thenReturn(elementName);
 
 		backgroundNewsXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
@@ -83,7 +83,7 @@ public class BackgroundNewsXMLEventHandlerTest extends BaseXMLEventHandlerTest {
        verify(mockBackgroundNewsXMLParser, never()).transformFieldContentToStructuredFormat(mockBackgroundNewsData, mockBodyProcessingContext);
    }
 
-	@Test
+   @Test
    public void shouldNotWriteTheAsideTagMissingSourceElement() throws XMLStreamException {
        String elementName = "someElementName";
        Map<String,String> attributes =  new HashMap<String,String>();
@@ -92,14 +92,34 @@ public class BackgroundNewsXMLEventHandlerTest extends BaseXMLEventHandlerTest {
        when(mockBackgroundNewsData.getHeader()).thenReturn(null);
        String quoteText = "some text";
        when(mockBackgroundNewsData.getText()).thenReturn(quoteText);
-       when(mockBackgroundNewsData.isOkToRender()).thenReturn(false);
+       when(mockBackgroundNewsData.isAllRequiredDataPresent()).thenReturn(false);
        when(mockAsset.getName()).thenReturn(elementName);
 
 		backgroundNewsXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
-       verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "backgroundNews", true);
+	   verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "backgroundNews");
        verify(mockStAXTransformingBodyProcessor, never()).process(quoteText, mockBodyProcessingContext);
        verify(mockBackgroundNewsXMLParser, never()).transformFieldContentToStructuredFormat(mockBackgroundNewsData, mockBodyProcessingContext);
+   }
+   
+   @Test
+   public void shouldNotWriteTheAsideTagMissingSourceElementAfterTransformation() throws XMLStreamException {
+       String elementName = "someElementName";
+       Map<String,String> attributes =  new HashMap<String,String>();
+       startElement = getStartElementWithAttributes("web-background-news", attributes);
+
+       String headerText = "some header text";
+       when(mockBackgroundNewsData.getHeader()).thenReturn(headerText);
+       String quoteText = "some text";
+       when(mockBackgroundNewsData.getText()).thenReturn(quoteText);
+       when(mockBackgroundNewsData.isAllRequiredDataPresent()).thenReturn(true).thenReturn(false);
+       when(mockAsset.getName()).thenReturn(elementName);
+
+        backgroundNewsXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
+
+       verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "backgroundNews");
+       verify(mockStAXTransformingBodyProcessor, never()).process(quoteText, mockBodyProcessingContext);
+       verify(mockBackgroundNewsXMLParser).transformFieldContentToStructuredFormat(mockBackgroundNewsData, mockBodyProcessingContext);
    }
 
    @Test(expected = IllegalArgumentException.class)

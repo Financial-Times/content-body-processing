@@ -30,15 +30,18 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
             T dataBean = parseElementData(startElement, xmlEventReader);
 
             // Add asset to the context and create the aside element if all required data is present
-            if (dataBean.isOkToRender()) {
+            if (dataBean.isAllRequiredDataPresent()) {
                 // process raw data and add any assets to the context
                 transformFieldContentToStructuredFormat(dataBean, bodyProcessingContext);
                 
-                // Get the asset and add it to the context
-                String assetName = addAssetToContextAndReturnAssetName(bodyProcessingContext, dataBean.getAsset());
-
-                // build aside element and skip until end of tag
-                asideElementWriter.writeAsideElement(eventWriter, assetName, getType());
+                // ensure that the mutated bean data is still valid for processing after the transform field content processing
+                if(dataBean.isAllRequiredDataPresent()) {
+                    // Get the asset and add it to the context
+                    String assetName = addAssetToContextAndReturnAssetName(bodyProcessingContext, dataBean.getAsset());
+    
+                    // build aside element and skip until end of tag
+                    asideElementWriter.writeAsideElement(eventWriter, assetName, getType());
+                }
             }
         } else {
             processFallBack(startElement, xmlEventReader, eventWriter, bodyProcessingContext);

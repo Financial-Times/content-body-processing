@@ -51,7 +51,7 @@ public class InteractiveGraphicXMLEventHandlerTest extends BaseXMLEventHandlerTe
         Map<String,String> attributes =  new HashMap<String,String>();
         startElement = getStartElementWithAttributes("plainHtml", attributes);
         
-        when(mockInteractiveGraphicData.isOkToRender()).thenReturn(true);
+        when(mockInteractiveGraphicData.isAllRequiredDataPresent()).thenReturn(true);
         when(mockInteractiveGraphicData.getAsset()).thenReturn(mockAsset);
         when(mockBodyProcessingContext.addAsset(Mockito.isA(Asset.class))).thenReturn(mockAsset);
         
@@ -67,7 +67,7 @@ public class InteractiveGraphicXMLEventHandlerTest extends BaseXMLEventHandlerTe
         Map<String,String> attributes =  new HashMap<String,String>();
         startElement = getStartElementWithAttributes("plainHtml", attributes);
         
-        when(mockInteractiveGraphicData.isOkToRender()).thenReturn(false);
+        when(mockInteractiveGraphicData.isAllRequiredDataPresent()).thenReturn(false);
         
         interactiveGraphicXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
@@ -84,13 +84,32 @@ public class InteractiveGraphicXMLEventHandlerTest extends BaseXMLEventHandlerTe
         when(mockInteractiveGraphicData.getId()).thenReturn(null);
         String srcText = "some text";
         when(mockInteractiveGraphicData.getSrc()).thenReturn(srcText);
-        when(mockInteractiveGraphicData.isOkToRender()).thenReturn(false);
+        when(mockInteractiveGraphicData.isAllRequiredDataPresent()).thenReturn(false);
         
         interactiveGraphicXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
         verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "interactiveGraphic");
         verify(mockStAXTransformingBodyProcessor, never()).process(srcText, mockBodyProcessingContext);
         verify(mockInteractiveGraphicXMLParser, never()).transformFieldContentToStructuredFormat(mockInteractiveGraphicData, mockBodyProcessingContext);
+    }
+    
+    @Test
+    public void shouldNotWriteTheAsideTagMissingIdElementAfterTransformation() throws XMLStreamException {
+        String elementName = "someElementName";
+        Map<String,String> attributes =  new HashMap<String,String>();
+        startElement = getStartElementWithAttributes("plainHtml", attributes);
+        
+        String idText = "idtext";
+        when(mockInteractiveGraphicData.getId()).thenReturn(idText);
+        String srcText = "some text";
+        when(mockInteractiveGraphicData.getSrc()).thenReturn(srcText);
+        when(mockInteractiveGraphicData.isAllRequiredDataPresent()).thenReturn(true).thenReturn(false);
+        
+        interactiveGraphicXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
+
+        verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "interactiveGraphic");
+        verify(mockStAXTransformingBodyProcessor, never()).process(srcText, mockBodyProcessingContext);
+        verify(mockInteractiveGraphicXMLParser).transformFieldContentToStructuredFormat(mockInteractiveGraphicData, mockBodyProcessingContext);
     }
     
     @Test(expected = IllegalArgumentException.class) 

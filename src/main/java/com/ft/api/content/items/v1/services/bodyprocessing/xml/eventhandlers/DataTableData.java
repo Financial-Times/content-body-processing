@@ -19,14 +19,14 @@ public class DataTableData extends BaseData implements AssetAware {
 	}
 
 	@Override
-	public boolean isOkToRender() {
+	public boolean isAllRequiredDataPresent() {
 		return !StringUtils.isBlank(this.body);
 	}
 
 	@Override
 	public Asset getAsset() throws IllegalStateException {
 		DataTable webTable = null;
-		if(isOkToRender()){
+		if(isAllRequiredDataPresent()){
 			webTable = new DataTable();
 			DataTableFields dataTableFields = new DataTableFields(nullIfEmpty(this.getBody()));
 			webTable.setFields(dataTableFields);

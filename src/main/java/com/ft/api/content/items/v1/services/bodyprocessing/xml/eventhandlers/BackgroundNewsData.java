@@ -27,14 +27,14 @@ public class BackgroundNewsData extends BaseData implements AssetAware {
 	}
 
 	@Override
-	public boolean isOkToRender() {
+	public boolean isAllRequiredDataPresent() {
 		return !StringUtils.isEmpty(this.text) || !StringUtils.isEmpty(this.header);
 	}
 
 	@Override
 	public Asset getAsset() throws IllegalStateException {
 		BackgroundNews backgroundNews = null;
-		if(isOkToRender()){
+		if(isAllRequiredDataPresent()){
 			backgroundNews = new BackgroundNews();
 			BackgroundNewsFields backgroundNewsFields = new BackgroundNewsFields(nullIfEmpty(this.getHeader()), nullIfEmpty(this.getText()));
 			backgroundNews.setFields(backgroundNewsFields);

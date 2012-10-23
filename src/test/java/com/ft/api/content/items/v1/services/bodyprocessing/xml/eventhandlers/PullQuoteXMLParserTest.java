@@ -57,7 +57,7 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         
         assertNotNull("PullQuoteData should not be null", pullQuoteData);
-        assertTrue(pullQuoteData.isOkToRender());
+        assertTrue(pullQuoteData.isAllRequiredDataPresent());
         assertEquals("Text was not as expected",EXPECTED_TEXT, pullQuoteData.getQuoteText());
         assertEquals("Source was not as expected", EXPECTED_SOURCE, pullQuoteData.getQuoteSource());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
@@ -69,7 +69,7 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         StartElement startElement = getStartElement(xmlEventReader);
         PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull("PullQuoteData should not be null", pullQuoteData);
-        assertTrue(pullQuoteData.isOkToRender());
+        assertTrue(pullQuoteData.isAllRequiredDataPresent());
         assertNull("Text was not as expected", pullQuoteData.getQuoteText());
         assertEquals("Source was not as expected", EXPECTED_SOURCE, pullQuoteData.getQuoteSource());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
@@ -81,7 +81,7 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         StartElement startElement = getStartElement(xmlEventReader);
         PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull("PullQuoteData should not be null", pullQuoteData);
-        assertTrue(pullQuoteData.isOkToRender());
+        assertTrue(pullQuoteData.isAllRequiredDataPresent());
         assertEquals("Text was not as expected",EXPECTED_TEXT, pullQuoteData.getQuoteText());
         assertNull("Source was not as expected", pullQuoteData.getQuoteSource());
     }
@@ -92,7 +92,7 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         StartElement startElement = getStartElement(xmlEventReader);
         PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull(pullQuoteData);
-        assertFalse(pullQuoteData.isOkToRender());
+        assertFalse(pullQuoteData.isAllRequiredDataPresent());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
     
@@ -102,7 +102,7 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         StartElement startElement = getStartElement(xmlEventReader);
         PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull(pullQuoteData);
-        assertFalse(pullQuoteData.isOkToRender());
+        assertFalse(pullQuoteData.isAllRequiredDataPresent());
     }
     
     @Test
@@ -111,7 +111,7 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         StartElement startElement = getStartElement(xmlEventReader);
         PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull("PullQuoteData should not be null", pullQuoteData);
-        assertTrue(pullQuoteData.isOkToRender());
+        assertTrue(pullQuoteData.isAllRequiredDataPresent());
         assertEquals("Text was not as expected", "", pullQuoteData.getQuoteText());
         assertEquals("Source was not as expected", EXPECTED_SOURCE, pullQuoteData.getQuoteSource());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
@@ -123,7 +123,7 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         StartElement startElement = getStartElement(xmlEventReader);
         PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);
         assertNotNull("PullQuoteData should not be null", pullQuoteData);
-        assertTrue(pullQuoteData.isOkToRender());
+        assertTrue(pullQuoteData.isAllRequiredDataPresent());
         assertEquals("Text was not as expected",EXPECTED_TEXT, pullQuoteData.getQuoteText());
         assertEquals("Source was not as expected", "", pullQuoteData.getQuoteSource());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
