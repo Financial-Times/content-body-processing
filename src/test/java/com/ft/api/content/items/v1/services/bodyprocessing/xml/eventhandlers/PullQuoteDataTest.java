@@ -50,6 +50,13 @@ public class PullQuoteDataTest {
     }
     
     @Test
+    public void testIsOkToRenderWhenNewLineDataIsOnlyPresent() {
+        pullQuoteData.setQuoteSource("\n");
+        pullQuoteData.setQuoteText("\n");
+        assertFalse(pullQuoteData.isOkToRender());
+    }
+    
+    @Test
     public void testGetAssetIsValid() {
         pullQuoteData.setQuoteSource(quoteSource);
         pullQuoteData.setQuoteText(quoteText);
@@ -83,15 +90,54 @@ public class PullQuoteDataTest {
     }
     
     @Test
-    public void testEmptyFieldsAreNull() {
-        pullQuoteData.setQuoteSource("");
+    public void testEmptyWSpacesSourceFieldIsNull() {
+        pullQuoteData.setQuoteSource("sometext");
         pullQuoteData.setQuoteText(" ");
         Asset actualAsset = pullQuoteData.getAsset();
         assertNotNull("The asset should not be null.", actualAsset);
         
         PullQuoteFields actualFields = ((PullQuote)actualAsset).getFields();
         assertNotNull("The fields should not be null.", actualFields);
-        assertNull("The attribution was not as expected.", actualFields.getAttribution());
+        assertNotNull("The attribution was not as expected.", actualFields.getAttribution());
         assertNull("The body was not as expected.", actualFields.getBody());
+    }
+    
+    @Test
+    public void testEmptySourceFieldIsNull() {
+        pullQuoteData.setQuoteSource("sometext");
+        pullQuoteData.setQuoteText("");
+        Asset actualAsset = pullQuoteData.getAsset();
+        assertNotNull("The asset should not be null.", actualAsset);
+        
+        PullQuoteFields actualFields = ((PullQuote)actualAsset).getFields();
+        assertNotNull("The fields should not be null.", actualFields);
+        assertNotNull("The attribution was not as expected.", actualFields.getAttribution());
+        assertNull("The body was not as expected.", actualFields.getBody());
+    }
+    
+    @Test
+    public void testEmptyWSpacesTextFieldIsNull() {
+        pullQuoteData.setQuoteSource(" ");
+        pullQuoteData.setQuoteText("sometext");
+        Asset actualAsset = pullQuoteData.getAsset();
+        assertNotNull("The asset should not be null.", actualAsset);
+        
+        PullQuoteFields actualFields = ((PullQuote)actualAsset).getFields();
+        assertNotNull("The fields should not be null.", actualFields);
+        assertNull("The attribution was not as expected.", actualFields.getAttribution());
+        assertNotNull("The body was not as expected.", actualFields.getBody());
+    }
+    
+    @Test
+    public void testEmptyTextFieldIsNull() {
+        pullQuoteData.setQuoteSource("");
+        pullQuoteData.setQuoteText("sometext");
+        Asset actualAsset = pullQuoteData.getAsset();
+        assertNotNull("The asset should not be null.", actualAsset);
+        
+        PullQuoteFields actualFields = ((PullQuote)actualAsset).getFields();
+        assertNotNull("The fields should not be null.", actualFields);
+        assertNull("The attribution was not as expected.", actualFields.getAttribution());
+        assertNotNull("The body was not as expected.", actualFields.getBody());
     }
 }

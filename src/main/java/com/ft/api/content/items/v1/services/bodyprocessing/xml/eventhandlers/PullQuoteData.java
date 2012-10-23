@@ -29,7 +29,11 @@ public class PullQuoteData extends BaseData implements AssetAware {
 
     @Override
     public boolean isOkToRender() {
-       return !StringUtils.isEmpty(this.quoteText) || !StringUtils.isEmpty(this.quoteSource);
+       return containsValidData(this.quoteText) || containsValidData(this.quoteSource);
+    }
+
+    private boolean containsValidData(String data) {
+        return !StringUtils.isBlank(data) && !StringUtils.isEmpty(data);
     }
 
     @Override
