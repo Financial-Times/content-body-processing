@@ -11,4 +11,8 @@ public abstract class BaseData {
         return value.trim();
     }
 
+    protected boolean containsValidData(String data) {
+        return !StringUtils.isBlank(data) && !StringUtils.isEmpty(data);
+    }
+
 }

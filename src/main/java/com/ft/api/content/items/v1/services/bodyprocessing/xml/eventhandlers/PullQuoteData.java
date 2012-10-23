@@ -1,6 +1,5 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
-import org.apache.commons.lang.StringUtils;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.unifiedContentModel.model.Asset;
@@ -31,10 +30,6 @@ public class PullQuoteData extends BaseData implements AssetAware {
     @Override
     public boolean isAllRequiredDataPresent() {
        return containsValidData(this.quoteText) || containsValidData(this.quoteSource);
-    }
-
-    private boolean containsValidData(String data) {
-        return !StringUtils.isBlank(data) && !StringUtils.isEmpty(data);
     }
 
     @Override

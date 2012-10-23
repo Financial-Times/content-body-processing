@@ -29,7 +29,7 @@ public class BackgroundNewsData extends BaseData implements AssetAware {
 
 	@Override
 	public boolean isAllRequiredDataPresent() {
-		return !StringUtils.isEmpty(this.text) || !StringUtils.isEmpty(this.header);
+		return containsValidData(this.text) || containsValidData(this.header);
 	}
 
 	@Override

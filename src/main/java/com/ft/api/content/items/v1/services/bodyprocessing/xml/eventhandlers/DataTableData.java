@@ -21,7 +21,7 @@ public class DataTableData extends BaseData implements AssetAware {
 
 	@Override
 	public boolean isAllRequiredDataPresent() {
-		return !StringUtils.isBlank(this.body);
+		return containsValidData(this.body);
 	}
 
 	@Override

@@ -103,10 +103,7 @@ public class PromoBoxData extends BaseData implements AssetAware {
     
     @Override
     public boolean isAllRequiredDataPresent() {
-        if(!StringUtils.isBlank(this.title) && !StringUtils.isBlank(this.imageFileRef)) {
-            return true;
-        }
-        return false;
+        return containsValidData(this.title) && containsValidData(this.imageFileRef);
     }
 
     @Override

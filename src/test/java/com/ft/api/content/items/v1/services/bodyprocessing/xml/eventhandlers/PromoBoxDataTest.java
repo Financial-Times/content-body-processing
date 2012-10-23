@@ -34,28 +34,49 @@ public class PromoBoxDataTest {
     }
     
     @Test
-        public void testIsAllRequiredDataPresentWhenSourceAndTextPresent() {
-            promoBoxData.setTitle(title);
-            promoBoxData.setImageFileRef(imageFileRef);
-            assertTrue(promoBoxData.isAllRequiredDataPresent());
-        }
+    public void testIsAllRequiredDataPresentWhenSourceAndTextPresent() {
+        promoBoxData.setTitle(title);
+        promoBoxData.setImageFileRef(imageFileRef);
+        assertTrue(promoBoxData.isAllRequiredDataPresent());
+    }
     
     @Test
-        public void testIsAllRequiredDataPresentWhenTitlePresent() {
-            promoBoxData.setTitle(title);     
-            assertFalse(promoBoxData.isAllRequiredDataPresent());
-        }
+    public void testIsAllRequiredDataPresentWhenTitlePresent() {
+        promoBoxData.setTitle(title);     
+        assertFalse(promoBoxData.isAllRequiredDataPresent());
+    }
     
     @Test
-        public void testIsAllRequiredDataPresentWhenImageFileRefPresent() {
-            promoBoxData.setImageFileRef(imageFileRef);
-            assertFalse(promoBoxData.isAllRequiredDataPresent());
-        }
+    public void testIsAllRequiredDataPresentWhenTitlePresentImageFileRefIsNewLineData() {
+        promoBoxData.setImageFileRef("\n");
+        promoBoxData.setTitle(title);     
+        assertFalse(promoBoxData.isAllRequiredDataPresent());
+    }
     
     @Test
-        public void testIsAllRequiredDataPresentWhenNoDataPresent() {
-            assertFalse(promoBoxData.isAllRequiredDataPresent());
-        }
+    public void testIsAllRequiredDataPresentWhenImageFileRefPresent() {
+        promoBoxData.setImageFileRef(imageFileRef);
+        assertFalse(promoBoxData.isAllRequiredDataPresent());
+    }
+    
+    @Test
+    public void testIsAllRequiredDataPresentWhenImageFileRefPresentTitleIsNewLineData() {
+        promoBoxData.setImageFileRef(imageFileRef);
+        promoBoxData.setTitle("\n"); 
+        assertFalse(promoBoxData.isAllRequiredDataPresent());
+    }
+    
+    @Test
+    public void testIsAllRequiredDataPresentWhenNoDataPresent() {
+        assertFalse(promoBoxData.isAllRequiredDataPresent());
+    }
+    
+    @Test
+    public void testIsAllRequiredDataPresentWhenNoDataPresentBothNewLineData() {
+        promoBoxData.setImageFileRef("\n"); 
+        promoBoxData.setTitle("\n"); 
+        assertFalse(promoBoxData.isAllRequiredDataPresent());
+    }
     
     @Test
     public void testGetAssetIsValid() {

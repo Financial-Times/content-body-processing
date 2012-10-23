@@ -29,7 +29,7 @@ public class InteractiveGraphicData extends BaseData implements AssetAware {
     }
 
     public boolean isAllRequiredDataPresent() {
-        return !StringUtils.isEmpty(this.id) && !StringUtils.isEmpty(this.src);
+        return containsValidData(this.id) && containsValidData(this.src);
     }
 
     @Override

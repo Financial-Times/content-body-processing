@@ -26,28 +26,36 @@ public class InteractiveGraphicDataTest {
     }
     
     @Test
-        public void testIsAllRequiredDataPresentWhenIdAndSrcPresent() {
-            interactiveGraphicData.setId(id);
-            interactiveGraphicData.setSrc(src);
-            assertTrue(interactiveGraphicData.isAllRequiredDataPresent());
-        }
+    public void testIsAllRequiredDataPresentWhenIdAndSrcPresent() {
+        interactiveGraphicData.setId(id);
+        interactiveGraphicData.setSrc(src);
+        assertTrue(interactiveGraphicData.isAllRequiredDataPresent());
+    }
     
     @Test
-        public void testIsAllRequiredDataPresentWhenOnlyIdPresent() {
-            interactiveGraphicData.setId(id);        
-            assertFalse(interactiveGraphicData.isAllRequiredDataPresent());
-        }
+    public void testIsAllRequiredDataPresentWhenOnlyIdPresent() {
+        interactiveGraphicData.setId(id);        
+        assertFalse(interactiveGraphicData.isAllRequiredDataPresent());
+    }
     
     @Test
-        public void testIsAllRequiredDataPresentWhenOnlySrcPresent() {
-            interactiveGraphicData.setSrc(src);
-            assertFalse(interactiveGraphicData.isAllRequiredDataPresent());
-        }
+    public void testIsAllRequiredDataPresentWhenOnlyIdPresentSrcNewLineData() {
+        interactiveGraphicData.setSrc("\n");
+        interactiveGraphicData.setId(id);        
+        assertFalse(interactiveGraphicData.isAllRequiredDataPresent());
+    }
     
     @Test
-        public void testIsAllRequiredDataPresentWhenNoDataPresent() {
-            assertFalse(interactiveGraphicData.isAllRequiredDataPresent());
-        }
+    public void testIsAllRequiredDataPresentWhenOnlySrcPresentIdNewLineData() {
+        interactiveGraphicData.setSrc(src);
+        interactiveGraphicData.setId("\n");   
+        assertFalse(interactiveGraphicData.isAllRequiredDataPresent());
+    }
+    
+    @Test
+    public void testIsAllRequiredDataPresentWhenNoDataPresent() {
+        assertFalse(interactiveGraphicData.isAllRequiredDataPresent());
+    }
     
     @Test
     public void testGetAssetIsValid() {

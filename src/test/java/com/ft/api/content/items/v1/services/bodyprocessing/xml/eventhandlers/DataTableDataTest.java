@@ -39,6 +39,13 @@ public class DataTableDataTest {
     }
     
     @Test
+    public void shouldNotBeTrueIsOkToRenderWithNewLine() {
+        DataTableData dataTableData = new DataTableData();
+        dataTableData.setBody("\n");
+        assertFalse(dataTableData.isAllRequiredDataPresent());
+    }
+    
+    @Test
     public void shouldNotBeTrueIsOkToRenderWithNull() {
         DataTableData dataTableData = new DataTableData();
         dataTableData.setBody(null);
