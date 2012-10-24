@@ -21,6 +21,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -125,6 +126,30 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
         when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF_NO_UUID);
 
+        promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
+
+        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
+        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
+        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_INTRO), Mockito.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_LINK), Mockito.eq(mockBodyProcessingContext));
+
+        verify(mockPromoBoxData, never()).setImageType(EXPECTED_IMAGE_TYPE);
+        verify(mockPromoBoxData, never()).setImageHeight(EXPECTED_IMAGE_HEIGHT);
+        verify(mockPromoBoxData, never()).setImageWidth(EXPECTED_IMAGE_WIDTH);
+        verify(mockPromoBoxData, never()).setImageAlt(EXPECTED_IMAGE_ALT);
+        verify(mockBodyProcessingContext, never()).getAttributeForImage("type", uuid);
+    }
+    
+    @Test
+    public void testTransformFieldContentToStructuredFormatUUIDButNoImage() {
+        when(mockPromoBoxData.getTitle()).thenReturn(EXPECTED_PARSED_TITLE);
+        when(mockPromoBoxData.getHeadline()).thenReturn(EXPECTED_PARSED_HEADLINE);
+        when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
+        when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
+        when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF);
+        
+        when(mockBodyProcessingContext.getAttributeForImage("height", uuid)).thenThrow(new BodyProcessingException("some exception"));
+                
         promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
 
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
