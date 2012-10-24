@@ -80,7 +80,7 @@ public class BackgroundNewsXMLEventHandlerTest extends BaseXMLEventHandlerTest {
 
 		backgroundNewsXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
-       verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "backgroundNews", true);
+       verify(mockAsideElementWriter, never()).writeAsideElement(mockEventWriter, elementName, "backgroundNews");
        verify(mockBackgroundNewsXMLParser, never()).transformFieldContentToStructuredFormat(mockBackgroundNewsData, mockBodyProcessingContext);
    }
 
