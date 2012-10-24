@@ -1,7 +1,7 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -52,6 +53,9 @@ public class DataTableXMLParserTest extends BaseXMLParserTest {
         assertNotNull("DataTableData should not be null", dataTableData);
         assertTrue(dataTableData.isAllRequiredDataPresent());
         assertEquals("Body was not as expected", validXml, dataTableData.getBody().trim());
+        
+        XMLEvent nextEvent = xmlEventReader.nextEvent();
+        assertTrue(nextEvent.isEndDocument());
         assertFalse("xmlReader should have no more events", xmlEventReader.hasNext());
     }
     
@@ -64,6 +68,9 @@ public class DataTableXMLParserTest extends BaseXMLParserTest {
         assertNotNull("DataTableData should not be null", dataTableData);
         assertTrue(dataTableData.isAllRequiredDataPresent());
         assertEquals("Body was not as expected", validXmlNoContents, dataTableData.getBody().trim());
+
+        XMLEvent nextEvent = xmlEventReader.nextEvent();
+        assertTrue(nextEvent.isEndDocument());
         assertFalse("xmlReader should have no more events", xmlEventReader.hasNext());
     }
     

@@ -52,4 +52,9 @@ public class PullQuoteXMLParser extends BaseXMLParser<PullQuoteData> implements 
             pullQuoteData.setQuoteSource(parseRawContent(QUOTE_SOURCE, xmlEventReader));
         }
     }
+    
+    @Override
+    boolean doesTriggerElementContainAllDataNeeded() {
+        return false;
+    }
 }

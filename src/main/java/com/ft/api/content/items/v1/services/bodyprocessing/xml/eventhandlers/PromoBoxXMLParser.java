@@ -97,6 +97,11 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
         }
     }
     
+    @Override
+    boolean doesTriggerElementContainAllDataNeeded() {
+        return false;
+    }
+    
     private String parseAttribute(String attributeName, StartElement startElement) {
         Attribute fileref = startElement.getAttributeByName(QName.valueOf(attributeName));
         

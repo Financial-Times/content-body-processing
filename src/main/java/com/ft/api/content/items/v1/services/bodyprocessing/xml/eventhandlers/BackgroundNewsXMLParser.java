@@ -48,4 +48,9 @@ public class BackgroundNewsXMLParser extends BaseXMLParser<BackgroundNewsData> i
 		}
 		return null;
 	}
+
+    @Override
+    boolean doesTriggerElementContainAllDataNeeded() {
+        return false;
+    }
 }

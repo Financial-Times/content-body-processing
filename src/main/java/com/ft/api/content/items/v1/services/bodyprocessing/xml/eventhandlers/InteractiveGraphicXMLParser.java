@@ -67,6 +67,11 @@ public class InteractiveGraphicXMLParser extends BaseXMLParser<InteractiveGraphi
             throw new UnexpectedElementStructureException(String.format("Found unsupported element [%s] while parsing the Interactive Graphic element", elementName));
         }
     }
+    
+    @Override
+    boolean doesTriggerElementContainAllDataNeeded() {
+        return false;
+    }
 
     private void enforceStrictElementStructure(boolean isStartElementExpected, String expectedElementName, XMLEventReader xmlEventReader) {
        XMLEvent xmlEvent = peekNextElement(xmlEventReader);

@@ -23,9 +23,14 @@ public abstract class BaseXMLParser<T> {
 
         try {
             // Use the start element (trigger element) to populate the bean as
-            // some types require parsing to start from the starting element
+            // some types require parsing to start from the starting element.
             populateBean(dataBean, startElement, xmlEventReader);
 
+            // Check if more data beyond the start element is needed to populate the data bean
+            if(doesTriggerElementContainAllDataNeeded()) {
+                return dataBean;
+            }
+            
             while (xmlEventReader.hasNext()) {
                 XMLEvent nextEvent = xmlEventReader.nextEvent();
 
@@ -50,6 +55,8 @@ public abstract class BaseXMLParser<T> {
         }
         return dataBean;
     }
+
+    abstract boolean doesTriggerElementContainAllDataNeeded();
 
     abstract T createDataBeanInstance();
 

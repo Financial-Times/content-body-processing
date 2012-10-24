@@ -12,10 +12,11 @@ import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingB
 
 public class DataTableXMLParser extends BaseXMLParser<DataTableData> implements XmlParser<DataTableData> {
 
-	private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
+	private static final String START_ELEMENT_NAME = "table";
+    private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
 
 	public DataTableXMLParser(StAXTransformingBodyProcessor stAXTransformingBodyProcessor) {
-		super("web-table");
+		super(START_ELEMENT_NAME);
 				
 		notNull(stAXTransformingBodyProcessor, "The StAXTransformingBodyProcessor cannot be null.");
         this.stAXTransformingBodyProcessor = stAXTransformingBodyProcessor;
@@ -28,8 +29,8 @@ public class DataTableXMLParser extends BaseXMLParser<DataTableData> implements 
 
 	@Override
 	void populateBean(DataTableData dataTableData, StartElement nextStartElement, XMLEventReader xmlEventReader) throws UnexpectedElementStructureException {
-		if (isElementNamed(nextStartElement.getName(), "table")) {
-			dataTableData.setBody(parseRawContent("table", xmlEventReader, nextStartElement));
+		if (isElementNamed(nextStartElement.getName(), START_ELEMENT_NAME)) {
+			dataTableData.setBody(parseRawContent(START_ELEMENT_NAME, xmlEventReader, nextStartElement));
 		}
 	}
 
@@ -37,6 +38,11 @@ public class DataTableXMLParser extends BaseXMLParser<DataTableData> implements 
 	public void transformFieldContentToStructuredFormat(DataTableData dataTableData, BodyProcessingContext bodyProcessingContext) {
 		dataTableData.setBody(transformRawContentToStructuredFormat(dataTableData.getBody(), bodyProcessingContext));
 	}
+	
+    @Override
+    boolean doesTriggerElementContainAllDataNeeded() {
+        return true;
+    }
 
 	private String transformRawContentToStructuredFormat(String unprocessedContent, BodyProcessingContext bodyProcessingContext) {
 		if (!StringUtils.isBlank(unprocessedContent)) {
