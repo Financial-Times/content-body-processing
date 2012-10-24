@@ -5,7 +5,6 @@ import static org.springframework.util.Assert.notNull;
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
 import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import org.apache.commons.lang.StringUtils;
 
@@ -14,7 +13,6 @@ public class BackgroundNewsXMLParser extends BaseXMLParser<BackgroundNewsData> i
 	private static final String WEB_BACKGROUND_NEWS_TEXT = "web-background-news-text";
 	private static final String WEB_BACKGROUND_NEWS_HEADER = "web-background-news-header";
 	private static final String WEB_BACKGROUND_NEWS = "web-background-news";
-	private ElementRawDataParser rawDataParser = new ElementRawDataParser();
 	private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
 
 	public BackgroundNewsXMLParser(StAXTransformingBodyProcessor stAXTransformingBodyProcessor) {
@@ -37,14 +35,6 @@ public class BackgroundNewsXMLParser extends BaseXMLParser<BackgroundNewsData> i
 			backgroundNewsData.setHeader(parseRawContent(WEB_BACKGROUND_NEWS_HEADER, xmlEventReader));
         }
 	}
-
-	private String parseRawContent(String elementName, XMLEventReader xmlEventReader) {
-	        try {
-	            return rawDataParser.parse(elementName, xmlEventReader);
-	        } catch (XMLStreamException e) {
-	            return null;
-	        }
-	    }
 
 	@Override
 	public void transformFieldContentToStructuredFormat(BackgroundNewsData backgroundNewsData, BodyProcessingContext bodyProcessingContext) {

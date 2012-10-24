@@ -3,7 +3,6 @@ package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 import static org.springframework.util.Assert.notNull;
 
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,7 +15,6 @@ public class PullQuoteXMLParser extends BaseXMLParser<PullQuoteData> implements 
     private static final String QUOTE_SOURCE = "web-pull-quote-source";
     private static final String QUOTE_TEXT = "web-pull-quote-text";
     private static final String PULL_QUOTE = "web-pull-quote";
-    private ElementRawDataParser rawDataParser;
     private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
 
     public PullQuoteXMLParser(StAXTransformingBodyProcessor stAXTransformingBodyProcessor) {
@@ -54,14 +52,4 @@ public class PullQuoteXMLParser extends BaseXMLParser<PullQuoteData> implements 
             pullQuoteData.setQuoteSource(parseRawContent(QUOTE_SOURCE, xmlEventReader));
         }
     }
-
-    private String parseRawContent(String elementName, XMLEventReader xmlEventReader) {
-        rawDataParser = new ElementRawDataParser();
-        try {
-            return rawDataParser.parse(elementName, xmlEventReader);
-        } catch (XMLStreamException e) {
-            return null;
-        }
-    }
-
 }

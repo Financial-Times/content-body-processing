@@ -13,7 +13,11 @@ import javax.xml.stream.events.StartElement;
 
 public class DataTableXMLEventHandler extends AsideBaseXMLEventHandler<DataTableData> {
 
-	private XmlParser<DataTableData> dataTableDataXmlParser;
+	private static final String DATA_TABLE_ATTRIBUTE_VALUE = "data-table";
+    private static final String DATA_TABLE_ATTRIBUTE_NAME = "class";
+    private static final String DATA_TABLE_TYPE = "dataTable";
+    private static final String DATA_TABLE_HTML_ELEMENT_NAME = "table";
+    private XmlParser<DataTableData> dataTableDataXmlParser;
 	private StripElementAndContentsXMLEventHandler stripElementAndContentsXMLEventHandler;
 
 	public DataTableXMLEventHandler(XmlParser<DataTableData> dataTableDataXmlParser, AsideElementWriter asideElementWriter, 
@@ -28,12 +32,12 @@ public class DataTableXMLEventHandler extends AsideBaseXMLEventHandler<DataTable
 
 	@Override
 	String getElementName() {
-		return "table";
+		return DATA_TABLE_HTML_ELEMENT_NAME;
 	}
 
 	@Override
 	String getType() {
-		return "dataTable";
+		return DATA_TABLE_TYPE;
 	}
 
 	@Override
@@ -48,8 +52,8 @@ public class DataTableXMLEventHandler extends AsideBaseXMLEventHandler<DataTable
 
 	protected boolean isElementOfCorrectType(StartElement event) {
 		if(event.getName().getLocalPart().toLowerCase().equals(getElementName().toLowerCase())){
-			Attribute classAttr =  event.getAttributeByName(QName.valueOf("class"));
-			if(classAttr != null && classAttr.getValue().toLowerCase().equals("data-table")){
+			Attribute classAttr =  event.getAttributeByName(QName.valueOf(DATA_TABLE_ATTRIBUTE_NAME));
+			if(classAttr != null && classAttr.getValue().toLowerCase().equals(DATA_TABLE_ATTRIBUTE_VALUE)){
 				return true;
 			}
 		}

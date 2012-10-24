@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 
@@ -28,7 +27,6 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
     private static final String PROMO_IMAGE= "promo-image";
 
     private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
-    private ElementRawDataParser rawDataParser;
     
     protected PromoBoxXMLParser(StAXTransformingBodyProcessor stAXTransformingBodyProcessor) {
         super(PROMO_BOX);
@@ -107,14 +105,4 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
         }
         return null;
     }
-
-    private String parseRawContent(String elementName, XMLEventReader xmlEventReader) {
-        rawDataParser = new ElementRawDataParser();
-        try {
-            return rawDataParser.parse(elementName, xmlEventReader);
-        } catch (XMLStreamException e) {
-            return null;
-        }
-    }
-
 }

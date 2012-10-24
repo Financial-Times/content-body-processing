@@ -2,17 +2,17 @@ package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
 import static org.springframework.util.Assert.notNull;
 
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.events.StartElement;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
 import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.StartElement;
-import org.apache.commons.lang.StringUtils;
 
 public class DataTableXMLParser extends BaseXMLParser<DataTableData> implements XmlParser<DataTableData> {
 
 	private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
-	private ElementRawDataParser rawDataParser = new ElementRawDataParser();
 
 	public DataTableXMLParser(StAXTransformingBodyProcessor stAXTransformingBodyProcessor) {
 		super("web-table");
@@ -44,13 +44,4 @@ public class DataTableXMLParser extends BaseXMLParser<DataTableData> implements 
 		}
 		return null;
 	}
-
-	private String parseRawContent(String elementName, XMLEventReader xmlEventReader, StartElement nextStartElement) {
-     try {
-         return rawDataParser.parse(elementName, xmlEventReader, nextStartElement);
-     } catch (XMLStreamException e) {
-         return null;
-     }
  }
-
-}

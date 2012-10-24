@@ -4,7 +4,6 @@ import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingExcepti
 import com.ft.unifiedContentModel.model.Asset;
 import com.ft.unifiedContentModel.model.BackgroundNews;
 import com.ft.unifiedContentModel.model.BackgroundNewsFields;
-import org.apache.commons.lang.StringUtils;
 
 public class BackgroundNewsData extends BaseData implements AssetAware {
 

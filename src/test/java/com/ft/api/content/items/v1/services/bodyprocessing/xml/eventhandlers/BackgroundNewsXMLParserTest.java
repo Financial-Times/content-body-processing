@@ -25,7 +25,7 @@ public class BackgroundNewsXMLParserTest extends BaseXMLParserTest {
     @Mock private StAXTransformingBodyProcessor mockStAXTransformingBodyProcessor;
     @Mock private BodyProcessingContext mockBodyProcessingContext;
     private XMLEventReader xmlEventReader;
-    private BackgroundNewsXMLParser backgroundNewsXMLParser;
+    private BaseXMLParser<BackgroundNewsData> backgroundNewsXMLParser;
     
     private static final String EXPECTED_HEADER = "<p>BACKGROUND NEWS</p>";
     private static final String EXPECTED_TEXT = "<p>Although the UK has some well-known gay entrepreneurs, only a handful of openly gay people have run the largest companies.</p><p>These include Sir Charles Allen, former chief executive of ITV, executive chairman of Granada and chairman of EMI, currently regional ambassador for <a href=\"http://www.ft.com/intl/london-2012-olympics\">the Olympic Games</a>. Lord Browne was another, though he stayed in the closet for years.</p><p>There is also Michael Bishop, now Lord Glendonbrook, the ex-chairman of BMI, whose success in building up the airline led to a £223m sale to Lufthansa in 2009. He sits on the Conservative benches in the House of Lords and is a prominent voice for gay rights.</p><p>Another is Tim Hely Hutchison, group chief executive of Hachette Livre UK, Britain’s largest publisher, an old Etonian and son of an earl. He went to Oxford, but started his business career from scratch.</p><p>Entrepreneurs include Allegra McEvedy, the chef who co-founded Leon, the healthy fast-food chain. She gave up her role there in 2009 to focus on writing and television.</p><p>In the media, notable entrepreneurs include Eileen Gallagher, founder of Shed Media, creator of the television series <i>Footballers’ Wives</i>. She earned £3.8m from a £100m takeover by Time Warner.</p><p>Prominent gay figures in the City have included Ashley Steel, recently promoted to be vice-chairman of KPMG’s UK arm, and Robert Taylor, former chief executive of Kleinwort Benson.</p><p>Ernst &amp; Young, the professional services firm, recently headed the annual top 100 list of gay-friendly employers published by Stonewall, the gay rights organisation, followed by the Home Office and Barclays bank.</p><p>Others in the top 10 included investment bank Goldman Sachs, consultants Accenture and IBM, property group Gentoo and law firm Simmons &amp; Simmons.</p>";
@@ -69,7 +69,7 @@ public class BackgroundNewsXMLParserTest extends BaseXMLParserTest {
         StartElement startElement = getStartElement(xmlEventReader);
         BackgroundNewsData backgroundNewsData = backgroundNewsXMLParser.parseElementData(startElement, xmlEventReader);
 
-        assertNotNull("PullQuoteData should not be null", backgroundNewsData);
+        assertNotNull("BackgroundNewsData should not be null", backgroundNewsData);
         assertTrue(backgroundNewsData.isAllRequiredDataPresent());
         assertNull("Text was not as expected", backgroundNewsData.getText());
         assertEquals("Source was not as expected", EXPECTED_HEADER, backgroundNewsData.getHeader());
@@ -82,7 +82,7 @@ public class BackgroundNewsXMLParserTest extends BaseXMLParserTest {
         StartElement startElement = getStartElement(xmlEventReader);
         BackgroundNewsData backgroundNewsData = backgroundNewsXMLParser.parseElementData(startElement, xmlEventReader);
 
-        assertNotNull("PullQuoteData should not be null", backgroundNewsData);
+        assertNotNull("BackgroundNewsData should not be null", backgroundNewsData);
         assertTrue(backgroundNewsData.isAllRequiredDataPresent());
         assertEquals("Text was not as expected", EXPECTED_TEXT, backgroundNewsData.getText());
         assertNull("Source was not as expected", backgroundNewsData.getHeader());
@@ -106,7 +106,7 @@ public class BackgroundNewsXMLParserTest extends BaseXMLParserTest {
         StartElement startElement = getStartElement(xmlEventReader);
         BackgroundNewsData backgroundNewsData = backgroundNewsXMLParser.parseElementData(startElement, xmlEventReader);
 
-        assertNotNull("PullQuoteData should not be null", backgroundNewsData);
+        assertNotNull("BackgroundNewsData should not be null", backgroundNewsData);
         assertTrue(backgroundNewsData.isAllRequiredDataPresent());
         assertEquals("Text was not as expected", "", backgroundNewsData.getText());
         assertEquals("Source was not as expected", EXPECTED_HEADER, backgroundNewsData.getHeader());
@@ -119,7 +119,7 @@ public class BackgroundNewsXMLParserTest extends BaseXMLParserTest {
         StartElement startElement = getStartElement(xmlEventReader);
         BackgroundNewsData backgroundNewsData = backgroundNewsXMLParser.parseElementData(startElement, xmlEventReader);
 
-        assertNotNull("PullQuoteData should not be null", backgroundNewsData);
+        assertNotNull("BackgroundNewsData should not be null", backgroundNewsData);
         assertTrue(backgroundNewsData.isAllRequiredDataPresent());
         assertEquals("Text was not as expected", EXPECTED_TEXT, backgroundNewsData.getText());
         assertEquals("Source was not as expected", "", backgroundNewsData.getHeader());
