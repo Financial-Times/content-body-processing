@@ -13,7 +13,7 @@ import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingExcepti
 import com.ft.unifiedContentModel.model.Asset;
 import com.ft.unifiedContentModel.model.PromoBox;
 import com.ft.unifiedContentModel.model.PromoBoxFields;
-import com.ft.unifiedContentModel.model.PromoBoxImage;
+import com.ft.unifiedContentModel.model.TypeBasedImage;
 
 public class PromoBoxDataTest {
     private PromoBoxData promoBoxData;
@@ -22,11 +22,15 @@ public class PromoBoxDataTest {
     private String headline = "some headline";
     private String intro = "some intro";
     private String link = "some link";
-    private String imageType = "some image type";
-    private String imageHeight = "some image height";
-    private String imageWidth = "some image width";
+    private String imageType = "promo";
+    private String imageHeight = "10";
+    private String imageWidth = "20";
     private String imageAlt = "some image alt";
     private String imageUrl = "http://someimageurl";
+    
+    private String imageSource = "some image source";
+    private String imageCaption = "some image caption";
+    private String imageMediaType = "some image media type";
     
     @Before
     public void setUp() {
@@ -106,6 +110,10 @@ public class PromoBoxDataTest {
         promoBoxData.setImageAlt(imageAlt);
         promoBoxData.setImageUrl(imageUrl);
         
+        promoBoxData.setImageSource(imageSource);
+        promoBoxData.setImageCaption(imageCaption);
+        promoBoxData.setImageMediaType(imageMediaType);
+        
         Asset actualAsset = promoBoxData.getAsset();
         assertNotNull("The asset should not be null.", actualAsset);
         
@@ -117,12 +125,16 @@ public class PromoBoxDataTest {
         Assert.assertEquals("The headline was not as expected.", actualFields.getIntro(), intro);
         Assert.assertEquals("The headline was not as expected.", actualFields.getLink(), link);
         
-        PromoBoxImage actualPromoBoxImage = actualFields.getImage();
+        TypeBasedImage actualPromoBoxImage = actualFields.getImage();
         Assert.assertEquals("The image url was not as expected.", actualPromoBoxImage.getUrl(), imageUrl);
         Assert.assertEquals("The image type was not as expected.", actualPromoBoxImage.getType(), imageType);
-        Assert.assertEquals("The image height was not as expected.", actualPromoBoxImage.getHeight(), imageHeight);
-        Assert.assertEquals("The image width was not as expected.", actualPromoBoxImage.getWidth(), imageWidth);
+        Assert.assertEquals("The image height was not as expected.", actualPromoBoxImage.getHeight(), new Integer(imageHeight));
+        Assert.assertEquals("The image width was not as expected.", actualPromoBoxImage.getWidth(), new Integer(imageWidth));
         Assert.assertEquals("The image alt was not as expected.", actualPromoBoxImage.getAlt(), imageAlt);
+        
+        Assert.assertEquals("The image caption was not as expected.", actualPromoBoxImage.getCaption(), imageCaption);
+        Assert.assertEquals("The image source was not as expected.", actualPromoBoxImage.getSource(), imageSource);
+        Assert.assertEquals("The image mediaType was not as expected.", actualPromoBoxImage.getMediaType(), imageMediaType);
     }
     
     @Test
@@ -144,7 +156,7 @@ public class PromoBoxDataTest {
         Assert.assertEquals("The headline was not as expected.", actualFields.getIntro(), intro);
         Assert.assertEquals("The headline was not as expected.", actualFields.getLink(), link);
         
-        PromoBoxImage actualPromoBoxImage = actualFields.getImage();
+        TypeBasedImage actualPromoBoxImage = actualFields.getImage();
         assertNull("The PromoBoxImage should be null.", actualPromoBoxImage);
     }
 

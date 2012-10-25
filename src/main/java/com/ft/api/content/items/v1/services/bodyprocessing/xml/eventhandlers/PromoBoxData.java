@@ -6,7 +6,8 @@ import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingExcepti
 import com.ft.unifiedContentModel.model.Asset;
 import com.ft.unifiedContentModel.model.PromoBox;
 import com.ft.unifiedContentModel.model.PromoBoxFields;
-import com.ft.unifiedContentModel.model.PromoBoxImage;
+import com.ft.unifiedContentModel.model.TypeBasedImage;
+import com.ft.unifiedContentModel.model.TypeBasedImage.ImageType;
 
 public class PromoBoxData extends BaseData implements AssetAware {
 
@@ -14,12 +15,42 @@ public class PromoBoxData extends BaseData implements AssetAware {
     private String headline;
     private String intro;
     private String link;
+    
     private String imageUrl;
     private String imageType;
     private String imageHeight;
     private String imageWidth;
     private String imageAlt;
     private String imageFileRef;
+    private String imageCaption;
+    private String imageSource;
+    private String imageMediaType;
+    
+    public String getImageCaption() {
+        return imageCaption;
+    }
+
+    public void setImageCaption(String imageCaption) {
+        this.imageCaption = imageCaption;
+    }
+
+    public String getImageSource() {
+        return imageSource;
+    }
+
+    public void setImageSource(String imageSource) {
+        this.imageSource = imageSource;
+    }
+
+    public String getImageMediaType() {
+        return imageMediaType;
+    }
+
+    public void setImageMediaType(String imageMediaType) {
+        this.imageMediaType = imageMediaType;
+    }
+
+    
     
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
@@ -113,7 +144,7 @@ public class PromoBoxData extends BaseData implements AssetAware {
         PromoBox promoBox = null;
         if(this.isAllRequiredDataPresent()) {
             promoBox = new PromoBox();
-            PromoBoxImage promoImage = createPromoImage();
+            TypeBasedImage promoImage = createPromoImage();
             
             PromoBoxFields fields = new PromoBoxFields(nullIfEmpty(this.title), nullIfEmpty(this.headline), 
                                                        nullIfEmpty(intro), nullIfEmpty(this.link), promoImage);
@@ -123,10 +154,21 @@ public class PromoBoxData extends BaseData implements AssetAware {
         throw new BodyProcessingException(GET_ASSET_NO_VALID_EXCEPTION_MESSAGE);
      }
 
-    private PromoBoxImage createPromoImage() {
+   
+    private TypeBasedImage createPromoImage() {
         if(!StringUtils.isBlank(this.imageUrl)) {
-            return new PromoBoxImage(nullIfEmpty(this.imageUrl), nullIfEmpty(this.imageType), nullIfEmpty(this.imageHeight), 
-                    nullIfEmpty(this.imageWidth), nullIfEmpty(this.imageAlt));
+            Integer imageWidthAsInt = convertToInt(imageWidth);
+            Integer imageHeightAsInt = convertToInt(imageHeight);
+            return new TypeBasedImage(nullIfEmpty(imageUrl), ImageType.PROMO, nullIfEmpty(imageSource),  nullIfEmpty(imageAlt), 
+                    nullIfEmpty(imageCaption), imageHeightAsInt, imageWidthAsInt, nullIfEmpty(imageMediaType));
+        }
+        return null;
+    }
+
+    private Integer convertToInt(String value) {
+        String valueToConvert = nullIfEmpty(value);
+        if(valueToConvert != null) {
+            return Integer.parseInt(valueToConvert);
         }
         return null;
     }

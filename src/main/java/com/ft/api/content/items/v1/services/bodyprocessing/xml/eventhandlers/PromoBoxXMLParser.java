@@ -51,6 +51,9 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
             dataBean.setImageWidth(bodyProcessingContext.getAttributeForImage("width", imageUuid));
             dataBean.setImageAlt(bodyProcessingContext.getAttributeForImage("alt", imageUuid));
             dataBean.setImageUrl(bodyProcessingContext.getAttributeForImage("src", imageUuid));
+            dataBean.setImageCaption(bodyProcessingContext.getAttributeForImage("caption", imageUuid));
+            dataBean.setImageSource(bodyProcessingContext.getAttributeForImage("source", imageUuid));
+            dataBean.setImageMediaType(bodyProcessingContext.getAttributeForImage("media-type", imageUuid));
         } else  {
             // Setting to an empty string so the bean knows that there isn't a valid image available
             dataBean.setImageFileRef(StringUtils.EMPTY);
@@ -58,11 +61,13 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
     }
 
     private String parseImageUuid(String imageFileRef) {
-        Pattern p = Pattern.compile(UUID_REGEX);
-        Matcher m = p.matcher(imageFileRef);
-
-        if (m.find()) {
-            return m.group(0);
+        if(!StringUtils.isBlank(imageFileRef)) {
+            Pattern p = Pattern.compile(UUID_REGEX);
+            Matcher m = p.matcher(imageFileRef);
+    
+            if (m.find()) {
+                return m.group(0);
+            }
         }
         return StringUtils.EMPTY;
     }
