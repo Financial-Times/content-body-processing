@@ -10,5 +10,7 @@ public interface BodyProcessingContext {
 	public Asset assignAssetNameToExistingAsset(String uuid);
 
 	public Asset addAsset(Asset asset);
+	
+	public boolean imageExists(String uuid);
 
 }

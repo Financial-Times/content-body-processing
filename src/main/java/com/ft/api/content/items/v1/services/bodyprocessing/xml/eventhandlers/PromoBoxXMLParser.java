@@ -13,7 +13,6 @@ import javax.xml.stream.events.StartElement;
 import org.apache.commons.lang.StringUtils;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
-import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
 
 public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements XmlParser<PromoBoxData> {
@@ -45,7 +44,7 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
         
         // populate image attributes
         String imageUuid = parseImageUuid(dataBean.getImageFileRef());
-        boolean imageExists = doesImageExist(imageUuid, bodyProcessingContext);
+        boolean imageExists = bodyProcessingContext.imageExists(imageUuid);
         if(imageExists && !StringUtils.isBlank(imageUuid)) {
             dataBean.setImageType(PROMO_TYPE);
             dataBean.setImageHeight(bodyProcessingContext.getAttributeForImage("height", imageUuid));
@@ -55,15 +54,6 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
         } else  {
             // Setting to an empty string so the bean knows that there isn't a valid image available
             dataBean.setImageFileRef(StringUtils.EMPTY);
-        }
-    }
-    
-    private boolean doesImageExist(String imageUuid, BodyProcessingContext bodyProcessingContext) {
-        try {
-            bodyProcessingContext.getAttributeForImage("height", imageUuid);
-            return true;
-        } catch(BodyProcessingException e) {
-            return false;
         }
     }
 

@@ -100,7 +100,9 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
         when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
         when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF);
-
+        
+        when(mockBodyProcessingContext.imageExists(uuid)).thenReturn(true);
+        
         promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
 
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
@@ -145,7 +147,7 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
         when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF);
         
-        when(mockBodyProcessingContext.getAttributeForImage("height", uuid)).thenThrow(new BodyProcessingException("some exception"));
+        when(mockBodyProcessingContext.imageExists(uuid)).thenReturn(false);
                 
         promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
 
