@@ -12,7 +12,7 @@ public abstract class BaseData {
     }
 
     protected boolean containsValidData(String data) {
-        return !StringUtils.isBlank(data) && !StringUtils.isEmpty(data);
+        return !StringUtils.isBlank(data);
     }
 
 }
