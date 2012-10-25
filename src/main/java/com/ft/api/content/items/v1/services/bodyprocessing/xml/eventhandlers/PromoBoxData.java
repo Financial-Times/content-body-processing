@@ -103,7 +103,9 @@ public class PromoBoxData extends BaseData implements AssetAware {
     
     @Override
     public boolean isAllRequiredDataPresent() {
-        return containsValidData(this.title) && containsValidData(this.imageFileRef);
+        return containsValidData(this.title) || containsValidData(this.imageFileRef)
+                || containsValidData(this.headline) || containsValidData(this.intro)
+                || containsValidData(this.link);
     }
 
     @Override

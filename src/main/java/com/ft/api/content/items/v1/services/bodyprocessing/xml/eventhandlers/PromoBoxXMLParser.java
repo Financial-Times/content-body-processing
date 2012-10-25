@@ -52,6 +52,9 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
             dataBean.setImageWidth(bodyProcessingContext.getAttributeForImage("width", imageUuid));
             dataBean.setImageAlt(bodyProcessingContext.getAttributeForImage("alt", imageUuid));
             dataBean.setImageUrl(bodyProcessingContext.getAttributeForImage("src", imageUuid));
+        } else  {
+            // Setting to an empty string so the bean knows that there isn't a valid image available
+            dataBean.setImageFileRef(StringUtils.EMPTY);
         }
     }
     

@@ -34,34 +34,48 @@ public class PromoBoxDataTest {
     }
     
     @Test
-    public void testIsAllRequiredDataPresentWhenSourceAndTextPresent() {
-        promoBoxData.setTitle(title);
+    public void testIsAllRequiredDataPresentWhenImageFileRefPresent() {
         promoBoxData.setImageFileRef(imageFileRef);
         assertTrue(promoBoxData.isAllRequiredDataPresent());
     }
     
     @Test
+    public void testIsAllRequiredDataPresentWhenHeadlinePresent() {
+        promoBoxData.setHeadline(headline);
+        assertTrue(promoBoxData.isAllRequiredDataPresent());
+    }
+    
+    @Test
+    public void testIsAllRequiredDataPresentWhenIntroPresent() {
+        promoBoxData.setIntro(intro);
+        assertTrue(promoBoxData.isAllRequiredDataPresent());
+    }
+    
+    @Test
+    public void testIsAllRequiredDataPresentWhenLinkPresent() {
+        promoBoxData.setLink(link);
+        assertTrue(promoBoxData.isAllRequiredDataPresent());
+    }
+    
+    @Test
     public void testIsAllRequiredDataPresentWhenTitlePresent() {
-        promoBoxData.setTitle(title);     
+        promoBoxData.setTitle(title);
+        assertTrue(promoBoxData.isAllRequiredDataPresent());
+    }
+    
+    @Test
+    public void testIsAllRequiredDataPresentWhenImageFileRefWithDataPresent() {
         assertFalse(promoBoxData.isAllRequiredDataPresent());
     }
     
     @Test
-    public void testIsAllRequiredDataPresentWhenTitlePresentImageFileRefIsNewLineData() {
-        promoBoxData.setImageFileRef("\n");
-        promoBoxData.setTitle(title);     
+    public void testIsAllRequiredDataPresentWhenImageFileRefIsNewLineData() {
+        promoBoxData.setImageFileRef("\n");   
         assertFalse(promoBoxData.isAllRequiredDataPresent());
     }
     
     @Test
-    public void testIsAllRequiredDataPresentWhenImageFileRefPresent() {
-        promoBoxData.setImageFileRef(imageFileRef);
-        assertFalse(promoBoxData.isAllRequiredDataPresent());
-    }
-    
-    @Test
-    public void testIsAllRequiredDataPresentWhenImageFileRefPresentTitleIsNewLineData() {
-        promoBoxData.setImageFileRef(imageFileRef);
+    public void testIsAllRequiredDataPresentWhenTitleIsNewLineData() {
         promoBoxData.setTitle("\n"); 
         assertFalse(promoBoxData.isAllRequiredDataPresent());
     }
