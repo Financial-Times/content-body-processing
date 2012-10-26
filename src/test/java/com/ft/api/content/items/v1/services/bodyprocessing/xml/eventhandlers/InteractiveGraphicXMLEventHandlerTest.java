@@ -19,6 +19,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
 import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
 import com.ft.unifiedContentModel.model.Asset;
@@ -120,5 +121,13 @@ public class InteractiveGraphicXMLEventHandlerTest extends BaseXMLEventHandlerTe
     @Test(expected = IllegalArgumentException.class) 
     public void testWithNullAsideElementWriter() {
         new InteractiveGraphicXMLEventHandler(mockInteractiveGraphicXMLParser, null);
+    }
+    
+    @Test(expected = BodyProcessingException.class)
+    public void testWithMismatchRootElement() throws XMLStreamException {
+        Map<String,String> attributes =  new HashMap<String,String>();
+        startElement = getStartElementWithAttributes("someOtherElement", attributes);
+        
+        interactiveGraphicXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
     }
 }

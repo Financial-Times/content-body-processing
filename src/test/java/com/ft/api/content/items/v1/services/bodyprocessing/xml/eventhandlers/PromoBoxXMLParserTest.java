@@ -11,6 +11,7 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -96,9 +97,8 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         assertEquals("Intro was not as expected", EXPECTED_PARSED_INTRO, promoBoxData.getIntro());
         assertEquals("Link was not as expected", EXPECTED_PARSED_LINK, promoBoxData.getLink());
         assertEquals("Image file ref was not as expected", EXPECTED_PARSED_IMAGE_FILE_REF, promoBoxData.getImageFileRef());
-
     }
-
+    
     @Test
     public void testTransformFieldContentToStructuredFormat() {
         when(mockPromoBoxData.getTitle()).thenReturn(EXPECTED_PARSED_TITLE);
@@ -113,6 +113,35 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
 
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
+        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_INTRO), Mockito.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_LINK), Mockito.eq(mockBodyProcessingContext));
+
+        verify(mockPromoBoxData).setImageType(EXPECTED_IMAGE_TYPE);
+        verify(mockPromoBoxData).setImageHeight(EXPECTED_IMAGE_HEIGHT);
+        verify(mockPromoBoxData).setImageWidth(EXPECTED_IMAGE_WIDTH);
+        verify(mockPromoBoxData).setImageAlt(EXPECTED_IMAGE_ALT);
+        
+        verify(mockPromoBoxData).setImageCaption(EXPECTED_IMAGE_CAPTION);
+        verify(mockPromoBoxData).setImageSource(EXPECTED_IMAGE_SOURCE);
+        verify(mockPromoBoxData).setImageMediaType(EXPECTED_IMAGE_MEDIA_TYPE);
+        
+        verify(mockBodyProcessingContext, Mockito.never()).getAttributeForImage("type", uuid);
+    }
+    
+    @Test
+    public void testTransformFieldContentToStructuredFormatWithBlankContent() {
+        when(mockPromoBoxData.getTitle()).thenReturn("\n");
+        when(mockPromoBoxData.getHeadline()).thenReturn(" ");
+        when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
+        when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
+        when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF);
+        
+        when(mockBodyProcessingContext.imageExists(uuid)).thenReturn(true);
+        
+        promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
+
+        verify(mockStAXTransformingBodyProcessor, never()).process("\n", mockBodyProcessingContext);
+        verify(mockStAXTransformingBodyProcessor, never()).process(" ", mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_INTRO), Mockito.eq(mockBodyProcessingContext));
         verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_LINK), Mockito.eq(mockBodyProcessingContext));
 

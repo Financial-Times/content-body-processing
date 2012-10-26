@@ -1,7 +1,5 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.unifiedContentModel.model.Asset;
 import com.ft.unifiedContentModel.model.InteractiveGraphic;

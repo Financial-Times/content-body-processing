@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.xml.stream.XMLEventReader;
@@ -15,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
@@ -23,6 +26,9 @@ import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingB
 @RunWith(MockitoJUnitRunner.class)
 public class PullQuoteXMLParserTest extends BaseXMLParserTest {
 
+    private static final String ORIGINAL_SOURCE = "original highest rainfall recorded in one hour, Maidenhead, July 12 1901";
+    private static final String ORIGINAL_TEXT = "<p>original 92 mm</p>";
+    
     private static final String EXPECTED_SOURCE = "highest rainfall recorded in one hour, Maidenhead, July 12 1901";
     private static final String EXPECTED_TEXT = "<p>92 mm</p>";
     private XMLEventReader xmlEventReader;
@@ -37,12 +43,13 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
     private PullQuoteXMLParser pullQuoteXMLParser;
     @Mock private StAXTransformingBodyProcessor mockStAXTransformingBodyProcessor;
     @Mock private BodyProcessingContext mockBodyProcessingContext;
+    @Mock PullQuoteData mockPullQuoteData; 
     
     @Before
     public void setUp() {
         pullQuoteXMLParser = new PullQuoteXMLParser(mockStAXTransformingBodyProcessor);
-        when(mockStAXTransformingBodyProcessor.process(EXPECTED_SOURCE, mockBodyProcessingContext)).thenReturn(EXPECTED_SOURCE);
-        when(mockStAXTransformingBodyProcessor.process(EXPECTED_TEXT, mockBodyProcessingContext)).thenReturn(EXPECTED_TEXT);
+        when(mockStAXTransformingBodyProcessor.process(ORIGINAL_SOURCE, mockBodyProcessingContext)).thenReturn(EXPECTED_SOURCE);
+        when(mockStAXTransformingBodyProcessor.process(ORIGINAL_TEXT, mockBodyProcessingContext)).thenReturn(EXPECTED_TEXT);
     }
     
     @Test(expected = IllegalArgumentException.class)
@@ -127,5 +134,33 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
         assertEquals("Text was not as expected",EXPECTED_TEXT, pullQuoteData.getQuoteText());
         assertEquals("Source was not as expected", "", pullQuoteData.getQuoteSource());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
+    }
+    
+    @Test
+    public void testTransformFieldContentToStructuredFormat() {
+        when(mockPullQuoteData.getQuoteSource()).thenReturn(ORIGINAL_SOURCE);
+        when(mockPullQuoteData.getQuoteText()).thenReturn(ORIGINAL_TEXT);
+                
+        pullQuoteXMLParser.transformFieldContentToStructuredFormat(mockPullQuoteData, mockBodyProcessingContext);
+        
+        verify(mockPullQuoteData).setQuoteText(EXPECTED_TEXT);
+        verify(mockPullQuoteData).setQuoteSource(EXPECTED_SOURCE);
+                
+        verify(mockStAXTransformingBodyProcessor).process(ORIGINAL_SOURCE, mockBodyProcessingContext);
+        verify(mockStAXTransformingBodyProcessor).process(ORIGINAL_TEXT, mockBodyProcessingContext);
+    }
+    
+    @Test
+    public void testTransformFieldContentToStructuredFormatWithBlankContent() {
+        when(mockPullQuoteData.getQuoteSource()).thenReturn("\n");
+        when(mockPullQuoteData.getQuoteText()).thenReturn(ORIGINAL_TEXT);
+                
+        pullQuoteXMLParser.transformFieldContentToStructuredFormat(mockPullQuoteData, mockBodyProcessingContext);
+        
+        verify(mockPullQuoteData).setQuoteText(EXPECTED_TEXT);
+        verify(mockPullQuoteData, never()).setQuoteSource(EXPECTED_SOURCE);
+                
+        verify(mockStAXTransformingBodyProcessor, never()).process(ORIGINAL_SOURCE, mockBodyProcessingContext);
+        verify(mockStAXTransformingBodyProcessor).process(ORIGINAL_TEXT, mockBodyProcessingContext);
     }
 }
