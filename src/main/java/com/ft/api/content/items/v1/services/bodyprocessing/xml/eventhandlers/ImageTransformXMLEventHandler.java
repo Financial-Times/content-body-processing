@@ -2,6 +2,7 @@ package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
+import com.ft.api.content.items.v1.services.bodyprocessing.ImageAttribute;
 import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
 import java.util.Arrays;
 import java.util.List;
@@ -56,7 +57,8 @@ public class ImageTransformXMLEventHandler extends SimpleTransformTagXmlEventHan
 	private void overRideWithAttributesFromImage(Map<String, String> attributesAndValues, String uuid, 
 			BodyProcessingContext bodyProcessingContext) {
 		for(String attributeName: validAttributes) {
-			String imageAttributeValue = bodyProcessingContext.getAttributeForImage(attributeName, uuid);
+			ImageAttribute imageAttribute = ImageAttribute.getByName(attributeName);
+		    String imageAttributeValue = bodyProcessingContext.getAttributeForImage(imageAttribute, uuid);
 			if (imageAttributeValue != null) {
 				attributesAndValues.put(attributeName, imageAttributeValue);
 			}

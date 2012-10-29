@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
+import com.ft.api.content.items.v1.services.bodyprocessing.ImageAttribute;
 import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
 import com.google.common.collect.ImmutableMap;
 import javax.xml.stream.events.EndElement;
@@ -37,9 +38,9 @@ public class ImageTransformXMLEventHandlerTest  extends BaseXMLEventHandlerTest 
 	public void setUp() {
 		eventHandler = new ImageTransformXMLEventHandler("img", "class", "ft-web-inline-picture");
 		
-		when(mockBodyProcessingContext.getAttributeForImage("height", UUID)).thenReturn("100");
-		when(mockBodyProcessingContext.getAttributeForImage("width", UUID)).thenReturn("300");
-		when(mockBodyProcessingContext.getAttributeForImage("src", UUID)).thenReturn("http://image.url");
+		when(mockBodyProcessingContext.getAttributeForImage(ImageAttribute.HEIGHT, UUID)).thenReturn("100");
+		when(mockBodyProcessingContext.getAttributeForImage(ImageAttribute.WIDTH, UUID)).thenReturn("300");
+		when(mockBodyProcessingContext.getAttributeForImage(ImageAttribute.SRC, UUID)).thenReturn("http://image.url");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -77,7 +78,7 @@ public class ImageTransformXMLEventHandlerTest  extends BaseXMLEventHandlerTest 
 	public void entireElementShouldBeRemovedIfNoMatchingImageFound() throws Exception {
 		ImmutableMap<String,String> attributesMap = ImmutableMap.of("fileref", FILEREF, "align", "left", "margin-bottom", "0px");
 		StartElement startElement = getStartElementWithAttributes("web-inline-picture", attributesMap);
-		when(mockBodyProcessingContext.getAttributeForImage("height", UUID)).thenThrow(new BodyProcessingException("No matching image found"));
+		when(mockBodyProcessingContext.getAttributeForImage(ImageAttribute.HEIGHT, UUID)).thenThrow(new BodyProcessingException("No matching image found"));
 		eventHandler.handleStartElementEvent(startElement, mockXmlEventReader, eventWriter, mockBodyProcessingContext);
 
 		verify(eventWriter, never()).writeStartTag(eq("img"), anyMap());
