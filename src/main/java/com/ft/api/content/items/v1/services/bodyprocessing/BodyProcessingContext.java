@@ -5,7 +5,10 @@ import com.ft.unifiedContentModel.model.Asset;
 
 public interface BodyProcessingContext {
 
+    @Deprecated
 	public String getAttributeForImage(String attributeName, String uuid);
+	
+	public String getAttributeForImage(ImageAttribute imageAttribute, String uuid);
 	
 	public Asset assignAssetNameToExistingAsset(String uuid);
 

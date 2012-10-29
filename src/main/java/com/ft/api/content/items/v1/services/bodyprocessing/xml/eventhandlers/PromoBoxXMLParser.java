@@ -8,6 +8,7 @@ import javax.xml.stream.events.StartElement;
 import org.apache.commons.lang.StringUtils;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.ImageAttribute;
 import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor;
 
 public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements XmlParser<PromoBoxData> {
@@ -42,13 +43,13 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
         boolean imageExists = bodyProcessingContext.imageExists(imageUuid);
         if(imageExists && !StringUtils.isBlank(imageUuid)) {
             dataBean.setImageType(PROMO_TYPE);
-            dataBean.setImageHeight(bodyProcessingContext.getAttributeForImage("height", imageUuid));
-            dataBean.setImageWidth(bodyProcessingContext.getAttributeForImage("width", imageUuid));
-            dataBean.setImageAlt(bodyProcessingContext.getAttributeForImage("alt", imageUuid));
-            dataBean.setImageUrl(bodyProcessingContext.getAttributeForImage("src", imageUuid));
-            dataBean.setImageCaption(bodyProcessingContext.getAttributeForImage("caption", imageUuid));
-            dataBean.setImageSource(bodyProcessingContext.getAttributeForImage("source", imageUuid));
-            dataBean.setImageMediaType(bodyProcessingContext.getAttributeForImage("media-type", imageUuid));
+            dataBean.setImageHeight(bodyProcessingContext.getAttributeForImage(ImageAttribute.HEIGHT, imageUuid));
+            dataBean.setImageWidth(bodyProcessingContext.getAttributeForImage(ImageAttribute.WIDTH, imageUuid));
+            dataBean.setImageAlt(bodyProcessingContext.getAttributeForImage(ImageAttribute.ALT, imageUuid));
+            dataBean.setImageUrl(bodyProcessingContext.getAttributeForImage(ImageAttribute.SRC, imageUuid));
+            dataBean.setImageCaption(bodyProcessingContext.getAttributeForImage(ImageAttribute.CAPTION, imageUuid));
+            dataBean.setImageSource(bodyProcessingContext.getAttributeForImage(ImageAttribute.SOURCE, imageUuid));
+            dataBean.setImageMediaType(bodyProcessingContext.getAttributeForImage(ImageAttribute.MEDIA_TYPE, imageUuid));
         } else  {
             // Setting to an empty string so the bean knows that there isn't a valid image available
             dataBean.setImageFileRef(StringUtils.EMPTY);
