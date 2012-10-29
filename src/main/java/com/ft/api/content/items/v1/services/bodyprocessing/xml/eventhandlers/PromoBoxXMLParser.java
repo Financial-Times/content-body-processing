@@ -2,9 +2,6 @@ package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
 import static org.springframework.util.Assert.notNull;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.events.StartElement;
 
@@ -15,7 +12,7 @@ import com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingB
 
 public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements XmlParser<PromoBoxData> {
 
-    private static final String UUID_REGEX = "[\\w]{8}-[\\w]{4}-[\\w]{4}-[\\w]{4}-[\\w]{12}";
+    private static final String UUIDPREFIX = "uuid=";
     private static final String PROMO_TYPE = "promo";
     private static final String PROMO_BOX = "promo-box";
     private static final String PROMO_TITLE = "promo-title";
@@ -60,11 +57,10 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
 
     private String parseImageUuid(String imageFileRef) {
         if(!StringUtils.isBlank(imageFileRef)) {
-            Pattern p = Pattern.compile(UUID_REGEX);
-            Matcher m = p.matcher(imageFileRef);
-    
-            if (m.find()) {
-                return m.group(0);
+            int indexOfUuid= imageFileRef.indexOf(UUIDPREFIX);
+            if (indexOfUuid != -1) {
+                int startingIndex = indexOfUuid + UUIDPREFIX.length();
+                return imageFileRef.substring(startingIndex).trim(); 
             }
         }
         return StringUtils.EMPTY;
