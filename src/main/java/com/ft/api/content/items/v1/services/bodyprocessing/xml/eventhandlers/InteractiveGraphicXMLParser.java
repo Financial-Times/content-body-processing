@@ -113,14 +113,6 @@ public class InteractiveGraphicXMLParser extends BaseXMLParser<InteractiveGraphi
         }
     }
 
-    private String parseAttribute(String attributeName, StartElement startElement) {
-      Attribute attributeValue = startElement.getAttributeByName(new QName(attributeName));
-      if(attributeValue == null || StringUtils.isBlank(attributeValue.getValue())) {
-          throw new UnexpectedElementStructureException(String.format("Failed to parse attribute [%s]", attributeName));
-      }
-      return attributeValue.getValue();
-    }
-
     /**
      * Check whether the src contains a valid URL structure and return the input
      * value otherwise return null;
@@ -145,7 +137,7 @@ public class InteractiveGraphicXMLParser extends BaseXMLParser<InteractiveGraphi
     }
 
     private String extractId(String id) {
-        if (id.startsWith(VALID_ID_PREFIX)) {
+        if (id != null && id.startsWith(VALID_ID_PREFIX)) {
             return id.substring(2);
         }
         return null;

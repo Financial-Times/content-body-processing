@@ -5,9 +5,7 @@ import static org.springframework.util.Assert.notNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 
 import org.apache.commons.lang.StringUtils;
@@ -109,14 +107,5 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
     @Override
     boolean doesTriggerElementContainAllDataNeeded() {
         return false;
-    }
-    
-    private String parseAttribute(String attributeName, StartElement startElement) {
-        Attribute fileref = startElement.getAttributeByName(QName.valueOf(attributeName));
-        
-        if(fileref != null) {
-            return fileref.getValue();
-        }
-        return null;
     }
 }

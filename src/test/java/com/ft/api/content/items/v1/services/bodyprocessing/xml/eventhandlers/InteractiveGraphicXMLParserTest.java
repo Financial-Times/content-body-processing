@@ -31,7 +31,7 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
     private String validXmlWithSpaces = "<plainHtml>      <div id=\"ig1234\">   <script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\">   </script> </div> </plainHtml>";
     private String invalidXmlWithCharactersBetweenDivAndScript = "<plainHtml><div id=\"ig1234\">some unexpected characters<script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\"></script></div></plainHtml>";
     
-    private InteractiveGraphicXMLParser interactiveGraphicXMLParser;
+    private BaseXMLParser<InteractiveGraphicData> interactiveGraphicXMLParser;
     
     @Before
     public void setUp() {
