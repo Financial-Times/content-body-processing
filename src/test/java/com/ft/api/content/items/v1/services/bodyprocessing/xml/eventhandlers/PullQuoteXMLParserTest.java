@@ -17,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
@@ -58,7 +57,7 @@ public class PullQuoteXMLParserTest extends BaseXMLParserTest {
     }
     
     @Test
-    public void testParseChildElementData() throws XMLStreamException {
+    public void testParseElementData() throws XMLStreamException {
         xmlEventReader = createReaderForXml(validXml);
         StartElement startElement = getStartElement(xmlEventReader);
         PullQuoteData pullQuoteData = pullQuoteXMLParser.parseElementData(startElement, xmlEventReader);

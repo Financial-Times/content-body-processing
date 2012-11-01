@@ -19,7 +19,9 @@ public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegist
 				"itemBody"); // itemBody included as it will be a root node wrapping the body text so that the xml being written out is valid
 		
 		// to be retained with attributes
-		super.registerStartAndEndElementEventHandler(new SlideshowAssetXMLEventHandler(new LinkTagXMLEventHandler()), "a");
+		super.registerStartElementEventHandler(new SlideshowXMLEventHandler(new SlideshowXMLParser(),  new AsideElementWriter(), new LinkTagXMLEventHandler()), "a");
+		super.registerEndElementEventHandler(new LinkTagXMLEventHandler(), "a");
+		
 		super.registerStartAndEndElementEventHandler(new VideoXMLEventHandler(new VideoXMLParser(), new AsideElementWriter(), new StripElementAndContentsXMLEventHandler()), "videoPlayer");
 		super.registerStartAndEndElementEventHandler(new ImageRetainWithSpecificAttributesXMLEventHandler(), "img");
 		super.registerStartAndEndElementEventHandler(new PullQuoteXMLEventHandler(new PullQuoteXMLParser(new StAXTransformingBodyProcessor(this)), new AsideElementWriter()), "web-pull-quote");
@@ -59,7 +61,7 @@ public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegist
 				"video",
 				"wbr");
 		
-		super.registerStartElementEventHandler(new InlineMediaAssetXMLEventHandler(new StripElementAndContentsXMLEventHandler()), "inlineDwc");
+		super.registerStartElementEventHandler(new InlineMediaXMLEventHandler(new SlideshowXMLParser("inlineDwc"),  new AsideElementWriter(), new StripElementAndContentsXMLEventHandler()), "inlineDwc");
 		
 		//xml elements to remove with all contents
 		super.registerStartElementEventHandler(new StripElementAndContentsXMLEventHandler(), 
@@ -69,7 +71,6 @@ public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegist
 				"interactive-chart", 
 				"lead-body", "lead-text", "ln", 
 				"photo", "photo-caption", "photo-group", 
-				//"promo-box", 
 				"promo-headline", "promo-image", "promo-intro", "promo-link", "promo-title", "promobox-body", 
 				"pull-quote", "pull-quote-header", "pull-quote-text", 
 				"readthrough", 

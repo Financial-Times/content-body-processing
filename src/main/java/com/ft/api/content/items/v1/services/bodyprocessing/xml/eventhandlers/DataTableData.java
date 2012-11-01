@@ -4,7 +4,6 @@ import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingExcepti
 import com.ft.unifiedContentModel.model.Asset;
 import com.ft.unifiedContentModel.model.DataTable;
 import com.ft.unifiedContentModel.model.DataTableFields;
-import org.apache.commons.lang.StringUtils;
 
 public class DataTableData extends BaseData implements AssetAware {
 

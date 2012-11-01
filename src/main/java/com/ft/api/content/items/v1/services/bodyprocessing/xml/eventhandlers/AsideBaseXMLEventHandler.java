@@ -6,6 +6,8 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
@@ -38,10 +40,12 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
                 // ensure that the mutated bean data is still valid for processing after the transform field content processing
                 if(dataBean.isAllRequiredDataPresent()) {
                     // Get the asset and add it to the context
-                    String assetName = addAssetToContextAndReturnAssetName(bodyProcessingContext, dataBean.getAsset());
+                    String assetName = addAssetToContextAndReturnAssetName(bodyProcessingContext, dataBean);
     
-                    // build aside element and skip until end of tag
-                    asideElementWriter.writeAsideElement(eventWriter, assetName, getType());
+                    if(!StringUtils.isBlank(assetName)) {
+                        // build aside element
+                        asideElementWriter.writeAsideElement(eventWriter, assetName, getType());
+                    }
                 }
             }
         } else {
@@ -50,7 +54,13 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
 
     }
 
-	protected void processFallBack(StartElement startElement, XMLEventReader xmlEventReader, BodyWriter eventWriter, BodyProcessingContext bodyProcessingContext) throws BodyProcessingException, XMLStreamException {
+	protected String addAssetToContextAndReturnAssetName(BodyProcessingContext bodyProcessingContext, T dataBean) {
+	    Asset asset = dataBean.getAsset();
+	    bodyProcessingContext.addAsset(asset);
+        return asset.getName();
+    }
+	
+    protected void processFallBack(StartElement startElement, XMLEventReader xmlEventReader, BodyWriter eventWriter, BodyProcessingContext bodyProcessingContext) throws BodyProcessingException, XMLStreamException {
 		throw new BodyProcessingException("event must correspond to" + getElementName() + " tag");
 	}
 
@@ -65,11 +75,6 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
 
     // Parse and populate a data bean
     abstract T parseElementData(StartElement startElement, XMLEventReader xmlEventReader) throws XMLStreamException;
-
-    private String addAssetToContextAndReturnAssetName(BodyProcessingContext bodyProcessingContext, Asset asset) {
-        bodyProcessingContext.addAsset(asset);
-        return asset.getName();
-    }
     
     protected boolean isElementOfCorrectType(StartElement event) {
         return event.getName().getLocalPart().toLowerCase().equals(getElementName().toLowerCase());
