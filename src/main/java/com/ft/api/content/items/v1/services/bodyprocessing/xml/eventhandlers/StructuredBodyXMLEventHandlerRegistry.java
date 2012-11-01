@@ -11,7 +11,7 @@ public class StructuredBodyXMLEventHandlerRegistry extends XMLEventHandlerRegist
 		//default is to skip events - any start or end tags not configured below will be excluded, as will comments
 		super.registerDefaultEventHandler(new StripXMLEventHandler());
 		//tags to include
-		super.registerStartAndEndElementEventHandler(new RetainWithoutAttributesXMLEventHandler(), 
+		super.registerStartAndEndElementEventHandler(new RetainWithoutAttributesXMLEventHandler(),
 				"h1","h2", "h3", "h4", "h5", "h6",
 				"ol", "ul", "li",
 				"p",
