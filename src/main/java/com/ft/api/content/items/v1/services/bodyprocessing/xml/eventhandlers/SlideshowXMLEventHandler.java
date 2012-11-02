@@ -11,7 +11,7 @@ import javax.xml.stream.events.StartElement;
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
-import com.ft.unifiedContentModel.model.Asset;
+import com.ft.api.ucm.model.v1.Asset;
 
 public class SlideshowXMLEventHandler extends AsideBaseXMLEventHandler<SlideshowData> {
 

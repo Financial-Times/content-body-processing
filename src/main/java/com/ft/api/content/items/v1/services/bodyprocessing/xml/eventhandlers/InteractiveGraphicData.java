@@ -1,9 +1,9 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
-import com.ft.unifiedContentModel.model.Asset;
-import com.ft.unifiedContentModel.model.InteractiveGraphic;
-import com.ft.unifiedContentModel.model.InteractiveGraphicFields;
+import com.ft.api.ucm.model.v1.Asset;
+import com.ft.api.ucm.model.v1.InteractiveGraphic;
+import com.ft.api.ucm.model.v1.InteractiveGraphicFields;
 
 public class InteractiveGraphicData extends BaseData implements AssetAware {
 

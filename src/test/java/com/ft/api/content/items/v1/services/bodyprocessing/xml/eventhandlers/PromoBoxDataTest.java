@@ -10,10 +10,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
-import com.ft.unifiedContentModel.model.Asset;
-import com.ft.unifiedContentModel.model.PromoBox;
-import com.ft.unifiedContentModel.model.PromoBoxFields;
-import com.ft.unifiedContentModel.model.TypeBasedImage;
+import com.ft.api.ucm.model.v1.Asset;
+import com.ft.api.ucm.model.v1.PromoBox;
+import com.ft.api.ucm.model.v1.PromoBoxFields;
+import com.ft.api.ucm.model.v1.TypeBasedImage;
 
 public class PromoBoxDataTest {
     private PromoBoxData promoBoxData;

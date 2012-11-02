@@ -3,11 +3,11 @@ package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 import org.apache.commons.lang.StringUtils;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
-import com.ft.unifiedContentModel.model.Asset;
-import com.ft.unifiedContentModel.model.PromoBox;
-import com.ft.unifiedContentModel.model.PromoBoxFields;
-import com.ft.unifiedContentModel.model.TypeBasedImage;
-import com.ft.unifiedContentModel.model.TypeBasedImage.ImageType;
+import com.ft.api.ucm.model.v1.Asset;
+import com.ft.api.ucm.model.v1.PromoBox;
+import com.ft.api.ucm.model.v1.PromoBoxFields;
+import com.ft.api.ucm.model.v1.TypeBasedImage;
+import com.ft.api.ucm.model.v1.TypeBasedImage.ImageType;
 
 public class PromoBoxData extends BaseData implements AssetAware {
 

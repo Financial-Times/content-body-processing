@@ -1,7 +1,8 @@
 package com.ft.api.content.items.v1.services.bodyprocessing;
 
+import com.ft.api.ucm.model.v1.Asset;
 
-import com.ft.unifiedContentModel.model.Asset;
+
 
 public interface BodyProcessingContext {
 

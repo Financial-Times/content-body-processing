@@ -10,9 +10,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
-import com.ft.unifiedContentModel.model.Asset;
-import com.ft.unifiedContentModel.model.PullQuote;
-import com.ft.unifiedContentModel.model.PullQuoteFields;
+import com.ft.api.ucm.model.v1.Asset;
+import com.ft.api.ucm.model.v1.PullQuote;
+import com.ft.api.ucm.model.v1.PullQuoteFields;
 
 
 public class PullQuoteDataTest {

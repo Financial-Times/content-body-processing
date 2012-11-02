@@ -1,29 +1,26 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
-import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
-import com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.SlideshowAssetXMLEventHandler;
-import com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.XMLEventHandler;
-import com.ft.unifiedContentModel.model.Asset;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
+
 import org.codehaus.stax2.XMLEventReader2;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
+import com.ft.api.ucm.model.v1.Asset;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SlideshowAssetXMLEventHandlerTest extends BaseXMLEventHandlerTest {

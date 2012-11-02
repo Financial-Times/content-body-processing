@@ -8,10 +8,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ft.unifiedContentModel.model.Asset;
-import com.ft.unifiedContentModel.model.InteractiveGraphic;
-import com.ft.unifiedContentModel.model.InteractiveGraphicFields;
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
+import com.ft.api.ucm.model.v1.Asset;
+import com.ft.api.ucm.model.v1.InteractiveGraphic;
+import com.ft.api.ucm.model.v1.InteractiveGraphicFields;
 
 
 public class InteractiveGraphicDataTest {

@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
-import com.ft.unifiedContentModel.model.Asset;
-import com.ft.unifiedContentModel.model.VideoAsset;
-import com.ft.unifiedContentModel.model.VideoFields;
+import com.ft.api.ucm.model.v1.Asset;
+import com.ft.api.ucm.model.v1.VideoAsset;
+import com.ft.api.ucm.model.v1.VideoFields;
 
 
 public class VideoDataTest {

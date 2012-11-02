@@ -9,9 +9,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
-import com.ft.unifiedContentModel.model.Asset;
-import com.ft.unifiedContentModel.model.BackgroundNews;
-import com.ft.unifiedContentModel.model.BackgroundNewsFields;
+import com.ft.api.ucm.model.v1.Asset;
+import com.ft.api.ucm.model.v1.BackgroundNews;
+import com.ft.api.ucm.model.v1.BackgroundNewsFields;
 
 
 public class BackgroundNewsDataTest {

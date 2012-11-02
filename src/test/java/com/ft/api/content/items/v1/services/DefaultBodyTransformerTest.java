@@ -5,15 +5,16 @@ import static org.mockito.Matchers.contains;
 import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.when;
 
-import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
-import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
-import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessor;
-import com.ft.unifiedContentModel.model.Body;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessor;
+import com.ft.api.ucm.model.v1.Body;
 
 @RunWith(value=MockitoJUnitRunner.class)
 public class DefaultBodyTransformerTest {

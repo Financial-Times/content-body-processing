@@ -5,8 +5,8 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessor;
-import com.ft.unifiedContentModel.model.Body;
-import com.ft.unifiedContentModel.model.StringBasedBody;
+import com.ft.api.ucm.model.v1.Body;
+import com.ft.api.ucm.model.v1.StringBasedBody;
 
 public class DefaultBodyTransformer implements BodyTransformer {
 

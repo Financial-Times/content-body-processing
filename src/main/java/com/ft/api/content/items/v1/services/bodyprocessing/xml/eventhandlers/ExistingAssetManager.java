@@ -1,12 +1,14 @@
 package com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers;
 
 
-import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
-import com.ft.unifiedContentModel.model.Asset;
 import javax.xml.namespace.QName;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
+
 import org.apache.commons.lang.StringUtils;
+
+import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext;
+import com.ft.api.ucm.model.v1.Asset;
 
 public class ExistingAssetManager implements AssetManager {
 	private static final String UUID_KEY = "uuid";
