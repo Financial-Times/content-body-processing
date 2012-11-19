@@ -15,6 +15,10 @@ public class ElementRawDataParserTest extends BaseXMLParserTest {
     private String rawElementContent = "<p></p>some more stuff<table><tr><td>test</td></tr>more text</table>testing 12345";
     private String validXml = "<".concat(element).concat(">").concat(rawElementContent).concat("</").concat(element).concat(">");
     
+    private String rawValidNestTables = "<p></p>some more stuff<table><th><some-element>more text</some-element></th></table>testing 12345";
+    private String validXmlWNestedTables = "<".concat(element).concat(">").concat(rawValidNestTables).concat("</").concat(element).concat(">");
+    
+    
     @Test
     public void shouldParseElementContents() throws XMLStreamException {
         xmlEventReader = createReaderForXml(validXml);
@@ -23,6 +27,16 @@ public class ElementRawDataParserTest extends BaseXMLParserTest {
         ElementRawDataParser elementRawDataParser = new ElementRawDataParser();
         String actualRawContent = elementRawDataParser.parse("some-element", xmlEventReader);
         Assert.assertEquals(rawElementContent, actualRawContent);
+    }
+    
+    @Test
+    public void shouldParseElementContentsWNestedTableElements() throws XMLStreamException {
+        xmlEventReader = createReaderForXml(validXmlWNestedTables);
+        moveReaderToElement(xmlEventReader, element);
+
+        ElementRawDataParser elementRawDataParser = new ElementRawDataParser();
+        String actualRawContent = elementRawDataParser.parse("some-element", xmlEventReader);
+        Assert.assertEquals(rawValidNestTables, actualRawContent);
     }
 
 	@Test

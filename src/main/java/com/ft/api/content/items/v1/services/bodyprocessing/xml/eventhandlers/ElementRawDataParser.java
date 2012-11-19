@@ -40,23 +40,37 @@ public class ElementRawDataParser {
 					startElement.writeAsEncodedUnicode(writer);
 				}
 
+		        int startElements = 1;// default since the starting root element is present already
+		        
+		        // Iterate over the xml 
 		        while(xmlEventReader.hasNext() && !hasReachedEndElement) {
 		            XMLEvent childEvent = xmlEventReader.nextEvent();
 
-		            // Check if the closing element reached
-		            if(childEvent.isEndElement()) {
-		                if(isElementNamed(childEvent.asEndElement().getName(), endElementName)) {
+		            // Track nested starting elements
+		            if(isNestedRootStartElement(childEvent, endElementName)) {
+		                
+		                startElements++;
+		            
+		            } else if(isRootEndElement(childEvent, endElementName)) {
+		                
+		                // Check if this ending element belongs to a nested root element
+		                if(startElements > 1) {
+		                    
+		                    startElements--; // cancel-out nested root element
+		                
+		                } else { // reached the end of the xml stream that needs parsing
 		                    hasReachedEndElement = true;
-							
-		                    if(needsRootElementWrapping(startElement)) {
-								// Wrap end element based on the endElement
-		                        childEvent.writeAsEncodedUnicode(writer);
-							}
-		                    continue;
+                            if(needsRootElementWrapping(startElement)) {
+                                // Wrap end element based on the endElement, if needed
+                                childEvent.writeAsEncodedUnicode(writer);
+                            }
+                            continue;
 		                }
 		            }
+		            // Write the parsed element/characters
 		            childEvent.writeAsEncodedUnicode(writer);
 		        }
+		        
 		        if(!hasReachedEndElement) {
 		            throw new IllegalArgumentException(String.format("Element name mismatch, could not find the end element for %s", endElementName));
 		        }
@@ -64,6 +78,20 @@ public class ElementRawDataParser {
 	}
 
     
+    private boolean isRootEndElement(XMLEvent childEvent, String endElementName) {
+        if(childEvent.isEndElement() && isElementNamed(childEvent.asEndElement().getName(), endElementName)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isNestedRootStartElement(XMLEvent childEvent, String endElementName) {
+        if(childEvent.isStartElement() && isElementNamed(childEvent.asStartElement().getName(), endElementName)) {
+            return true;
+        }
+        return false;
+    }
+
     private void ensureEndElementNameMatchesStartElement(String endElementName, StartElement startElement) {
         String startElementName = parseStartElementName(startElement);
         if(startElementName != null && !startElementName.equals(endElementName.toLowerCase())) {
