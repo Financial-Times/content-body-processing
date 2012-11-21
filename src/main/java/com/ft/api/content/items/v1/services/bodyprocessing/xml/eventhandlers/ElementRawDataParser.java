@@ -32,49 +32,49 @@ public class ElementRawDataParser {
      */
 	public String parse(String endElementName, XMLEventReader xmlEventReader, StartElement startElement) throws XMLStreamException {
 		StringWriter writer = new StringWriter();
-		        boolean hasReachedEndElement = false;
-		        ensureEndElementNameMatchesStartElement(endElementName, startElement);
-		        
-				// Wrap with start element based on the startElement
-		        if(needsRootElementWrapping(startElement)) {
-					startElement.writeAsEncodedUnicode(writer);
-				}
+        boolean hasReachedEndElement = false;
+        ensureEndElementNameMatchesStartElement(endElementName, startElement);
+        
+		// Wrap with start element based on the startElement
+        if(needsRootElementWrapping(startElement)) {
+			startElement.writeAsEncodedUnicode(writer);
+		}
 
-		        int startElements = 1;// default since the starting root element is present already
-		        
-		        // Iterate over the xml 
-		        while(xmlEventReader.hasNext() && !hasReachedEndElement) {
-		            XMLEvent childEvent = xmlEventReader.nextEvent();
+        int startElements = 1;// default since the starting root element is present already
+        
+        // Iterate over the xml 
+        while(xmlEventReader.hasNext() && !hasReachedEndElement) {
+            XMLEvent childEvent = xmlEventReader.nextEvent();
 
-		            // Track nested starting elements
-		            if(isNestedRootStartElement(childEvent, endElementName)) {
-		                
-		                startElements++;
-		            
-		            } else if(isRootEndElement(childEvent, endElementName)) {
-		                
-		                // Check if this ending element belongs to a nested root element
-		                if(startElements > 1) {
-		                    
-		                    startElements--; // cancel-out nested root element
-		                
-		                } else { // reached the end of the xml stream that needs parsing
-		                    hasReachedEndElement = true;
-                            if(needsRootElementWrapping(startElement)) {
-                                // Wrap end element based on the endElement, if needed
-                                childEvent.writeAsEncodedUnicode(writer);
-                            }
-                            continue;
-		                }
-		            }
-		            // Write the parsed element/characters
-		            childEvent.writeAsEncodedUnicode(writer);
-		        }
-		        
-		        if(!hasReachedEndElement) {
-		            throw new IllegalArgumentException(String.format("Element name mismatch, could not find the end element for %s", endElementName));
-		        }
-		        return writer.toString();
+            // Track nested starting elements
+            if(isNestedRootStartElement(childEvent, endElementName)) {
+                
+                startElements++;
+            
+            } else if(isRootEndElement(childEvent, endElementName)) {
+                
+                // Check if this ending element belongs to a nested root element
+                if(startElements > 1) {
+                    
+                    startElements--; // cancel-out nested root element
+                
+                } else { // reached the end of the xml stream that needs parsing
+                    hasReachedEndElement = true;
+                    if(needsRootElementWrapping(startElement)) {
+                        // Wrap end element based on the endElement, if needed
+                        childEvent.writeAsEncodedUnicode(writer);
+                    }
+                    continue;
+                }
+            }
+            // Write the parsed element/characters
+            childEvent.writeAsEncodedUnicode(writer);
+        }
+        
+        if(!hasReachedEndElement) {
+            throw new IllegalArgumentException(String.format("Element name mismatch, could not find the end element for %s", endElementName));
+        }
+        return writer.toString();
 	}
 
     

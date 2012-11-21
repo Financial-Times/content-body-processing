@@ -38,6 +38,16 @@ public class ElementRawDataParserTest extends BaseXMLParserTest {
         String actualRawContent = elementRawDataParser.parse("some-element", xmlEventReader);
         Assert.assertEquals(rawValidNestTables, actualRawContent);
     }
+    
+    @Test
+    public void shouldParseWholeElementContentsWNestedTableElements() throws XMLStreamException {
+        xmlEventReader = createReaderForXml(validXmlWNestedTables);
+        
+        ElementRawDataParser elementRawDataParser = new ElementRawDataParser();
+        StartElement startElement = getStartElement(xmlEventReader);
+        String actualRawContent = elementRawDataParser.parse("some-element", xmlEventReader, startElement);
+        Assert.assertEquals(validXmlWNestedTables, actualRawContent);
+    }
 
 	@Test
     public void shouldParseElementContentsIncludingRootElement() throws XMLStreamException {
