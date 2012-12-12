@@ -35,6 +35,10 @@ public class ImageTransformXMLEventHandler extends SimpleTransformTagXmlEventHan
 			String uuid = getUUIDForImage(event);
 			overRideWithAttributesFromImage(attributesAndValues, uuid, bodyProcessingContext);
 			eventWriter.writeStartTag(getNewElement(), attributesAndValues);
+			
+			// Skip till the end of the element in case it's not self closing
+			skipUntilMatchingEndTag(event.getName().getLocalPart(), xmlEventReader);
+			eventWriter.writeEndTag(getNewElement());
 		} catch (BodyProcessingException e) {
 			skipUntilMatchingEndTag(event.getName().getLocalPart(), xmlEventReader);
 		}

@@ -61,8 +61,9 @@ public class ImageTransformXMLEventHandlerTest  extends BaseXMLEventHandlerTest 
 		eventHandler.handleStartElementEvent(startElement, mockXmlEventReader, eventWriter, mockBodyProcessingContext);
 
 		verify(eventWriter).writeStartTag("img", expectedMap);
+		verify(eventWriter).writeEndTag("img");
 	}
-
+	
 	@Test
 	public void startElementShouldBeTransformedMissingAltTagAdded() throws Exception {
 		ImmutableMap<String,String> attributesMap = ImmutableMap.of("fileref", FILEREF, "align", "left", "margin-bottom", "0px");
@@ -71,6 +72,7 @@ public class ImageTransformXMLEventHandlerTest  extends BaseXMLEventHandlerTest 
 		eventHandler.handleStartElementEvent(startElement, mockXmlEventReader, eventWriter, mockBodyProcessingContext);
 
 		verify(eventWriter).writeStartTag("img", expectedMap);
+		verify(eventWriter).writeEndTag("img");
 	}
 
 	@SuppressWarnings("unchecked")
