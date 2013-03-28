@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.ft</groupId>
 		<artifactId>contentAPI</artifactId>
-		<version>1.20.1-SNAPSHOT</version>
+		<version>1.21.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>content-api-body-processing</artifactId>
