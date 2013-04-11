@@ -3,6 +3,7 @@ package com.ft.api.content.items.v1.services.bodyprocessing.xml;
 import java.io.StringReader;
 
 import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
 import org.codehaus.stax2.XMLInputFactory2;
@@ -18,6 +19,8 @@ public class XMLEventReaderFactory {
     public XMLEventReaderFactory(XMLInputFactory2 xmlInputFactory) {
         this.xmlInputFactory = xmlInputFactory;
         this.xmlInputFactory.setProperty(XMLStreamProperties.XSP_NAMESPACE_AWARE, false);
+        this.xmlInputFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, true);
+        this.xmlInputFactory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
     }
     
     public XMLEventReader createXMLEventReader(String xml) throws XMLStreamException {
