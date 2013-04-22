@@ -79,6 +79,34 @@ public class XMLEventHandlerRegistryTest extends BaseXMLEventHandlerTest {
 	}
 	
 	@Test
+	public void entityReferenceEventHandlerRegisteredIsReturned() {
+		eventHandlerRegistry.registerEntityReferenceEventHandler(mockXMLEventHandler, "nbsp");
+		assertEquals(eventHandlerRegistry.getEventHandler(getEntityReference("nbsp")), mockXMLEventHandler);
+	}
+	
+	@Test
+	public void entityReferenceEventHandlerRegisteredIsReturnedCaseIsIgnored() {
+		eventHandlerRegistry.registerEntityReferenceEventHandler(mockXMLEventHandler, "NBSP");
+		assertEquals(eventHandlerRegistry.getEventHandler(getEntityReference("nbsp")), mockXMLEventHandler);
+	}
+	
+	@Test
+	public void entityReferenceEventHandlerRegisteredIsReturnedCaseIsIgnoredOtherDirection() {
+		eventHandlerRegistry.registerEntityReferenceEventHandler(mockXMLEventHandler, "nbsp");
+		assertEquals(eventHandlerRegistry.getEventHandler(getEntityReference("NBSP")), mockXMLEventHandler);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowExceptionFromRegisterEntityReferenceHandlerIfIfNullHandlerSupplied() {
+		eventHandlerRegistry.registerEntityReferenceEventHandler(null, "a");
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowExceptionFromRegisterEntityReferenceHandlerIfNamesNotSupplied() {
+		eventHandlerRegistry.registerEntityReferenceEventHandler(mockXMLEventHandler);
+	}
+	
+	@Test
 	public void charactersEventHandlerRegisteredIsReturned() {
 		eventHandlerRegistry.registerCharactersEventHandler(mockXMLEventHandler);
 		assertEquals(eventHandlerRegistry.getEventHandler(getCharacters("any")), mockXMLEventHandler);
@@ -87,6 +115,17 @@ public class XMLEventHandlerRegistryTest extends BaseXMLEventHandlerTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExceptionFromRegisterCharactersHandlerIfIfNullHandlerSupplied() {
 		eventHandlerRegistry.registerCharactersEventHandler(null);
+	}
+	
+	@Test
+	public void commentsEventHandlerRegisteredIsReturned() {
+		eventHandlerRegistry.registerCommentsEventHandler(mockXMLEventHandler);
+		assertEquals(eventHandlerRegistry.getEventHandler(getComment("my comment")), mockXMLEventHandler);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowExceptionFromRegisterCommentsHandlerIfIfNullHandlerSupplied() {
+		eventHandlerRegistry.registerCommentsEventHandler(null);
 	}
 	
 	@Test

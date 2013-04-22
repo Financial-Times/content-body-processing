@@ -10,7 +10,9 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.Comment;
 import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.EntityReference;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
@@ -37,6 +39,18 @@ public class BaseXMLEventHandler implements XMLEventHandler {
 	public void handleEndElementEvent(EndElement event, XMLEventReader xmlEventReader, BodyWriter eventWriter)
 			throws XMLStreamException {
 		// By default, do nothing
+	}
+
+	@Override
+	public void handleComment(Comment event, XMLEventReader xmlEventReader, BodyWriter eventWriter) 
+			throws XMLStreamException {
+		// By default, do nothing
+	}
+
+	@Override
+	public void handleEntityReferenceEvent(EntityReference event, XMLEventReader xmlEventReader, BodyWriter bodyWriter)
+			throws XMLStreamException {
+		// By default, do nothing	
 	}
 	
 	protected void skipUntilMatchingEndTag(String nameToMatch, XMLEventReader xmlEventReader) throws XMLStreamException {

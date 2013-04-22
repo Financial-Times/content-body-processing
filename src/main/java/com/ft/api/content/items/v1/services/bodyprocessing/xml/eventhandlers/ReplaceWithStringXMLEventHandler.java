@@ -5,6 +5,7 @@ import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.EntityReference;
 import javax.xml.stream.events.StartElement;
 
 
@@ -26,5 +27,10 @@ public class ReplaceWithStringXMLEventHandler extends BaseXMLEventHandler {
 	public void handleStartElementEvent(StartElement event, XMLEventReader xmlEventReader,
 			BodyWriter eventWriter, BodyProcessingContext bodyProcessingContext) throws XMLStreamException {
 		eventWriter.write(replacementString);
+	}
+	
+	@Override
+	public void handleEntityReferenceEvent(EntityReference event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException {
+		eventWriter.write(replacementString);	
 	}
 }

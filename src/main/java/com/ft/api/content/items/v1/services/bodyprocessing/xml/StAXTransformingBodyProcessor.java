@@ -12,6 +12,8 @@ import com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.XML
 import com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.XMLEventHandlerRegistry;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Comment;
+import javax.xml.stream.events.EntityReference;
 import javax.xml.stream.events.XMLEvent;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLOutputFactory2;
@@ -96,7 +98,13 @@ public class StAXTransformingBodyProcessor implements BodyProcessor {
         } else if (event.isCharacters()) {
             eventHandler = eventHandlerRegistry.getEventHandler(event.asCharacters());
             eventHandler.handleCharactersEvent(event.asCharacters(), xmlEventReader, bodyWriter);
-        } else {
+        } else if (event.getEventType() == XMLEvent.COMMENT){
+        	eventHandler = eventHandlerRegistry.getEventHandler((Comment)event);
+        	eventHandler.handleComment((Comment)event, xmlEventReader, bodyWriter);
+    	} else if (event.getEventType() == XMLEvent.ENTITY_REFERENCE) {
+    		eventHandler = eventHandlerRegistry.getEventHandler((EntityReference) event);
+    		eventHandler.handleEntityReferenceEvent((EntityReference) event, xmlEventReader, bodyWriter);
+    	} else {
             eventHandler = eventHandlerRegistry.getEventHandler(event);
             eventHandler.handleEvent(event, xmlEventReader, bodyWriter);
         }

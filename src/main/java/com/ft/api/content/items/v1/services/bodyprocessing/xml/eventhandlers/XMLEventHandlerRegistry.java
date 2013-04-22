@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.Comment;
 import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.EntityReference;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
@@ -17,6 +19,8 @@ public class XMLEventHandlerRegistry {
 	private XMLEventHandler charactersEventHandler = null;
 	private Map<String, XMLEventHandler> endElementEventHandlers = new HashMap<String,XMLEventHandler>();
 	private Map<String, XMLEventHandler> startElementEventHandlers = new HashMap<String,XMLEventHandler>();
+	private Map<String, XMLEventHandler> entityReferenceEventHandlers = new HashMap<String,XMLEventHandler>();
+	private XMLEventHandler commentsEventHandler;
 	
 	public XMLEventHandlerRegistry() {	
 		this.defaultEventHandler = new BaseXMLEventHandler();
@@ -42,8 +46,24 @@ public class XMLEventHandlerRegistry {
 		return eventHandler;
 	}
 	
+	public XMLEventHandler getEventHandler(EntityReference event) {
+		XMLEventHandler eventHandler = entityReferenceEventHandlers.get(event.getName().toLowerCase());
+		if (eventHandler == null) {
+			eventHandler = (XMLEventHandler) defaultEventHandler;
+		}
+		return eventHandler;
+	}
+	
 	public XMLEventHandler getEventHandler(Characters event) {
 		XMLEventHandler eventHandler = charactersEventHandler;
+		if (eventHandler == null) {
+			eventHandler = (XMLEventHandler)defaultEventHandler;
+		}	
+		return eventHandler;
+	}
+	
+	public XMLEventHandler getEventHandler(Comment event) {
+		XMLEventHandler eventHandler = commentsEventHandler;
 		if (eventHandler == null) {
 			eventHandler = (XMLEventHandler)defaultEventHandler;
 		}	
@@ -74,6 +94,20 @@ public class XMLEventHandlerRegistry {
 	public void registerCharactersEventHandler(XMLEventHandler charactersEventHandler) {
 		notNull(charactersEventHandler, "charactersEventHandler cannot be null");
 		this.charactersEventHandler = charactersEventHandler;
+	}
+	
+	public void registerCommentsEventHandler(XMLEventHandler commentsEventHandler) {
+		notNull(commentsEventHandler, "commentsEventHandler cannot be null");
+		this.commentsEventHandler = commentsEventHandler;
+	}
+	
+	public void registerEntityReferenceEventHandler(XMLEventHandler entityReferenceEventHandler, String... names) {
+		notNull(entityReferenceEventHandler, "entityReferenceEventHandler cannot be null");
+		notNull(names, "names cannot be null");
+		notEmpty(names, "names cannot be empty");
+		for(String name: names) {
+			this.entityReferenceEventHandlers.put(name.toLowerCase(), entityReferenceEventHandler);
+		}
 	}
 	
 	public void registerDefaultEventHandler(XMLEventHandler defaultEventHandler) {
