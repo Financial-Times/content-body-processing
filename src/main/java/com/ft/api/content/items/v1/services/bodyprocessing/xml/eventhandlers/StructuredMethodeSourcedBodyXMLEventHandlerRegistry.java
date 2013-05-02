@@ -76,17 +76,18 @@ public class StructuredMethodeSourcedBodyXMLEventHandlerRegistry extends XMLEven
 				"readthrough", 
 				"short-body", "skybox-body", "stories", "story", "strap",
 				"videoObject",
-				"web-alt-picture",
+				"web-alt-picture", "web-background-news-header",
+				"web-background-news-text",
 				"web-picture", "web-pull-quote-source", "web-pull-quote-text",
-				"web-skybox-picture", "web-subhead", 
-				 "web-thumbnail",
+				"web-skybox-picture", "web-subhead",
+				"web-thumbnail",
 				"xref", "xrefs");
 		// characters (i.e. normal text) will be output
 		super.registerCharactersEventHandler(new RetainXMLEventHandler());
 		// comments will be removed
 		super.registerCommentsEventHandler(new StripXMLEventHandler());
-		// nbsp will be replaced with a space
-		super.registerEntityReferenceEventHandler(new ReplaceWithStringXMLEventHandler(" "), "nbsp");
+		// nbsp should be retained
+		super.registerEntityReferenceEventHandler(new RetainXMLEventHandler(), "nbsp");
 		
 	}
 

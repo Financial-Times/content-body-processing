@@ -17,9 +17,6 @@
 		class="com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessorChain">
 		<constructor-arg>
 			<list>
-				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.AddRootNodeBodyProcessor">
-					<constructor-arg><value>itemBody</value></constructor-arg>
-				</bean>
 				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.regex.RegexRemoverBodyProcessor">
 					<constructor-arg>
 						<value>\r+</value>
@@ -30,10 +27,36 @@
 						<value>\n+</value>
 					</constructor-arg>
 				</bean>
+				<!--  get rid of any empty p tags already present 	-->			
+				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.regex.RegexRemoverBodyProcessor">
+					<constructor-arg>
+						<value>(&lt;p&gt;)(&lt;/p&gt;)|(&lt;p/&gt;)</value>
+					</constructor-arg>
+				</bean>
+				
 				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor">
 					<constructor-arg ref="xmlEventReaderFactory" />
 					<constructor-arg>
-						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.PlainTextMethodeSourcedBodyXMLEventHandlerRegistry" />
+						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.StructuredMethodeSourcedBodyXMLEventHandlerRegistry" />
+					</constructor-arg>
+					<constructor-arg>
+						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.writer.HTML5VoidElementHandlingXMLBodyWriterFactory">
+							<constructor-arg>
+								<bean class="org.codehaus.stax2.XMLOutputFactory2" factory-method="newInstance"  />
+							</constructor-arg>
+						</bean>
+					</constructor-arg>
+				</bean>						
+				<!--  get rid of any empty p tags added during processing (e.g. when adding an aside tag) -->
+				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.regex.RegexRemoverBodyProcessor">
+					<constructor-arg>
+						<value>(&lt;p&gt;)(&lt;/p&gt;)</value>
+					</constructor-arg>
+				</bean>		
+				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor">
+					<constructor-arg ref="xmlEventReaderFactory" />
+					<constructor-arg>
+						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.PlainTextFromStructuredXMLEventHandlerRegistry" />
 					</constructor-arg>
 					<constructor-arg>
 						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.writer.PlainTextBodyWriterFactory" />
@@ -55,9 +78,7 @@
 		class="com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessorChain">
 		<constructor-arg>
 			<list>
-				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.AddRootNodeBodyProcessor">
-					<constructor-arg><value>itemBody</value></constructor-arg>
-				</bean>
+				<!-- remove any line breaks already present, as we will be mapping paragraph marks to line breaks -->
 				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.regex.RegexRemoverBodyProcessor">
 					<constructor-arg>
 						<value>\r+</value>
@@ -68,10 +89,36 @@
 						<value>\n+</value>
 					</constructor-arg>
 				</bean>
+				<!--  get rid of any empty p tags already present 	-->			
+				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.regex.RegexRemoverBodyProcessor">
+					<constructor-arg>
+						<value>(&lt;p&gt;)(&lt;/p&gt;)|(&lt;p/&gt;)</value>
+					</constructor-arg>
+				</bean>
+				
 				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor">
 					<constructor-arg ref="xmlEventReaderFactory" />
 					<constructor-arg>
-						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.PlainTextWordPressSourcedBodyXMLEventHandlerRegistry" />
+						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.StructuredWordPressSourcedBodyXMLEventHandlerRegistry" />
+					</constructor-arg>
+					<constructor-arg>
+						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.writer.HTML5VoidElementHandlingXMLBodyWriterFactory">
+							<constructor-arg>
+								<bean class="org.codehaus.stax2.XMLOutputFactory2" factory-method="newInstance"  />
+							</constructor-arg>
+						</bean>
+					</constructor-arg>
+				</bean>								
+				<!--  get rid of any empty p tags added during processing (e.g. when adding an aside tag) -->
+				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.regex.RegexRemoverBodyProcessor">
+					<constructor-arg>
+						<value>(&lt;p&gt;)(&lt;/p&gt;)</value>
+					</constructor-arg>
+				</bean>		
+				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor">
+					<constructor-arg ref="xmlEventReaderFactory" />
+					<constructor-arg>
+						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.PlainTextFromStructuredXMLEventHandlerRegistry" />
 					</constructor-arg>
 					<constructor-arg>
 						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.writer.PlainTextBodyWriterFactory" />
@@ -110,6 +157,41 @@
 					<constructor-arg ref="xmlEventReaderFactory" />
 					<constructor-arg>
 						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.StructuredMethodeSourcedBodyXMLEventHandlerRegistry" />
+					</constructor-arg>
+					<constructor-arg>
+						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.writer.HTML5VoidElementHandlingXMLBodyWriterFactory">
+							<constructor-arg>
+								<bean class="org.codehaus.stax2.XMLOutputFactory2" factory-method="newInstance"  />
+							</constructor-arg>
+						</bean>
+					</constructor-arg>
+				</bean>
+								
+				<!--  get rid of any empty p tags added during processing (e.g. when adding an aside tag) -->
+				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.regex.RegexRemoverBodyProcessor">
+					<constructor-arg>
+						<value>(&lt;p&gt;)(&lt;/p&gt;)</value>
+					</constructor-arg>
+				</bean>				
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="structuredWordPressSourcedBodyProcessorChain"
+		class="com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessorChain">
+		<constructor-arg>
+			<list>
+				<!--  get rid of any empty p tags already present 	-->			
+				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.regex.RegexRemoverBodyProcessor">
+					<constructor-arg>
+						<value>(&lt;p&gt;)(&lt;/p&gt;)|(&lt;p/&gt;)</value>
+					</constructor-arg>
+				</bean>
+				
+				<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.StAXTransformingBodyProcessor">
+					<constructor-arg ref="xmlEventReaderFactory" />
+					<constructor-arg>
+						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.xml.eventhandlers.StructuredWordPressSourcedBodyXMLEventHandlerRegistry" />
 					</constructor-arg>
 					<constructor-arg>
 						<bean class="com.ft.api.content.items.v1.services.bodyprocessing.writer.HTML5VoidElementHandlingXMLBodyWriterFactory">

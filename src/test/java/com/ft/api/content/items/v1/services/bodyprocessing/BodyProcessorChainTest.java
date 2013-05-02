@@ -21,14 +21,16 @@ public class BodyProcessorChainTest {
 	@Mock private BodyProcessor mockThirdBodyProcessor;
 	@Mock private BodyProcessor mockFailingBodyProcessor;
 	
+	@Mock private BodyProcessingContext mockBodyProcessingContext;
+	
 	private static final String BODY = "body";
 	
 	@Before
 	public void setup() {
-		when(mockFirstBodyProcessor.process(BODY, null)).thenReturn(BODY);
-		when(mockSecondBodyProcessor.process(BODY, null)).thenReturn(BODY);
-		when(mockThirdBodyProcessor.process(BODY, null)).thenReturn(BODY);
-		when(mockFailingBodyProcessor.process(BODY, null)).thenThrow(new BodyProcessingException("Error"));
+		when(mockFirstBodyProcessor.process(BODY, mockBodyProcessingContext)).thenReturn(BODY);
+		when(mockSecondBodyProcessor.process(BODY, mockBodyProcessingContext)).thenReturn(BODY);
+		when(mockThirdBodyProcessor.process(BODY, mockBodyProcessingContext)).thenReturn(BODY);
+		when(mockFailingBodyProcessor.process(BODY, mockBodyProcessingContext)).thenThrow(new BodyProcessingException("Error"));
 	}
 
 	@Test(expected=IllegalArgumentException.class)
@@ -40,15 +42,27 @@ public class BodyProcessorChainTest {
 	public void bodyProcessorsAreCalledInSameOrderAsBodyProcessorsList() {
 		bodyProcessor = new BodyProcessorChain(Arrays.asList(mockFirstBodyProcessor, mockSecondBodyProcessor, mockThirdBodyProcessor));
 		InOrder inOrder = inOrder(mockFirstBodyProcessor, mockSecondBodyProcessor, mockThirdBodyProcessor);
-		bodyProcessor.process(BODY, null);
-		inOrder.verify(mockFirstBodyProcessor).process(BODY, null);
-		inOrder.verify(mockSecondBodyProcessor).process(BODY, null);
-		inOrder.verify(mockThirdBodyProcessor).process(BODY, null);
+		bodyProcessor.process(BODY, mockBodyProcessingContext);
+		inOrder.verify(mockFirstBodyProcessor).process(BODY, mockBodyProcessingContext);
+		inOrder.verify(mockSecondBodyProcessor).process(BODY, mockBodyProcessingContext);
+		inOrder.verify(mockThirdBodyProcessor).process(BODY, mockBodyProcessingContext);
 	}
 	
 	@Test(expected=BodyProcessingException.class)
 	public void whenBodyProcessorThrowsExceptionItGetsPropogated() {
 		//TODO - is this the expected behaviour??
+		bodyProcessor = new BodyProcessorChain(Arrays.asList(mockFailingBodyProcessor));
+		bodyProcessor.process(BODY, mockBodyProcessingContext);
+	}
+	
+	@Test(expected=BodyProcessingException.class)
+	public void exceptionThrownWhenBodyIsNull() {
+		bodyProcessor = new BodyProcessorChain(Arrays.asList(mockFailingBodyProcessor));
+		bodyProcessor.process(null, mockBodyProcessingContext);
+	}
+	
+	@Test(expected=BodyProcessingException.class)
+	public void exceptionThrownWhenBodyProcessingContextIsNull() {
 		bodyProcessor = new BodyProcessorChain(Arrays.asList(mockFailingBodyProcessor));
 		bodyProcessor.process(BODY, null);
 	}

@@ -12,6 +12,8 @@ public interface BodyWriter {
 	void writeStartTag(String name, Map<String, String> validAttributesAndValues);
 
 	void writeEndTag(String name);
+	
+	void writeEntityReference(String name);
 
 	String asString();
 

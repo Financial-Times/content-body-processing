@@ -9,6 +9,8 @@ import javax.xml.stream.XMLStreamException;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamProperties;
 
+import com.ctc.wstx.api.WstxInputProperties;
+
 public class XMLEventReaderFactory {
 
     private static final String HTML_ELEMENT_START = "<html>";
@@ -26,7 +28,7 @@ public class XMLEventReaderFactory {
     public XMLEventReader createXMLEventReader(String xml) throws XMLStreamException {
         String paddedXml = padXmlWithRootNode(xml);
         StringReader stringReader = new StringReader(paddedXml);
-        return  xmlInputFactory.createXMLEventReader(stringReader);
+        return xmlInputFactory.createXMLEventReader(stringReader);
     }
 
     private String padXmlWithRootNode(String xml) {

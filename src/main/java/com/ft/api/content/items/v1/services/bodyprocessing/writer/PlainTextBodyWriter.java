@@ -41,6 +41,11 @@ public class PlainTextBodyWriter implements BodyWriter {
 		throw new UnsupportedOperationException("PlainTextWriter should not write out end tags");
 	}
 
+	@Override
+	public void writeEntityReference(String name) {
+		throw new UnsupportedOperationException("PlainTextWriter should not write out entity references");
+	}
+
     @Override
     public boolean isPTagCurrentlyOpen() {
         throw new UnsupportedOperationException("PlainTextWriter should not need to know about <p> tags");

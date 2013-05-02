@@ -116,6 +116,15 @@ public class HTML5VoidElementHandlingXMLBodyWriter implements BodyWriter {
 		}
 	}
 
+	@Override
+	public void writeEntityReference(String name) {
+		try {
+			xmlStreamWriter2.writeEntityRef(name);
+		} catch (XMLStreamException e) {
+			throw new BodyProcessingException(e);
+		}
+	}
+
     @Override
 	public String asString() {
 	    try {

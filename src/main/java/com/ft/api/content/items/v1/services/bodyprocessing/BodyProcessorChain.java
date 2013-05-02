@@ -19,6 +19,12 @@ public class BodyProcessorChain implements BodyProcessor {
 
 	@Override
 	public String process(String body, BodyProcessingContext bodyProcessingContext) throws BodyProcessingException {
+		if (body == null) {
+			throw new BodyProcessingException("Body is null");
+		}
+		if (bodyProcessingContext == null) {
+			throw new BodyProcessingException("BodyProcessingContext is null");
+		}
 		String processedBody = body;
         for(BodyProcessor bodyProcessor: bodyProcessors) {
 			LOGGER.debug("body=[" + processedBody + "]");
