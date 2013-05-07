@@ -24,11 +24,11 @@ public class StructuredMethodeSourcedBodyXMLEventHandlerRegistry extends XMLEven
 		
 		super.registerStartAndEndElementEventHandler(new VideoXMLEventHandler(new VideoXMLParser(), new AsideElementWriter(), new StripElementAndContentsXMLEventHandler()), "videoPlayer");
 		super.registerStartAndEndElementEventHandler(new ImageRetainWithSpecificAttributesXMLEventHandler(), "img");
-		super.registerStartAndEndElementEventHandler(new PullQuoteXMLEventHandler(new PullQuoteXMLParser(new StAXTransformingBodyProcessor(this)), new AsideElementWriter()), "web-pull-quote");
+		super.registerStartAndEndElementEventHandler(new PullQuoteXMLEventHandler(new PullQuoteXMLParser(new StAXTransformingBodyProcessor(new StructuredMethodeSourcedBodyXMLEventHandlerRegistryInnerAside(this))), new AsideElementWriter()), "web-pull-quote");
 		super.registerStartAndEndElementEventHandler(new InteractiveGraphicXMLEventHandler(new InteractiveGraphicXMLParser(), new AsideElementWriter()), "plainHtml");
-		super.registerStartAndEndElementEventHandler(new BackgroundNewsXMLEventHandler(new BackgroundNewsXMLParser(new StAXTransformingBodyProcessor(this)), new AsideElementWriter()), "web-background-news");
+		super.registerStartAndEndElementEventHandler(new BackgroundNewsXMLEventHandler(new BackgroundNewsXMLParser(new StAXTransformingBodyProcessor(new StructuredMethodeSourcedBodyXMLEventHandlerRegistryInnerAside(this))), new AsideElementWriter()), "web-background-news");
 		super.registerStartAndEndElementEventHandler(new DataTableXMLEventHandler(new DataTableXMLParser(new StAXTransformingBodyProcessor(new StructuredMethodeSourcedBodyXMLEventHandlerRegistryInnerTable(this))), new AsideElementWriter(), new StripElementAndContentsXMLEventHandler()), "table");
-		super.registerStartAndEndElementEventHandler(new PromoBoxXMLEventHandler(new PromoBoxXMLParser(new StAXTransformingBodyProcessor(this)), new AsideElementWriter()), "promo-box");
+		super.registerStartAndEndElementEventHandler(new PromoBoxXMLEventHandler(new PromoBoxXMLParser(new StAXTransformingBodyProcessor(new StructuredMethodeSourcedBodyXMLEventHandlerRegistryInnerAside(this))), new AsideElementWriter()), "promo-box");
 				
 		// to be transformed
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-underlined"), "u");

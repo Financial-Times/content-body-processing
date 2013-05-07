@@ -9,25 +9,19 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 
-public class StructuredMethodeSourcedBodyXMLEventHandlerRegistryInnerTable extends XMLEventHandlerRegistry {
+public class StructuredMethodeSourcedBodyXMLEventHandlerRegistryInnerAside extends XMLEventHandlerRegistry {
 
 	private Map<String, XMLEventHandler> startElementEventHandlersWrapper = new HashMap<String,XMLEventHandler>();
 	private Map<String, XMLEventHandler> endElementEventHandlersWrapper = new HashMap<String,XMLEventHandler>();
 
 	private StructuredMethodeSourcedBodyXMLEventHandlerRegistry handlerRegistry;
 
-	public StructuredMethodeSourcedBodyXMLEventHandlerRegistryInnerTable(StructuredMethodeSourcedBodyXMLEventHandlerRegistry structuredBodyXMLEventHandlerRegistry) {
+	public StructuredMethodeSourcedBodyXMLEventHandlerRegistryInnerAside(StructuredMethodeSourcedBodyXMLEventHandlerRegistry structuredBodyXMLEventHandlerRegistry) {
 		this.handlerRegistry = structuredBodyXMLEventHandlerRegistry;
 		
 		// inside an aside, we want to strip out any further asides
-		this.registerStartAndEndElementEventHandlerWrapper(new StripElementAndContentsXMLEventHandler(), "videoPlayer", "web-pull-quote", "plainHtml", "web-background-news", "promo-box");
+		this.registerStartAndEndElementEventHandlerWrapper(new StripElementAndContentsXMLEventHandler(), "videoPlayer", "web-pull-quote", "plainHtml", "web-background-news", "table", "promo-box");
 
-		this.registerStartAndEndElementEventHandlerWrapper(new RetainWithSpecificAttributesXMLEventHandler("colspan", "rowspan"),
-				"th", "td");
-
-		this.registerStartAndEndElementEventHandlerWrapper(new RetainWithoutAttributesXMLEventHandler(),
-						"table", "thead", "tbody", 
-						"tfoot", "caption", "tr");
 	}
 
 	@Override
