@@ -19,7 +19,7 @@ public class BlogPostVideoXMLParser extends BaseXMLParser<VideoData> implements 
 
     @Override
     boolean doesTriggerElementContainAllDataNeeded() {
-        return true;
+        return false;
     }
 
     @Override
