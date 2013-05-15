@@ -20,12 +20,14 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 		// to be retained with attributes
 		super.registerStartElementEventHandler(new LinkTagXMLEventHandler(), "a");
 		super.registerEndElementEventHandler(new LinkTagXMLEventHandler(), "a");
-					
+
+        registerStartAndEndElementEventHandler(new BlogPostVideoXMLEventHandler(new BlogPostVideoXMLParser(), new AsideElementWriter(), new BaseXMLEventHandler()), "div");
+
 		// to be transformed
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-underlined"), "u");
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-bold"), "b");
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-italic"), "i");
-		
+
 		//html5 tags to remove with all contents
 		super.registerStartElementEventHandler(new StripElementAndContentsXMLEventHandler(), 
 				"applet", "audio", 
