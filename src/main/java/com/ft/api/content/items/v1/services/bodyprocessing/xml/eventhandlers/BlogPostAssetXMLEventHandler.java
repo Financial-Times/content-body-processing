@@ -12,24 +12,26 @@ import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingContext
 import com.ft.api.content.items.v1.services.bodyprocessing.BodyProcessingException;
 import com.ft.api.content.items.v1.services.bodyprocessing.writer.BodyWriter;
 
-public class BlogPostVideoXMLEventHandler extends AsideBaseXMLEventHandler<VideoData> {
+public class BlogPostAssetXMLEventHandler<T extends AssetAware> extends AsideBaseXMLEventHandler<T> {
 
-    private final BlogPostVideoXMLParser videoXMLParser;
+    private final XmlParser<T> assetXMLParser;
     private final XMLEventHandler fallbackHandler;
+    private final String assetType;
 
     private static final QName ASSET_TYPE_ATTR = QName.valueOf("data-asset-type");
     private static final QName ASSET_SOURCE_ATTR = QName.valueOf("data-asset-source");
     private static final QName ASSET_REF_ATTR = QName.valueOf("data-asset-ref");
 
     private static final String ELEMENT_NAME = "div";
-    private static final String ASSET_TYPE = "video";
 
-    protected BlogPostVideoXMLEventHandler(BlogPostVideoXMLParser blogPostVideoXMLParser, AsideElementWriter asideElementWriter,
+    protected BlogPostAssetXMLEventHandler(XmlParser<T> assetXMLParser, String assetType, AsideElementWriter asideElementWriter,
                                            XMLEventHandler fallbackHandler) {
         super(asideElementWriter);
-        notNull(blogPostVideoXMLParser, "blogPostVideoXMLParser cannot be null");
+        this.assetType = assetType;
+        notNull(assetXMLParser, "assetXMLParser cannot be null");
         notNull(fallbackHandler, "fallbackHandler cannot be null");
-        this.videoXMLParser = blogPostVideoXMLParser;
+        notNull(assetType, "assetType cannot be null");
+        this.assetXMLParser = assetXMLParser;
         this.fallbackHandler = fallbackHandler;
     }
 
@@ -40,7 +42,7 @@ public class BlogPostVideoXMLEventHandler extends AsideBaseXMLEventHandler<Video
 
     @Override
     String getType() {
-        return ASSET_TYPE;
+        return assetType;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class BlogPostVideoXMLEventHandler extends AsideBaseXMLEventHandler<Video
         return attributeIsPopulated(event, ASSET_TYPE_ATTR) &&
                 attributeIsPopulated(event, ASSET_SOURCE_ATTR) &&
                 attributeIsPopulated(event, ASSET_REF_ATTR) &&
-                attributeHasValue(event, ASSET_TYPE_ATTR, "video");
+                attributeHasValue(event, ASSET_TYPE_ATTR, assetType);
     }
 
     private boolean attributeHasValue(StartElement element, QName attrName, String expectedValue) {
@@ -70,13 +72,13 @@ public class BlogPostVideoXMLEventHandler extends AsideBaseXMLEventHandler<Video
         return value == null || value.trim().equals("");
     }
     @Override
-    void transformFieldContentToStructuredFormat(VideoData dataBean, BodyProcessingContext bodyProcessingContext) {
+    void transformFieldContentToStructuredFormat(T dataBean, BodyProcessingContext bodyProcessingContext) {
         // Do nothing since the only parsed data is a video id.
     }
 
     @Override
-    VideoData parseElementData(StartElement startElement, XMLEventReader xmlEventReader) throws XMLStreamException {
-        return this.videoXMLParser.parseElementData(startElement, xmlEventReader);
+    T parseElementData(StartElement startElement, XMLEventReader xmlEventReader) throws XMLStreamException {
+        return assetXMLParser.parseElementData(startElement, xmlEventReader);
     }
 
     @Override

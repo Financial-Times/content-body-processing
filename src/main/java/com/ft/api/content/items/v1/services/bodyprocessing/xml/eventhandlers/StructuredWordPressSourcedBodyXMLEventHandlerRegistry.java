@@ -21,7 +21,7 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 		super.registerStartElementEventHandler(new LinkTagXMLEventHandler(), "a");
 		super.registerEndElementEventHandler(new LinkTagXMLEventHandler(), "a");
 
-        registerStartAndEndElementEventHandler(new BlogPostVideoXMLEventHandler(new BlogPostVideoXMLParser(), new AsideElementWriter(), new BaseXMLEventHandler()), "div");
+        registerStartAndEndElementEventHandler(videoHandlerWithFallbackTo(tweetHandlerWithFallbackTo(new BaseXMLEventHandler())), "div");
 
 		// to be transformed
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-underlined"), "u");
@@ -61,5 +61,13 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 		super.registerEntityReferenceEventHandler(new RetainXMLEventHandler(), "nbsp");
 		
 	}
+
+    private BlogPostAssetXMLEventHandler<VideoData> videoHandlerWithFallbackTo(XMLEventHandler fallbackHandler) {
+        return new BlogPostAssetXMLEventHandler<VideoData>(new BlogPostVideoXMLParser(), "video", new AsideElementWriter(), fallbackHandler);
+    }
+
+    private BlogPostAssetXMLEventHandler<TweetData> tweetHandlerWithFallbackTo(XMLEventHandler fallbackHandler) {
+        return new BlogPostAssetXMLEventHandler<TweetData>(new BlogPostTweetXMLParser(), "tweet", new AsideElementWriter(), fallbackHandler);
+    }
 
 }
