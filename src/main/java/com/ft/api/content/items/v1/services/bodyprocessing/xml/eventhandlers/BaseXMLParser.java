@@ -33,19 +33,25 @@ public abstract class BaseXMLParser<T> {
             if(doesTriggerElementContainAllDataNeeded()) {
                 return dataBean;
             }
-            
+            int depth = 1;
             while (xmlEventReader.hasNext()) {
                 XMLEvent nextEvent = xmlEventReader.nextEvent();
 
                 if (nextEvent.isStartElement()) {
                     StartElement nextStartElement = nextEvent.asStartElement();
                     populateBean(dataBean, nextStartElement, xmlEventReader);
+                    if(isElementNamed(nextStartElement.getName(), startElementName)) {
+                        depth++;
+                    }
                 } else if (nextEvent.isEndElement()) {
                     // Check if it's the closing element of the start element,
                     // in which case exit as we should not continue to parse
                     // beyond this element.
                     if (isElementNamed(nextEvent.asEndElement().getName(), startElementName)) {
-                        break;
+                        depth--;
+                        if(depth==0) {
+                            break;
+                        }
                     }
                 }
             }
