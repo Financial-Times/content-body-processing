@@ -20,6 +20,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <ft-unifiedContentModel.version>0.24.0</ft-unifiedContentModel.version>
         <commons-lang.version>2.6</commons-lang.version>
         <guava.version>r09</guava.version>
