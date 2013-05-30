@@ -10,10 +10,11 @@
         <version>2.12</version>
     </parent>
 
+    <groupId>com.ft.content</groupId>
     <artifactId>content-body-processing</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <version>1.21.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <description>Content body processing</description>
 
