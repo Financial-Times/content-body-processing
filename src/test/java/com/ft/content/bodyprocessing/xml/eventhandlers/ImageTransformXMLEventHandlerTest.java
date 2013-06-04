@@ -55,9 +55,9 @@ public class ImageTransformXMLEventHandlerTest  extends BaseXMLEventHandlerTest 
 
 	@Test
 	public void startElementShouldBeTransformed() throws Exception {
-		ImmutableMap<String,String> attributesMap = ImmutableMap.of("fileref", FILEREF, "align", "left", "margin-bottom", "0px", "alt", "text describing image");
+		ImmutableMap<String,String> attributesMap = ImmutableMap.of("fileref", FILEREF, "align", "left", "margin-bottom", "0px", ImageAttribute.ALT.getAttributeName(), "text describing image");
 		StartElement startElement = getStartElementWithAttributes("web-inline-picture", attributesMap);
-		ImmutableMap<String,String> expectedMap = ImmutableMap.of("class", "ft-web-inline-picture", "src", "http://image.url", "height", "100", "width", "300", "alt", "text describing image");
+		ImmutableMap<String,String> expectedMap = ImmutableMap.of("class", "ft-web-inline-picture", ImageAttribute.SRC.getAttributeName(), "http://image.url", ImageAttribute.HEIGHT.getAttributeName(), "100", ImageAttribute.WIDTH.getAttributeName(), "300", ImageAttribute.ALT.getAttributeName(), "text describing image");
 		eventHandler.handleStartElementEvent(startElement, mockXmlEventReader, eventWriter, mockBodyProcessingContext);
 
 		verify(eventWriter).writeStartTag("img", expectedMap);
@@ -68,7 +68,7 @@ public class ImageTransformXMLEventHandlerTest  extends BaseXMLEventHandlerTest 
 	public void startElementShouldBeTransformedMissingAltTagAdded() throws Exception {
 		ImmutableMap<String,String> attributesMap = ImmutableMap.of("fileref", FILEREF, "align", "left", "margin-bottom", "0px");
 		StartElement startElement = getStartElementWithAttributes("web-inline-picture", attributesMap);
-		ImmutableMap<String,String> expectedMap = ImmutableMap.of("class", "ft-web-inline-picture", "src", "http://image.url", "height", "100", "width", "300", "alt", "");
+		ImmutableMap<String,String> expectedMap = ImmutableMap.of("class", "ft-web-inline-picture", ImageAttribute.SRC.getAttributeName(), "http://image.url", ImageAttribute.HEIGHT.getAttributeName(), "100", ImageAttribute.WIDTH.getAttributeName(), "300", ImageAttribute.ALT.getAttributeName(), "");
 		eventHandler.handleStartElementEvent(startElement, mockXmlEventReader, eventWriter, mockBodyProcessingContext);
 
 		verify(eventWriter).writeStartTag("img", expectedMap);

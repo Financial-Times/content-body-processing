@@ -17,4 +17,8 @@ public enum ImageAttribute {
         }
         return null;
     }
+
+    public String getAttributeName() {
+        return attributeName;
+    }
 }

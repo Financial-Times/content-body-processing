@@ -20,7 +20,7 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 		// to be retained with attributes
 		super.registerStartElementEventHandler(new LinkTagXMLEventHandler(), "a");
 		super.registerEndElementEventHandler(new LinkTagXMLEventHandler(), "a");
-
+        super.registerStartAndEndElementEventHandler(new BlogPostImageRetainWithSpecificAttributesXMLEventHandler(), "img");
         registerStartAndEndElementEventHandler(videoHandlerWithFallbackTo(tweetHandlerWithFallbackTo(new BaseXMLEventHandler())), "div");
 
 		// to be transformed

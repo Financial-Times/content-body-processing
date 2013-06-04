@@ -18,8 +18,9 @@ public class ImageTransformXMLEventHandler extends SimpleTransformTagXmlEventHan
 
 	private final static String SRC_ATTRIBUTE = "fileref";
 	private final static String UUIDPREFIX = "uuid=";
-	private final static String ALT_ATTRIBUTE = "alt";
-	private List<String> validAttributes = Arrays.asList("width", "height", "alt", "src");
+	private final static String ALT_ATTRIBUTE =  ImageAttribute.ALT.getAttributeName();
+	private List<String> validAttributes = Arrays.asList(ImageAttribute.SRC.getAttributeName(), ImageAttribute.ALT.getAttributeName(), 
+	            ImageAttribute.WIDTH.getAttributeName(), ImageAttribute.HEIGHT.getAttributeName());
 	
 	public ImageTransformXMLEventHandler(String newElement, String... attributesToAdd) {
 		super(newElement, attributesToAdd);
