@@ -36,11 +36,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.ft</groupId>
-                <artifactId>ft-deliveryPlatformApi</artifactId>
-                <version>${ft-deliveryPlatform.version}</version>
-            </dependency>
             
             <!-- Unified Content Model -->
             <dependency>
@@ -156,11 +151,6 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.ft</groupId>
-            <artifactId>ft-deliveryPlatformApi</artifactId>
-            <version>1.22.0</version>
         </dependency>
     </dependencies>
 </project>

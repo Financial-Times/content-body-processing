@@ -1,5 +1,6 @@
 package com.ft.content.bodyprocessing.xml.eventhandlers;
 
+import com.ft.api.ucm.model.v1.TypeBasedImage;
 import com.ft.content.bodyprocessing.BodyProcessingContext;
 import com.ft.content.bodyprocessing.ImageAttribute;
 import com.ft.content.bodyprocessing.writer.BodyWriter;
@@ -43,7 +44,7 @@ public class BlogPostImageRetainWithSpecificAttributesXMLEventHandlerTest extend
                 (getStartElementWithAttributes("img", expectedImageAttributes), eventReader,
                 eventWriter, bodyProcessingContext);
 
-        verify(bodyProcessingContext).addImageWithAttributes(expectedImageAttributes);
+        verify(bodyProcessingContext).addImageWithAttributes(expectedImageAttributes, TypeBasedImage.ImageType.INLINE_EXT);
         verify(eventWriter).writeStartTag("img", expectedImageAttributes);
     }
 }

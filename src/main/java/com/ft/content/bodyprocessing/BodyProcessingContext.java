@@ -1,7 +1,8 @@
 package com.ft.content.bodyprocessing;
 
 import com.ft.api.ucm.model.v1.Asset;
-import com.ft.deliveryplatform.content.ImageView;
+import com.ft.api.ucm.model.v1.Image;
+import com.ft.api.ucm.model.v1.TypeBasedImage;
 
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface BodyProcessingContext {
 	
 	public boolean imageExists(String uuid);
 
-    public void addImageWithAttributes(Map<String, String> attributes);
+    public void addImageWithAttributes(Map<String, String> attributes, TypeBasedImage.ImageType imageType);
     
-    List<ImageView> retrieveProcessedImages();
+    List<Image> retrieveProcessedImages();
 }
