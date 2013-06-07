@@ -18,6 +18,12 @@
 
     <description>Content body processing</description>
 
+    <scm>
+        <connection>scm:git:http://git.svc.ft.com:9080/git/content-api/content-body-processing.git</connection>
+        <developerConnection>scm:git:http://git.svc.ft.com:9080/git/content-api/content-body-processing.git</developerConnection>
+        <url>http://git.svc.ft.com/summary/content-api%2Fcontent-body-processing.git</url>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
