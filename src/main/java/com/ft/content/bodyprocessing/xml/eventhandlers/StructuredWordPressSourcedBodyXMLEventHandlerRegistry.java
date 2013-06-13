@@ -1,7 +1,6 @@
 package com.ft.content.bodyprocessing.xml.eventhandlers;
 
 
-
 public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEventHandlerRegistry {
 
 
@@ -58,8 +57,7 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 		// characters (i.e. normal text) will be output
 		super.registerCharactersEventHandler(new RetainXMLEventHandler());
 		// specific entity references should be retained
-		super.registerEntityReferenceEventHandler(new RetainXMLEventHandler(), "nbsp");
-		
+		super.registerEntityReferenceEventHandler(new StructuredXmlHtmlEntityReferenceEventHandler());
 	}
 
     private BlogPostAssetXMLEventHandler<VideoData> videoHandlerWithFallbackTo(XMLEventHandler fallbackHandler) {

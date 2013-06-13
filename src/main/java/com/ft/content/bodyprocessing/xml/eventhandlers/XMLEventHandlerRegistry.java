@@ -19,7 +19,7 @@ public class XMLEventHandlerRegistry {
 	private XMLEventHandler charactersEventHandler = null;
 	private Map<String, XMLEventHandler> endElementEventHandlers = new HashMap<String,XMLEventHandler>();
 	private Map<String, XMLEventHandler> startElementEventHandlers = new HashMap<String,XMLEventHandler>();
-	private Map<String, XMLEventHandler> entityReferenceEventHandlers = new HashMap<String,XMLEventHandler>();
+	private XMLEventHandler entityReferenceEventHandler;
 	private XMLEventHandler commentsEventHandler;
 	
 	public XMLEventHandlerRegistry() {	
@@ -47,7 +47,7 @@ public class XMLEventHandlerRegistry {
 	}
 	
 	public XMLEventHandler getEventHandler(EntityReference event) {
-		XMLEventHandler eventHandler = entityReferenceEventHandlers.get(event.getName().toLowerCase());
+		XMLEventHandler eventHandler = entityReferenceEventHandler;
 		if (eventHandler == null) {
 			eventHandler = (XMLEventHandler) defaultEventHandler;
 		}
@@ -100,17 +100,13 @@ public class XMLEventHandlerRegistry {
 		notNull(commentsEventHandler, "commentsEventHandler cannot be null");
 		this.commentsEventHandler = commentsEventHandler;
 	}
-	
-	public void registerEntityReferenceEventHandler(XMLEventHandler entityReferenceEventHandler, String... names) {
-		notNull(entityReferenceEventHandler, "entityReferenceEventHandler cannot be null");
-		notNull(names, "names cannot be null");
-		notEmpty(names, "names cannot be empty");
-		for(String name: names) {
-			this.entityReferenceEventHandlers.put(name.toLowerCase(), entityReferenceEventHandler);
-		}
-	}
-	
-	public void registerDefaultEventHandler(XMLEventHandler defaultEventHandler) {
+
+    public void registerEntityReferenceEventHandler(XMLEventHandler entityReferenceEventHandler) {
+        notNull(entityReferenceEventHandler, "entityReferenceEventHandler cannot be null");
+        this.entityReferenceEventHandler = entityReferenceEventHandler;
+    }
+
+    public void registerDefaultEventHandler(XMLEventHandler defaultEventHandler) {
 		notNull(defaultEventHandler, "defaultEventHandler cannot be null");
 		this.defaultEventHandler = defaultEventHandler;
 	}

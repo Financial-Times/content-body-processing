@@ -11,8 +11,7 @@ public class PlainTextFromStructuredXMLEventHandlerRegistry extends XMLEventHand
 		super.registerEndElementEventHandler(new ReplaceWithStringXMLEventHandler(" "), "br", "li", "ol", "ul");
 		super.registerStartElementEventHandler(new ReplaceWithStringXMLEventHandler(" "), "ol", "ul");
 		super.registerCharactersEventHandler(new RetainXMLEventHandler());
-		// nbsp will be replaced with a space
-		super.registerEntityReferenceEventHandler(new ReplaceWithStringXMLEventHandler(" "), "nbsp");
-	}
+        super.registerEntityReferenceEventHandler(new PlainTextHtmlEntityReferenceEventHandler());
+    }
 
 }

@@ -86,9 +86,6 @@ public class StructuredMethodeSourcedBodyXMLEventHandlerRegistry extends XMLEven
 		super.registerCharactersEventHandler(new RetainXMLEventHandler());
 		// comments will be removed
 		super.registerCommentsEventHandler(new StripXMLEventHandler());
-		// nbsp should be retained
-		super.registerEntityReferenceEventHandler(new RetainXMLEventHandler(), "nbsp");
-		
+		super.registerEntityReferenceEventHandler(new StructuredXmlHtmlEntityReferenceEventHandler());
 	}
-
 }

@@ -80,30 +80,13 @@ public class XMLEventHandlerRegistryTest extends BaseXMLEventHandlerTest {
 	
 	@Test
 	public void entityReferenceEventHandlerRegisteredIsReturned() {
-		eventHandlerRegistry.registerEntityReferenceEventHandler(mockXMLEventHandler, "nbsp");
+		eventHandlerRegistry.registerEntityReferenceEventHandler(mockXMLEventHandler);
 		assertEquals(eventHandlerRegistry.getEventHandler(getEntityReference("nbsp")), mockXMLEventHandler);
-	}
-	
-	@Test
-	public void entityReferenceEventHandlerRegisteredIsReturnedCaseIsIgnored() {
-		eventHandlerRegistry.registerEntityReferenceEventHandler(mockXMLEventHandler, "NBSP");
-		assertEquals(eventHandlerRegistry.getEventHandler(getEntityReference("nbsp")), mockXMLEventHandler);
-	}
-	
-	@Test
-	public void entityReferenceEventHandlerRegisteredIsReturnedCaseIsIgnoredOtherDirection() {
-		eventHandlerRegistry.registerEntityReferenceEventHandler(mockXMLEventHandler, "nbsp");
-		assertEquals(eventHandlerRegistry.getEventHandler(getEntityReference("NBSP")), mockXMLEventHandler);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldThrowExceptionFromRegisterEntityReferenceHandlerIfIfNullHandlerSupplied() {
-		eventHandlerRegistry.registerEntityReferenceEventHandler(null, "a");
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldThrowExceptionFromRegisterEntityReferenceHandlerIfNamesNotSupplied() {
-		eventHandlerRegistry.registerEntityReferenceEventHandler(mockXMLEventHandler);
+		eventHandlerRegistry.registerEntityReferenceEventHandler(null);
 	}
 	
 	@Test
