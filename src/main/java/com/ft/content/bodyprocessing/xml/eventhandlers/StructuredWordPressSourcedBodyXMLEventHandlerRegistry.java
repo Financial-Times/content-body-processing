@@ -14,7 +14,7 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 				"ol", "ul", "li",
 				"p",
 				"br", "strong", "em", "small", "sub", "sup",
-				"itemBody"); // itemBody included as it will be a root node wrapping the body text so that the xml being written out is valid
+				"itemBody", "del"); // itemBody included as it will be a root node wrapping the body text so that the xml being written out is valid
 		
 		// to be retained with attributes
 		super.registerStartElementEventHandler(new LinkTagXMLEventHandler(), "a");
@@ -26,13 +26,15 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-underlined"), "u");
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-bold"), "b");
 		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("span", "class", "ft-italic"), "i");
+		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("del"), "s");
+		super.registerStartAndEndElementEventHandler(new SimpleTransformTagXmlEventHandler("del"), "strike");
 
 		//html5 tags to remove with all contents
 		super.registerStartElementEventHandler(new StripElementAndContentsXMLEventHandler(), 
 				"applet", "audio", 
 				"base", "basefont", "button", 
 				"canvas", "caption",  "col", "colgroup", "command", 
-				"datalist", "del", "dir", 
+				"datalist", "dir", 
 				"embed", 
 				"fieldset", "form", "frame", "frameset", 
 				"head", 
@@ -44,8 +46,8 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 				"object", "optgroup", 
 				"option", "output", 
 				"param", "progress", 
-				"rp", "rt", "ruby", "s",
-				"script", "select", "source", "strike", "style", "table",
+				"rp", "rt", "ruby",
+				"script", "select", "source", "style", "table",
 				"tbody", "td", "textarea", "tfoot", "th", "thead", "tr", "track",
 				"video",
 				"wbr");
