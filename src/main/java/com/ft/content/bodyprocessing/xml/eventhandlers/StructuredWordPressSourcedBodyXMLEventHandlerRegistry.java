@@ -14,7 +14,8 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 				"ol", "ul", "li",
 				"p",
 				"br", "strong", "em", "small", "sub", "sup",
-				"itemBody", "del"); // itemBody included as it will be a root node wrapping the body text so that the xml being written out is valid
+				"del", "blockquote",
+				"itemBody"); // itemBody included as it will be a root node wrapping the body text so that the xml being written out is valid
 		
 		// to be retained with attributes
 		super.registerStartElementEventHandler(new LinkTagXMLEventHandler(), "a");
