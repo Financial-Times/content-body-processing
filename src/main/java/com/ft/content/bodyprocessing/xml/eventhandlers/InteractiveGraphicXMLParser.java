@@ -76,8 +76,7 @@ public class InteractiveGraphicXMLParser extends BaseXMLParser<InteractiveGraphi
     private void enforceStrictElementStructure(boolean isStartElementExpected, String expectedElementName, XMLEventReader xmlEventReader) {
        XMLEvent xmlEvent = peekNextElement(xmlEventReader);
        
-       // Check for spaces, such events should be ignored and not fail the processing of the element
-       if(xmlEvent.isCharacters() && isWhiteSpace(xmlEvent.asCharacters())) {
+       if(xmlEvent.isCharacters() && (isWhiteSpace(xmlEvent.asCharacters()) || areCharactersInsideScriptTag(isStartElementExpected, expectedElementName))) {
            return;
        }
        
@@ -85,12 +84,16 @@ public class InteractiveGraphicXMLParser extends BaseXMLParser<InteractiveGraphi
            StartElement startElement = xmlEvent.asStartElement();
            validateElementName(expectedElementName, startElement.getName());
        } else if(!isStartElementExpected && xmlEvent.isEndElement()) {
-           EndElement endtElement = xmlEvent.asEndElement();
-           validateElementName(expectedElementName, endtElement.getName());
+           EndElement endElement = xmlEvent.asEndElement();
+           validateElementName(expectedElementName, endElement.getName());
        } else {
            throw new UnexpectedElementStructureException(String.format("Found unsupported element while parsing the Interactive Graphic element"));
        }
         
+    }
+
+    private boolean areCharactersInsideScriptTag(boolean isStartElementExpected, String expectedElementName) {
+        return (SCRIPT.equals(expectedElementName) && !isStartElementExpected);
     }
 
     private boolean isWhiteSpace(Characters characters) {

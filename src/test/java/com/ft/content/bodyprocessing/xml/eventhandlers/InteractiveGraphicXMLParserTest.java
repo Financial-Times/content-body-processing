@@ -29,6 +29,7 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
     private String xmlWithExtraElementsAfterDiv = "<plainHtml><div id=\"ig1234\"><td></td><script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\"></script></div></plainHtml>";
     private String xmlWithExtraElementsAfterPlainHtml = "<plainHtml><td></td><div id=\"ig1234\"><script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\"></script></div></plainHtml>";
     private String validXmlWithSpaces = "<plainHtml>      <div id=\"ig1234\">   <script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\">   </script> </div> </plainHtml>";
+    private String validXmlWithCharactersInsideScript = "<plainHtml>      <div id=\"ig1234\">   <script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\"> some characters including /*comments*/  </script> </div> </plainHtml>";
     private String invalidXmlWithCharactersBetweenDivAndScript = "<plainHtml><div id=\"ig1234\">some unexpected characters<script type=\"text/javascript\" src=\"http://interactive.ftdata.co.uk/interactive-graphic-1234.js\" data-asset-type=\"interactive-graphic\"></script></div></plainHtml>";
     
     private BaseXMLParser<InteractiveGraphicData> interactiveGraphicXMLParser;
@@ -171,6 +172,20 @@ public class InteractiveGraphicXMLParserTest extends BaseXMLParserTest {
         
         assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
         assertFalse(interactiveGraphicData.isAllRequiredDataPresent());
+        assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
+    }
+
+    @Test
+    public void testParseWithCharactersInsideScript() throws XMLStreamException {
+        xmlEventReader = createReaderForXml(validXmlWithCharactersInsideScript);
+        StartElement startElement = getStartElement(xmlEventReader);
+        InteractiveGraphicData interactiveGraphicData = interactiveGraphicXMLParser
+                .parseElementData(startElement, xmlEventReader);
+
+        assertNotNull("interactiveGraphicData should not be null", interactiveGraphicData);
+        assertTrue(interactiveGraphicData.isAllRequiredDataPresent());
+        assertEquals("Id was not as expected", EXPECTED_ID, interactiveGraphicData.getId());
+        assertEquals("Src was not as expected", EXPECTED_SRC, interactiveGraphicData.getSrc());
         assertTrue("xmlReader should have no more events", xmlEventReader.nextEvent().isEndDocument());
     }
 }
