@@ -12,11 +12,12 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 		super.registerStartAndEndElementEventHandler(new RetainWithoutAttributesXMLEventHandler(),
 				"h1","h2", "h3", "h4", "h5", "h6",
 				"ol", "ul", "li",
-				"p",
 				"br", "strong", "em", "small", "sub", "sup",
 				"del", "blockquote",
 				"itemBody"); // itemBody included as it will be a root node wrapping the body text so that the xml being written out is valid
-		
+
+        super.registerStartAndEndElementEventHandler(imageCaptionHandlerWithFallbackTo(new RetainWithoutAttributesXMLEventHandler()), "p");
+
 		// to be retained with attributes
 		super.registerStartElementEventHandler(new LinkTagXMLEventHandler(), "a");
 		super.registerEndElementEventHandler(new LinkTagXMLEventHandler(), "a");
@@ -62,6 +63,10 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 		// specific entity references should be retained
 		super.registerEntityReferenceEventHandler(new StructuredXmlHtmlEntityReferenceEventHandler());
 	}
+
+    private XMLEventHandler imageCaptionHandlerWithFallbackTo(XMLEventHandler fallbackHandler) {
+        return new BlogPostInlineImageCaptionEventHandler(fallbackHandler);
+    }
 
     private BlogPostAssetXMLEventHandler<VideoData> videoHandlerWithFallbackTo(XMLEventHandler fallbackHandler) {
         return new BlogPostAssetXMLEventHandler<VideoData>(new BlogPostVideoXMLParser(), "video", new AsideElementWriter(), fallbackHandler);

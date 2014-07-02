@@ -23,6 +23,8 @@ public interface BodyProcessingContext {
 	public boolean imageExists(String uuid);
 
     public void addImageWithAttributes(Map<String, String> attributes, TypeBasedImage.ImageType imageType);
+
+    public void addAttributesToExistingImageWithId(String imageId, Map<String, String> attributes);
     
     List<Image> retrieveProcessedImages();
 }

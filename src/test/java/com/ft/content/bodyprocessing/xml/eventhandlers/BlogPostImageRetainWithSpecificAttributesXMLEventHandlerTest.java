@@ -38,7 +38,7 @@ public class BlogPostImageRetainWithSpecificAttributesXMLEventHandlerTest extend
     @Test
     public void shouldAddProcessedImageAttributesAsImageToProcessingContext() throws Exception {
         Map<String, String> expectedImageAttributes = ImmutableMap
-                .of(ImageAttribute.SRC.getAttributeName(), "someImage.jpg", ImageAttribute.ALT.getAttributeName(), "someAlt");
+                .of(ImageAttribute.SRC.getAttributeName(), "someImage.jpg", ImageAttribute.ALT.getAttributeName(), "someAlt", ImageAttribute.IMAGE_ID.getAttributeName(), "275702");
 
         blogPostImageRetainWithSpecificAttributesXMLEventHandler.handleStartElementEvent
                 (getStartElementWithAttributes("img", expectedImageAttributes), eventReader,
