@@ -4,6 +4,7 @@ import com.ft.content.bodyprocessing.BodyProcessingContext;
 import com.ft.content.bodyprocessing.ImageAttribute;
 import com.ft.content.bodyprocessing.writer.BodyWriter;
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang.StringUtils;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
@@ -25,7 +26,9 @@ public class BlogPostInlineImageCaptionEventHandler extends BaseXMLEventHandler 
         String imageId = retrieveImageId(event);
         if (imageId != null) {
             String caption = retrieveCaption(event, xmlEventReader);
-            bodyProcessingContext.addAttributesToExistingImageWithId(imageId, ImmutableMap.of(ImageAttribute.CAPTION.getAttributeName(), caption));
+            if (StringUtils.isNotEmpty(caption)) {
+                bodyProcessingContext.addAttributesToExistingImageWithId(imageId, ImmutableMap.of(ImageAttribute.CAPTION.getAttributeName(), caption));
+            }
         } else {
             fallbackHandler.handleStartElementEvent(event, xmlEventReader, eventWriter, bodyProcessingContext);
         }

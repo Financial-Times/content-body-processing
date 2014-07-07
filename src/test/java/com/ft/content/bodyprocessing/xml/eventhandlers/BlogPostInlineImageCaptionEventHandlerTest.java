@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
@@ -88,5 +89,31 @@ public class BlogPostInlineImageCaptionEventHandlerTest extends BaseXMLEventHand
         blogPostInlineImageCaptionEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 
         verify(mockBodyProcessingContext).addAttributesToExistingImageWithId(eq("someId"), eq(ImmutableMap.of(ImageAttribute.CAPTION.getAttributeName(), "caption")));
+    }
+
+    @Test
+    public void testCaptionShouldNotBeAddedToTheContextWhenXMLStreamExceptionThrown() throws Exception {
+        startElement = getStartElementWithAttributes("p", ImmutableMap.of(ImageAttribute.IMAGE_ID.getAttributeName(), "someId"));
+        characters = getCharacters("caption");
+        endElement = getEndElement("p");
+        when(mockXmlEventReader.hasNext()).thenReturn(true);
+        when(mockXmlEventReader.nextEvent()).thenThrow(new XMLStreamException());
+
+        blogPostInlineImageCaptionEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
+
+        verifyZeroInteractions(mockBodyProcessingContext);
+    }
+
+    @Test
+    public void testEmptyCaptionShouldNotBeAddedToTheContext() throws Exception {
+        startElement = getStartElementWithAttributes("p", ImmutableMap.of(ImageAttribute.IMAGE_ID.getAttributeName(), "someId"));
+        characters = getCharacters("");
+        endElement = getEndElement("p");
+        when(mockXmlEventReader.hasNext()).thenReturn(true);
+        when(mockXmlEventReader.nextEvent()).thenReturn(characters).thenReturn(endElement);
+
+        blogPostInlineImageCaptionEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
+
+        verifyZeroInteractions(mockBodyProcessingContext);
     }
 }
