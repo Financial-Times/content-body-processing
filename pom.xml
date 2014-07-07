@@ -20,9 +20,9 @@
     <description>Content body processing</description>
 
     <scm>
-        <connection>scm:git:http://git.svc.ft.com:9080/git/content-api/content-body-processing.git</connection>
-        <developerConnection>scm:git:http://git.svc.ft.com:9080/git/content-api/content-body-processing.git</developerConnection>
-        <url>http://git.svc.ft.com/summary/content-api%2Fcontent-body-processing.git</url>
+        <connection> scm:git:http://MVN-Release:mTRSZkG5E@git.svc.ft.com:8080/scm/ftfal/content-body-processing.git</connection>
+        <developerConnection>scm:git:http://MVN-Release:mTRSZkG5E@git.svc.ft.com:8080/scm/ftfal/content-body-processing.git</developerConnection>
+        <url>scm:git:http://MVN-Release:mTRSZkG5E@git.svc.ft.com:8080/scm/ftfal/content-body-processing.git</url>
     </scm>
 
     <properties>
