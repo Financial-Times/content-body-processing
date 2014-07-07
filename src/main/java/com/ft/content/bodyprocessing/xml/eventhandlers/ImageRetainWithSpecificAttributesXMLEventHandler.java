@@ -14,7 +14,7 @@ public class ImageRetainWithSpecificAttributesXMLEventHandler extends RetainWith
 
 	private final static String ALT_ATTRIBUTE = ImageAttribute.ALT.getAttributeName();
 	private final static String[] VALID_ATTRIBUTES = {ImageAttribute.SRC.getAttributeName(), ImageAttribute.ALT.getAttributeName(), 
-            ImageAttribute.WIDTH.getAttributeName(), ImageAttribute.HEIGHT.getAttributeName()};
+            ImageAttribute.WIDTH.getAttributeName(), ImageAttribute.HEIGHT.getAttributeName(), ImageAttribute.IMAGE_ID.getAttributeName()};
 
 	public ImageRetainWithSpecificAttributesXMLEventHandler(String... validAttributes) {
 		super(VALID_ATTRIBUTES);

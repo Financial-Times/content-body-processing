@@ -2,21 +2,25 @@ package com.ft.content.bodyprocessing;
 
 import org.junit.Test;
 
-import junit.framework.Assert;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 
 public class ImageAttributeTest {
 
     @Test
     public void testStringConversion() {
-        Assert.assertEquals(ImageAttribute.ALT, ImageAttribute.getByName("alt"));
-        Assert.assertEquals(ImageAttribute.CAPTION, ImageAttribute.getByName("caption"));
-        Assert.assertEquals(ImageAttribute.HEIGHT, ImageAttribute.getByName("height"));
-        Assert.assertEquals(ImageAttribute.WIDTH, ImageAttribute.getByName("width"));
-        Assert.assertEquals(ImageAttribute.MEDIA_TYPE, ImageAttribute.getByName("media_type"));
-        Assert.assertEquals(ImageAttribute.SOURCE, ImageAttribute.getByName("source"));
-        Assert.assertEquals(ImageAttribute.SRC, ImageAttribute.getByName("src"));
-        
-        Assert.assertNull(ImageAttribute.getByName("doesNotExist"));
+        assertThat(ImageAttribute.getByName("alt"), is(equalTo(ImageAttribute.ALT)));
+        assertThat(ImageAttribute.getByName("caption"), is(equalTo(ImageAttribute.CAPTION)));
+        assertThat(ImageAttribute.getByName("height"), is(equalTo(ImageAttribute.HEIGHT)));
+        assertThat(ImageAttribute.getByName("width"), is(equalTo(ImageAttribute.WIDTH)));
+        assertThat(ImageAttribute.getByName("media_type"), is(equalTo(ImageAttribute.MEDIA_TYPE)));
+        assertThat(ImageAttribute.getByName("source"), is(equalTo(ImageAttribute.SOURCE)));
+        assertThat(ImageAttribute.getByName("src"), is(equalTo(ImageAttribute.SRC)));
+        assertThat(ImageAttribute.getByName("data-img-id"), is(equalTo(ImageAttribute.IMAGE_ID)));
+
+        assertThat(ImageAttribute.getByName("doesNotExist"), is(nullValue()));
     }
 }
