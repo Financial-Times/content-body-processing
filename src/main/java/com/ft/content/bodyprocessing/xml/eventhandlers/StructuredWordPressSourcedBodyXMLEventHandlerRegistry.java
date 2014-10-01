@@ -1,6 +1,8 @@
 package com.ft.content.bodyprocessing.xml.eventhandlers;
 
 
+import com.ft.content.bodyprocessing.xml.StAXTransformingBodyProcessor;
+
 public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEventHandlerRegistry {
 
 
@@ -17,6 +19,7 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 				"itemBody"); // itemBody included as it will be a root node wrapping the body text so that the xml being written out is valid
 
         super.registerStartAndEndElementEventHandler(imageCaptionHandlerWithFallbackTo(new RetainWithoutAttributesXMLEventHandler()), "p");
+        super.registerStartAndEndElementEventHandler(imageSourceHandlerWithFallbackTo(new StripXMLEventHandler()), "span");
 
 		// to be retained with attributes
 		super.registerStartElementEventHandler(new LinkTagXMLEventHandler(), "a");
@@ -64,8 +67,12 @@ public class StructuredWordPressSourcedBodyXMLEventHandlerRegistry extends XMLEv
 		super.registerEntityReferenceEventHandler(new StructuredXmlHtmlEntityReferenceEventHandler());
 	}
 
+    private XMLEventHandler imageSourceHandlerWithFallbackTo(XMLEventHandler fallbackHandler) {
+        return new BlogPostInlineImageSourceEventHandler(fallbackHandler, new StAXTransformingBodyProcessor(this));
+    }
+
     private XMLEventHandler imageCaptionHandlerWithFallbackTo(XMLEventHandler fallbackHandler) {
-        return new BlogPostInlineImageCaptionEventHandler(fallbackHandler);
+        return new BlogPostInlineImageCaptionEventHandler(fallbackHandler, new StAXTransformingBodyProcessor(this));
     }
 
     private BlogPostAssetXMLEventHandler<VideoData> videoHandlerWithFallbackTo(XMLEventHandler fallbackHandler) {
