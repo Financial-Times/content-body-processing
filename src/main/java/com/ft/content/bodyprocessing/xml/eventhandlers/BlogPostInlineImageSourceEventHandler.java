@@ -5,25 +5,23 @@ import com.ft.content.bodyprocessing.ImageAttribute;
 
 import javax.xml.stream.events.StartElement;
 
-public class BlogPostInlineImageCaptionEventHandler extends BlogPostInlineImageDataEventHandler {
+public class BlogPostInlineImageSourceEventHandler extends BlogPostInlineImageDataEventHandler {
+    private static final String SOURCE_TAG = "span";
 
-    private static final String CAPTION_TAG = "p";
-
-    public BlogPostInlineImageCaptionEventHandler(XMLEventHandler fallbackHandler, BodyProcessor transformingBodyProcessor) {
+    public BlogPostInlineImageSourceEventHandler(XMLEventHandler fallbackHandler, BodyProcessor transformingBodyProcessor) {
         super(fallbackHandler, transformingBodyProcessor);
+    }
+
+    protected String getImageDataAttributeName() {
+        return ImageAttribute.SOURCE.getAttributeName();
     }
 
     @Override
     protected String retrieveImageId(StartElement event) {
-        if (CAPTION_TAG.equals(event.getName().getLocalPart())) {
+        if (SOURCE_TAG.equals(event.getName().getLocalPart())) {
             return getValidAttributesAndValues(event).get(ImageAttribute.IMAGE_ID.getAttributeName());
         }
         return null;
-    }
-
-    @Override
-    protected String getImageDataAttributeName() {
-        return ImageAttribute.CAPTION.getAttributeName();
     }
 
 }
