@@ -14,7 +14,7 @@
     <artifactId>content-body-processing</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <version>1.7.1-SNAPSHOT</version>
+    <version>1.8.0-SNAPSHOT</version>
 
     <description>Content body processing</description>
 
@@ -22,7 +22,7 @@
         <connection> scm:git:http://MVN-Release:mTRSZkG5E@git.svc.ft.com:8080/scm/ftfal/content-body-processing.git</connection>
         <developerConnection>scm:git:http://MVN-Release:mTRSZkG5E@git.svc.ft.com:8080/scm/ftfal/content-body-processing.git</developerConnection>
         <url>scm:git:http://MVN-Release:mTRSZkG5E@git.svc.ft.com:8080/scm/ftfal/content-body-processing.git</url>
-      <tag>RELEASE-1.7.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <properties>
