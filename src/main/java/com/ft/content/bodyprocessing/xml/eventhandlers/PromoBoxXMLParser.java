@@ -2,7 +2,9 @@ package com.ft.content.bodyprocessing.xml.eventhandlers;
 
 import static org.springframework.util.Assert.notNull;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 
 import org.apache.commons.lang.StringUtils;
@@ -21,6 +23,8 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
     private static final String PROMO_INTRO = "promo-intro";
     private static final String PROMO_LINK= "promo-link";
     private static final String PROMO_IMAGE= "promo-image";
+    private static final String PROMO_CLASS_ATTRIBUTE = "class";
+    private static final String NUMBERS_COMPONENT_IDENTIFIER = "numbers-component";
 
     private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
     
@@ -83,6 +87,12 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
     public void populateBean(PromoBoxData promoBoxData, StartElement nextStartElement, XMLEventReader xmlEventReader)
             throws UnexpectedElementStructureException {
         
+        if (isElementNamed(nextStartElement.getName(), PROMO_BOX)) {
+            Attribute classAttribute = nextStartElement.getAttributeByName(new QName(PROMO_CLASS_ATTRIBUTE));
+            if (isNumbersComponent(classAttribute)) {
+                promoBoxData.setAsNumbersComponent();
+            }
+        } 
         if (isElementNamed(nextStartElement.getName(), PROMO_TITLE)) {
             promoBoxData.setTitle(parseRawContent(PROMO_TITLE, xmlEventReader));
         } 
@@ -97,8 +107,18 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
         } 
         else if (isElementNamed(nextStartElement.getName(), PROMO_IMAGE)) {
             String fileRef = parseAttribute("fileref", nextStartElement);
-            promoBoxData.setImageFileRef(fileRef);
+            promoBoxData.setImageFileRef(fileRef);  
         }
+    }
+
+    private boolean isNumbersComponent(Attribute classAttribute) {
+        if (classAttribute == null) {
+            return false;
+        }
+        if (classAttribute.getValue() == null) {
+            return false;
+        }
+        return classAttribute.getValue().contains(NUMBERS_COMPONENT_IDENTIFIER);
     }
     
     @Override

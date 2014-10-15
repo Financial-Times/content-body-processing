@@ -4,6 +4,8 @@ import org.apache.commons.lang.StringUtils;
 
 import com.ft.content.bodyprocessing.BodyProcessingException;
 import com.ft.api.ucm.model.v1.Asset;
+import com.ft.api.ucm.model.v1.NumbersComponent;
+import com.ft.api.ucm.model.v1.NumbersComponentFields;
 import com.ft.api.ucm.model.v1.PromoBox;
 import com.ft.api.ucm.model.v1.PromoBoxFields;
 import com.ft.api.ucm.model.v1.TypeBasedImage;
@@ -15,7 +17,7 @@ public class PromoBoxData extends BaseData implements AssetAware {
     private String headline;
     private String intro;
     private String link;
-    
+
     private String imageUrl;
     private String imageType;
     private String imageHeight;
@@ -25,6 +27,8 @@ public class PromoBoxData extends BaseData implements AssetAware {
     private String imageCaption;
     private String imageSource;
     private String imageMediaType;
+    
+    private boolean numbersComponent = false;
     
     public String getImageCaption() {
         return imageCaption;
@@ -49,8 +53,6 @@ public class PromoBoxData extends BaseData implements AssetAware {
     public void setImageMediaType(String imageMediaType) {
         this.imageMediaType = imageMediaType;
     }
-
-    
     
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
@@ -132,27 +134,53 @@ public class PromoBoxData extends BaseData implements AssetAware {
         this.imageFileRef = imageFileRef;
     }
     
+    public boolean isNumbersComponent() {
+        return numbersComponent;
+    }
+    
+    public void setAsNumbersComponent() {
+        this.numbersComponent = true;
+    }
+    
     @Override
     public boolean isAllRequiredDataPresent() {
+        return isNumbersComponent() ? validateNumbersComponent() : validateNormalPromoBox();
+    }
+    
+    private boolean validateNormalPromoBox() {
         return containsValidData(this.title) || containsValidData(this.imageFileRef)
                 || containsValidData(this.headline) || containsValidData(this.intro)
                 || containsValidData(this.link);
     }
+    
+    private boolean validateNumbersComponent() {
+        return containsValidData(this.headline) || containsValidData(this.intro);
+    }
 
     @Override
     public Asset getAsset() throws BodyProcessingException {
-        PromoBox promoBox = null;
         if(this.isAllRequiredDataPresent()) {
-            promoBox = new PromoBox();
-            TypeBasedImage promoImage = createPromoImage();
-            
-            PromoBoxFields fields = new PromoBoxFields(nullIfEmpty(this.title), nullIfEmpty(this.headline), 
-                                                       nullIfEmpty(intro), nullIfEmpty(this.link), promoImage);
-            promoBox.setFields(fields);
-            return promoBox;
+            return isNumbersComponent() ? getNumbersComponentAsset() : getPromoBoxAsset();
         }
         throw new BodyProcessingException(GET_ASSET_NO_VALID_EXCEPTION_MESSAGE);
      }
+
+    private Asset getNumbersComponentAsset() {
+        NumbersComponent numbersComponent = new NumbersComponent();
+        NumbersComponentFields numbersComponentFields = new NumbersComponentFields(nullIfEmpty(this.headline), nullIfEmpty(intro));
+        numbersComponent.setFields(numbersComponentFields);
+        return numbersComponent;
+    }
+
+    private Asset getPromoBoxAsset() {
+        PromoBox promoBox = new PromoBox();
+        TypeBasedImage promoImage = createPromoImage();
+        
+        PromoBoxFields fields = new PromoBoxFields(nullIfEmpty(this.title), nullIfEmpty(this.headline), 
+                                                   nullIfEmpty(intro), nullIfEmpty(this.link), promoImage);
+        promoBox.setFields(fields);
+        return promoBox;
+    }
 
    
     private TypeBasedImage createPromoImage() {

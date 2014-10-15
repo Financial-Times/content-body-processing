@@ -14,8 +14,8 @@ import javax.xml.stream.events.StartElement;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.ft.content.bodyprocessing.BodyProcessingContext;
@@ -56,6 +56,10 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
     private String uuid = "432b5632-9e79-11e0-9469-00144feabdc0";
     private String nonStandardUuid = "ABCD_432b5632-9e79-11e0-9469-00144feabdc0";
     private String validXml = "<promo-box align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><promo-title><p><a href=\"http://www.ft.com/reports/ft-500-2011\" title=\"www.ft.com\">FT 500</a></p></promo-title></td></tr><tr><td><promo-headline><p>someheadline</p></promo-headline></td></tr><tr><td><promo-image fileref=\"/FT/Graphics/Online/Secondary_%26_Triplet_167x96/2011/06/SEC_ft500.jpg?uuid=432b5632-9e79-11e0-9469-00144feabdc0\"/></td></tr><tr><td><promo-intro><p>The risers and fallers in our annual list of the world’s biggest companies</p></promo-intro></td></tr><tr><td><promo-link><p>somelink</p></promo-link></td></tr></table></promo-box>";
+    private String numbersComponentXml = "<promo-box align=\"left\" class=\"numbers-component\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\">"
+            + "<tr><td><promo-headline><p>someheadline</p></promo-headline></td></tr>"
+            + "<tr><td><promo-intro><p>The risers and fallers in our annual list of the world’s biggest companies</p></promo-intro></td></tr>"
+            + "</table></promo-box>";
     private String validXmlNoFileref = "<promo-box align=\"left\"><table align=\"left\" cellpadding=\"6px\" width=\"170px\"><tr><td><promo-title><p><a href=\"http://www.ft.com/reports/ft-500-2011\" title=\"www.ft.com\">FT 500</a></p></promo-title></td></tr><tr><td><promo-headline><p>someheadline</p></promo-headline></td></tr><tr><td><promo-image /></td></tr><tr><td><promo-intro><p>The risers and fallers in our annual list of the world’s biggest companies</p></promo-intro></td></tr><tr><td><promo-link><p>somelink</p></promo-link></td></tr></table></promo-box>";
     
     private PromoBoxXMLParser promoBoxXMLParser;
@@ -125,8 +129,8 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
 
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_INTRO), Mockito.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_LINK), Mockito.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
 
         verify(mockPromoBoxData).setImageType(EXPECTED_IMAGE_TYPE);
         verify(mockPromoBoxData).setImageHeight(EXPECTED_IMAGE_HEIGHT);
@@ -153,8 +157,8 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
 
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_INTRO), Mockito.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_LINK), Mockito.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
 
         verify(mockPromoBoxData).setImageType(EXPECTED_IMAGE_TYPE);
         verify(mockPromoBoxData).setImageHeight(EXPECTED_IMAGE_HEIGHT);
@@ -181,8 +185,8 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
 
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_INTRO), Mockito.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_LINK), Mockito.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
 
         verify(mockPromoBoxData).setImageType(EXPECTED_IMAGE_TYPE);
         verify(mockPromoBoxData).setImageHeight(EXPECTED_IMAGE_HEIGHT);
@@ -209,8 +213,8 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
 
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_INTRO), Mockito.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_LINK), Mockito.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
 
         verify(mockPromoBoxData).setImageType(EXPECTED_IMAGE_TYPE);
         verify(mockPromoBoxData).setImageHeight(EXPECTED_IMAGE_HEIGHT);
@@ -220,7 +224,6 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         verify(mockPromoBoxData).setImageCaption(EXPECTED_IMAGE_CAPTION);
         verify(mockPromoBoxData).setImageSource(EXPECTED_IMAGE_SOURCE);
         verify(mockPromoBoxData).setImageMediaType(EXPECTED_IMAGE_MEDIA_TYPE);
-
     }
     
     @Test
@@ -237,8 +240,8 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
 
         verify(mockStAXTransformingBodyProcessor, never()).process("\n", mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor, never()).process(" ", mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_INTRO), Mockito.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_LINK), Mockito.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
 
         verify(mockPromoBoxData).setImageType(EXPECTED_IMAGE_TYPE);
         verify(mockPromoBoxData).setImageHeight(EXPECTED_IMAGE_HEIGHT);
@@ -263,8 +266,8 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
 
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_INTRO), Mockito.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_LINK), Mockito.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
 
         verify(mockPromoBoxData, never()).setImageType(EXPECTED_IMAGE_TYPE);
         verify(mockPromoBoxData, never()).setImageHeight(EXPECTED_IMAGE_HEIGHT);
@@ -286,8 +289,8 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
 
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_INTRO), Mockito.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_LINK), Mockito.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
 
         verify(mockPromoBoxData, never()).setImageType(EXPECTED_IMAGE_TYPE);
         verify(mockPromoBoxData, never()).setImageHeight(EXPECTED_IMAGE_HEIGHT);
@@ -309,8 +312,8 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
 
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_INTRO), Mockito.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Mockito.eq(EXPECTED_PARSED_LINK), Mockito.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
+        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
 
         verify(mockPromoBoxData, never()).setImageType(EXPECTED_IMAGE_TYPE);
         verify(mockPromoBoxData, never()).setImageHeight(EXPECTED_IMAGE_HEIGHT);
@@ -324,5 +327,18 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         StartElement startElement = getStartElement(xmlEventReader);
         PromoBoxData promoBoxData = promoBoxXMLParser.parseElementData(startElement, xmlEventReader);
         assertTrue(promoBoxData.isAllRequiredDataPresent());
+    }
+    
+    @Test
+    public void testNumbersComponent() throws Exception {
+        xmlEventReader = createReaderForXml(numbersComponentXml);
+        StartElement startElement = getStartElement(xmlEventReader);
+        PromoBoxData promoBoxData = promoBoxXMLParser.parseElementData(startElement, xmlEventReader);
+        
+        assertTrue(promoBoxData.isAllRequiredDataPresent());
+        assertTrue(promoBoxData.isNumbersComponent());
+        
+        assertEquals("Headline was not as expected.", EXPECTED_PARSED_HEADLINE, promoBoxData.getHeadline());
+        assertEquals("Intro was not as expected.", EXPECTED_PARSED_INTRO, promoBoxData.getIntro());
     }
 }
