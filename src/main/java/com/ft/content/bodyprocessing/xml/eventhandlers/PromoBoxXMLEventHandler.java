@@ -40,5 +40,4 @@ public class PromoBoxXMLEventHandler extends AsideBaseXMLEventHandler<PromoBoxDa
     PromoBoxData parseElementData(StartElement startElement, XMLEventReader xmlEventReader) throws XMLStreamException {
         return promoBoxXMLParser.parseElementData(startElement, xmlEventReader);
     }
-
 }

@@ -56,7 +56,7 @@ public abstract class BaseXMLParser<T> {
                 }
             }
         } catch (UnexpectedElementStructureException e) {
-            // Something went wrong - read til the end of this element to get
+            // Something went wrong - read until the end of this element to get
             // rid of the whole thing
             skipUntilMatchingEndTag(startElementName, xmlEventReader);
             // Ensure that the bean returned is not valid for processing.

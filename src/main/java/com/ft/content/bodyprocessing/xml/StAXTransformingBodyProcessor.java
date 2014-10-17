@@ -10,11 +10,16 @@ import com.ft.content.bodyprocessing.writer.BodyWriterFactory;
 import com.ft.content.bodyprocessing.writer.HTML5VoidElementHandlingXMLBodyWriterFactory;
 import com.ft.content.bodyprocessing.xml.eventhandlers.XMLEventHandler;
 import com.ft.content.bodyprocessing.xml.eventhandlers.XMLEventHandlerRegistry;
+
 import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Comment;
 import javax.xml.stream.events.EntityReference;
 import javax.xml.stream.events.XMLEvent;
+
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLOutputFactory2;
 
@@ -98,10 +103,10 @@ public class StAXTransformingBodyProcessor implements BodyProcessor {
         } else if (event.isCharacters()) {
             eventHandler = eventHandlerRegistry.getEventHandler(event.asCharacters());
             eventHandler.handleCharactersEvent(event.asCharacters(), xmlEventReader, bodyWriter);
-        } else if (event.getEventType() == XMLEvent.COMMENT){
+        } else if (event.getEventType() == XMLStreamConstants.COMMENT){
         	eventHandler = eventHandlerRegistry.getEventHandler((Comment)event);
         	eventHandler.handleComment((Comment)event, xmlEventReader, bodyWriter);
-    	} else if (event.getEventType() == XMLEvent.ENTITY_REFERENCE) {
+    	} else if (event.getEventType() == XMLStreamConstants.ENTITY_REFERENCE) {
     		eventHandler = eventHandlerRegistry.getEventHandler((EntityReference) event);
     		eventHandler.handleEntityReferenceEvent((EntityReference) event, xmlEventReader, bodyWriter);
     	} else {
@@ -111,12 +116,10 @@ public class StAXTransformingBodyProcessor implements BodyProcessor {
     }
 
     private static BodyWriterFactory createBodyWriterFactory() {
-        return new HTML5VoidElementHandlingXMLBodyWriterFactory((XMLOutputFactory2) XMLOutputFactory2.newInstance());
+        return new HTML5VoidElementHandlingXMLBodyWriterFactory((XMLOutputFactory2) XMLOutputFactory.newInstance());
     }
 
     private static XMLEventReaderFactory createXMLEventReaderFactory() {
-        return new XMLEventReaderFactory((XMLInputFactory2) XMLInputFactory2.newInstance());
+        return new XMLEventReaderFactory((XMLInputFactory2) XMLInputFactory.newInstance());
     }
-    
-
 }

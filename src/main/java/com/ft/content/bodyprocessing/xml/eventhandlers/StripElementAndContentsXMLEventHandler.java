@@ -14,7 +14,5 @@ public class StripElementAndContentsXMLEventHandler extends BaseXMLEventHandler 
 		
 		String nameToMatch = startElement.getName().getLocalPart();
 		skipUntilMatchingEndTag(nameToMatch, xmlEventReader);
-
 	}
-
 }

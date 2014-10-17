@@ -45,7 +45,8 @@ public class StructuredBodyXMLEventHandlerRegistryInnerTable extends XMLEventHan
 		return eventHandler;
 	}
 
-	public XMLEventHandler getEventHandler(Characters event) {
+	@Override
+    public XMLEventHandler getEventHandler(Characters event) {
 		return  handlerRegistry.getEventHandler(event);
 	}
 

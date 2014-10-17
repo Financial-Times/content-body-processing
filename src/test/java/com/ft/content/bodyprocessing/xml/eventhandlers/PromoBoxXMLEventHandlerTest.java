@@ -14,13 +14,13 @@ import org.codehaus.stax2.XMLEventReader2;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.ft.api.ucm.model.v1.Asset;
 import com.ft.content.bodyprocessing.BodyProcessingContext;
 import com.ft.content.bodyprocessing.writer.BodyWriter;
-import com.ft.api.ucm.model.v1.Asset;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PromoBoxXMLEventHandlerTest extends BaseXMLEventHandlerTest {
@@ -40,7 +40,7 @@ public class PromoBoxXMLEventHandlerTest extends BaseXMLEventHandlerTest {
     @Before
     public void setup() throws XMLStreamException {
         promoBoxXMLEventHandler = new PromoBoxXMLEventHandler(mockPromoBoxXMLParser, mockAsideElementWriter);
-        when(mockPromoBoxXMLParser.parseElementData(Mockito.isA(StartElement.class), Mockito.eq(mockXmlEventReader))).thenReturn(mockPromoBox);
+        when(mockPromoBoxXMLParser.parseElementData(Matchers.isA(StartElement.class), Matchers.eq(mockXmlEventReader))).thenReturn(mockPromoBox);
         when(mockAsset.getName()).thenReturn(elementName);
     }
     
@@ -51,7 +51,7 @@ public class PromoBoxXMLEventHandlerTest extends BaseXMLEventHandlerTest {
         
         when(mockPromoBox.isAllRequiredDataPresent()).thenReturn(true);
         when(mockPromoBox.getAsset()).thenReturn(mockAsset);
-        when(mockBodyProcessingContext.addAsset(Mockito.isA(Asset.class))).thenReturn(mockAsset);
+        when(mockBodyProcessingContext.addAsset(Matchers.isA(Asset.class))).thenReturn(mockAsset);
         
         promoBoxXMLEventHandler.handleStartElementEvent(startElement, mockXmlEventReader, mockEventWriter, mockBodyProcessingContext);
 

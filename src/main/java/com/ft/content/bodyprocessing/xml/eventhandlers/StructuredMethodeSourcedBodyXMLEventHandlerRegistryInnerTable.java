@@ -48,7 +48,8 @@ public class StructuredMethodeSourcedBodyXMLEventHandlerRegistryInnerTable exten
 		return eventHandler;
 	}
 
-	public XMLEventHandler getEventHandler(Characters event) {
+	@Override
+    public XMLEventHandler getEventHandler(Characters event) {
 		return  handlerRegistry.getEventHandler(event);
 	}
 
