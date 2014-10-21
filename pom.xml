@@ -14,7 +14,7 @@
     <artifactId>content-body-processing</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <version>1.8.0-SNAPSHOT</version>
+    <version>1.8.0</version>
 
     <description>Content body processing</description>
 
