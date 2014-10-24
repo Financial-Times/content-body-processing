@@ -83,7 +83,7 @@ public class BlogPostAssetXMLEventHandlerTest extends BaseXMLEventHandlerTest {
     @Test
     public void typeIsAsPassedInConstructor() {
         BlogPostAssetXMLEventHandler handler = new BlogPostAssetXMLEventHandler<VideoData>(xmlParser, "some type", mockAsideElementWriter, mockXmlEventHandler);
-        assertThat(handler.getType(), is("some type"));
+        assertThat(handler.getType(null), is("some type"));
     }
 
     @Test

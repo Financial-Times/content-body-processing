@@ -10,9 +10,9 @@ import com.ft.content.bodyprocessing.BodyProcessingContext;
 
 public class PromoBoxXMLEventHandler extends AsideBaseXMLEventHandler<PromoBoxData> {
 
-
     private static final String PROMO_BOX_ELEMENT_NAME = "promo-box";
     private static final String PROMO_BOX_TYPE = "promoBox";
+    private static final String PROMOTE_NUMBER_TYPE = "promoteNumber";
     private PromoBoxXMLParser promoBoxXMLParser;
 
     public PromoBoxXMLEventHandler(PromoBoxXMLParser promoBoxXMLParser, AsideElementWriter asideElementWriter) {
@@ -27,8 +27,8 @@ public class PromoBoxXMLEventHandler extends AsideBaseXMLEventHandler<PromoBoxDa
     }
 
     @Override
-    String getType() {
-        return PROMO_BOX_TYPE;
+    String getType(PromoBoxData dataType) {
+        return dataType.isNumbersComponent() ? PROMOTE_NUMBER_TYPE : PROMO_BOX_TYPE;
     }
 
     @Override

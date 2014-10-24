@@ -37,7 +37,7 @@ public class SlideshowXMLEventHandler extends AsideBaseXMLEventHandler<Slideshow
     }
 
     @Override
-    String getType() {
+    String getType(SlideshowData dataType) {
         return TYPE_SLIDESHOW;
     }
 

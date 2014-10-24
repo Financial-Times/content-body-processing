@@ -34,7 +34,7 @@ public class InlineMediaXMLEventHandler extends AsideBaseXMLEventHandler<Slidesh
     }
 
     @Override
-    String getType() {
+    String getType(SlideshowData dataType) {
         return TYPE;
     }
 

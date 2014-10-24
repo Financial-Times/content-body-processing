@@ -1,5 +1,6 @@
 package com.ft.content.bodyprocessing.xml.eventhandlers;
 
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,6 +10,8 @@ import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
+
+import junit.framework.Assert;
 
 import org.codehaus.stax2.XMLEventReader2;
 import org.junit.Before;
@@ -109,5 +112,21 @@ public class PromoBoxXMLEventHandlerTest extends BaseXMLEventHandlerTest {
     @Test(expected = IllegalArgumentException.class) 
     public void testWithNullAsideElementWriter() {
         new PromoBoxXMLEventHandler(mockPromoBoxXMLParser, null);
+    }
+    
+    @Test
+    public void testGetTypePromoteNumber() {
+        when(mockPromoBox.isNumbersComponent()).thenReturn(true);
+        
+        String type = promoBoxXMLEventHandler.getType(mockPromoBox);
+        assertEquals("promoteNumber", type);
+    }
+
+    @Test
+    public void testGetTypePromoBox() {
+        when(mockPromoBox.isNumbersComponent()).thenReturn(false);
+        
+        String type = promoBoxXMLEventHandler.getType(mockPromoBox);
+        assertEquals("promoBox", type);
     }
 }

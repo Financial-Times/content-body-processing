@@ -36,7 +36,7 @@ public class DataTableXMLEventHandler extends AsideBaseXMLEventHandler<DataTable
 	}
 
 	@Override
-	String getType() {
+	String getType(DataTableData dataType) {
 		return DATA_TABLE_TYPE;
 	}
 

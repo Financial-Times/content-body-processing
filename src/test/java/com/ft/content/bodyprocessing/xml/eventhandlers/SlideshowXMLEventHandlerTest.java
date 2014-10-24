@@ -57,7 +57,7 @@ public class SlideshowXMLEventHandlerTest {
     
     @Test
     public void testGetType() {
-        String actualType = slideshowXMLEventHandler.getType();
+        String actualType = slideshowXMLEventHandler.getType(null);
         assertEquals("slideshow", actualType);
     }
     

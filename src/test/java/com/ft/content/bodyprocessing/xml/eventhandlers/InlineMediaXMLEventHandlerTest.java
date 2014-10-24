@@ -50,7 +50,7 @@ public class InlineMediaXMLEventHandlerTest {
     
     @Test
     public void testGetType() {
-        String actualType = inlineMediaXMLEventHandler.getType();
+        String actualType = inlineMediaXMLEventHandler.getType(null);
         assertEquals("slideshow", actualType);
     }
     

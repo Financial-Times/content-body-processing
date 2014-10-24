@@ -41,7 +41,7 @@ public class BlogPostAssetXMLEventHandler<T extends AssetAware> extends AsideBas
     }
 
     @Override
-    String getType() {
+    String getType(T dataType) {
         return assetType;
     }
 

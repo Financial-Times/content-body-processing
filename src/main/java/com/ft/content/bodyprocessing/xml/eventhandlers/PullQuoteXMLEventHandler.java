@@ -28,7 +28,7 @@ public class PullQuoteXMLEventHandler extends AsideBaseXMLEventHandler<PullQuote
     }
 
     @Override
-    String getType() {
+    String getType(PullQuoteData dataType) {
         return WEB_PULL_QUOTE_TYPE;
     }
 

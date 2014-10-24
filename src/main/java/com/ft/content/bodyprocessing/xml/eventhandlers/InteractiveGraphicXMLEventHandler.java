@@ -27,7 +27,7 @@ public class InteractiveGraphicXMLEventHandler extends AsideBaseXMLEventHandler<
     }
 
     @Override
-    String getType() {
+    String getType(InteractiveGraphicData dataType) {
         return INTERACTIVE_GRAPHIC_TYPE;
     }
 

@@ -26,7 +26,7 @@ public class BackgroundNewsXMLEventHandler extends AsideBaseXMLEventHandler<Back
 	}
 
 	@Override
-	String getType() {
+	String getType(BackgroundNewsData dataType) {
 		return WEB_BACKGROUND_NEWS_TYPE;
 	}
 

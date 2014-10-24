@@ -44,7 +44,7 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
     
                     if(!StringUtils.isBlank(assetName)) {
                         // build aside element
-                        asideElementWriter.writeAsideElement(eventWriter, assetName, getType());
+                        asideElementWriter.writeAsideElement(eventWriter, assetName, getType(dataBean));
                     }
                 }
             }
@@ -68,7 +68,7 @@ public abstract class AsideBaseXMLEventHandler<T extends AssetAware> extends Bas
     abstract String getElementName();
 
     // Return the type that will be used to render the aside element
-    abstract String getType();
+    abstract String getType(T dataBean);
 
     // Transform the data bean's contents as they can contain html that needs transforming. Any assets as part of the transformation are added to the context
     abstract void transformFieldContentToStructuredFormat(T dataBean, BodyProcessingContext bodyProcessingContext);

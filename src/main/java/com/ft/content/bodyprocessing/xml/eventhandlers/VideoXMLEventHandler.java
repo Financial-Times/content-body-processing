@@ -32,7 +32,7 @@ public class VideoXMLEventHandler extends AsideBaseXMLEventHandler<VideoData> {
     }
 
     @Override
-    String getType() {
+    String getType(VideoData dataType) {
         return VIDEO_TYPE;
     }
 
