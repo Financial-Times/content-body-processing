@@ -7,6 +7,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
@@ -22,6 +24,7 @@ import com.ft.content.bodyprocessing.BodyProcessingContext;
 import com.ft.content.bodyprocessing.ImageAttribute;
 import com.ft.content.bodyprocessing.xml.StAXTransformingBodyProcessor;
 
+// TODO: add tests for Promobox with master image
 @RunWith(MockitoJUnitRunner.class)
 public class PromoBoxXMLParserTest extends BaseXMLParserTest {
 
@@ -67,6 +70,7 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
     @Mock private StAXTransformingBodyProcessor mockStAXTransformingBodyProcessor;
     @Mock private BodyProcessingContext mockBodyProcessingContext;
     @Mock private PromoBoxData mockPromoBoxData;
+    @Mock private PromoboxImageData mockPromoBoxImageData;
 
     @Before
     public void setUp() {
@@ -112,7 +116,8 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         assertEquals("Headline was not as expected", EXPECTED_PARSED_HEADLINE, promoBoxData.getHeadline());
         assertEquals("Intro was not as expected", EXPECTED_PARSED_INTRO, promoBoxData.getIntro());
         assertEquals("Link was not as expected", EXPECTED_PARSED_LINK, promoBoxData.getLink());
-        assertEquals("Image file ref was not as expected", EXPECTED_PARSED_IMAGE_FILE_REF, promoBoxData.getImageFileRef());
+        String imageFileRef = promoBoxData.getPromoboxImages().get(0).getImageFileRef();
+        assertEquals("Image file ref was not as expected", EXPECTED_PARSED_IMAGE_FILE_REF, imageFileRef);
     }
     
     @Test
@@ -121,25 +126,15 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         when(mockPromoBoxData.getHeadline()).thenReturn(EXPECTED_PARSED_HEADLINE);
         when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
         when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
-        when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF_NON_STANDARD_UUID);
+        when(mockPromoBoxData.getPromoboxImages()).thenReturn(Arrays.asList(mockPromoBoxImageData));
         
+        when(mockPromoBoxImageData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF_NON_STANDARD_UUID);
         when(mockBodyProcessingContext.imageExists(nonStandardUuid)).thenReturn(true);
         
         promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
 
-        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
-
-        verify(mockPromoBoxData).setImageType(EXPECTED_IMAGE_TYPE);
-        verify(mockPromoBoxData).setImageHeight(EXPECTED_IMAGE_HEIGHT);
-        verify(mockPromoBoxData).setImageWidth(EXPECTED_IMAGE_WIDTH);
-        verify(mockPromoBoxData).setImageAlt(EXPECTED_IMAGE_ALT);
-        
-        verify(mockPromoBoxData).setImageCaption(EXPECTED_IMAGE_CAPTION);
-        verify(mockPromoBoxData).setImageSource(EXPECTED_IMAGE_SOURCE);
-        verify(mockPromoBoxData).setImageMediaType(EXPECTED_IMAGE_MEDIA_TYPE);
+        verifyStAXTransformingBodyProcessor();
+        verifyPromoboxImageFields();
            
     }
     
@@ -149,54 +144,40 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         when(mockPromoBoxData.getHeadline()).thenReturn(EXPECTED_PARSED_HEADLINE);
         when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
         when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
-        when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF_NON_STANDARD_UUID_WITH_SPACES);
+        when(mockPromoBoxData.getPromoboxImages()).thenReturn(Arrays.asList(mockPromoBoxImageData));
         
+        when(mockPromoBoxImageData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF_NON_STANDARD_UUID_WITH_SPACES);
         when(mockBodyProcessingContext.imageExists(nonStandardUuid)).thenReturn(true);
         
         promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
 
+        verifyStAXTransformingBodyProcessor();
+        verifyPromoboxImageFields();
+        
+    }
+
+    private void verifyStAXTransformingBodyProcessor() {
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
         verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
-
-        verify(mockPromoBoxData).setImageType(EXPECTED_IMAGE_TYPE);
-        verify(mockPromoBoxData).setImageHeight(EXPECTED_IMAGE_HEIGHT);
-        verify(mockPromoBoxData).setImageWidth(EXPECTED_IMAGE_WIDTH);
-        verify(mockPromoBoxData).setImageAlt(EXPECTED_IMAGE_ALT);
-        
-        verify(mockPromoBoxData).setImageCaption(EXPECTED_IMAGE_CAPTION);
-        verify(mockPromoBoxData).setImageSource(EXPECTED_IMAGE_SOURCE);
-        verify(mockPromoBoxData).setImageMediaType(EXPECTED_IMAGE_MEDIA_TYPE);
-        
     }
-    
+
     @Test
     public void testTransformFieldContentToStructuredFormatWithNonStandardUuidWithSpaces() {
         when(mockPromoBoxData.getTitle()).thenReturn(EXPECTED_PARSED_TITLE);
         when(mockPromoBoxData.getHeadline()).thenReturn(EXPECTED_PARSED_HEADLINE);
         when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
         when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
-        when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF_NON_STANDARD_UUID);
+        when(mockPromoBoxData.getPromoboxImages()).thenReturn(Arrays.asList(mockPromoBoxImageData));
         
+        when(mockPromoBoxImageData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF_NON_STANDARD_UUID);
         when(mockBodyProcessingContext.imageExists(nonStandardUuid)).thenReturn(true);
         
         promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
 
-        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
-
-        verify(mockPromoBoxData).setImageType(EXPECTED_IMAGE_TYPE);
-        verify(mockPromoBoxData).setImageHeight(EXPECTED_IMAGE_HEIGHT);
-        verify(mockPromoBoxData).setImageWidth(EXPECTED_IMAGE_WIDTH);
-        verify(mockPromoBoxData).setImageAlt(EXPECTED_IMAGE_ALT);
-        
-        verify(mockPromoBoxData).setImageCaption(EXPECTED_IMAGE_CAPTION);
-        verify(mockPromoBoxData).setImageSource(EXPECTED_IMAGE_SOURCE);
-        verify(mockPromoBoxData).setImageMediaType(EXPECTED_IMAGE_MEDIA_TYPE);
-        
+        verifyStAXTransformingBodyProcessor();
+        verifyPromoboxImageFields();
     }
     
     @Test
@@ -205,25 +186,15 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         when(mockPromoBoxData.getHeadline()).thenReturn(EXPECTED_PARSED_HEADLINE);
         when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
         when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
-        when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF);
+        when(mockPromoBoxData.getPromoboxImages()).thenReturn(Arrays.asList(mockPromoBoxImageData));
         
+        when(mockPromoBoxImageData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF);
         when(mockBodyProcessingContext.imageExists(uuid)).thenReturn(true);
         
         promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
 
-        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
-
-        verify(mockPromoBoxData).setImageType(EXPECTED_IMAGE_TYPE);
-        verify(mockPromoBoxData).setImageHeight(EXPECTED_IMAGE_HEIGHT);
-        verify(mockPromoBoxData).setImageWidth(EXPECTED_IMAGE_WIDTH);
-        verify(mockPromoBoxData).setImageAlt(EXPECTED_IMAGE_ALT);
-        
-        verify(mockPromoBoxData).setImageCaption(EXPECTED_IMAGE_CAPTION);
-        verify(mockPromoBoxData).setImageSource(EXPECTED_IMAGE_SOURCE);
-        verify(mockPromoBoxData).setImageMediaType(EXPECTED_IMAGE_MEDIA_TYPE);
+        verifyStAXTransformingBodyProcessor();
+        verifyPromoboxImageFields();
     }
     
     @Test
@@ -232,8 +203,9 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         when(mockPromoBoxData.getHeadline()).thenReturn(" ");
         when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
         when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
-        when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF);
+        when(mockPromoBoxData.getPromoboxImages()).thenReturn(Arrays.asList(mockPromoBoxImageData));
         
+        when(mockPromoBoxImageData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF);
         when(mockBodyProcessingContext.imageExists(uuid)).thenReturn(true);
         
         promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
@@ -242,16 +214,7 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         verify(mockStAXTransformingBodyProcessor, never()).process(" ", mockBodyProcessingContext);
         verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
         verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
-
-        verify(mockPromoBoxData).setImageType(EXPECTED_IMAGE_TYPE);
-        verify(mockPromoBoxData).setImageHeight(EXPECTED_IMAGE_HEIGHT);
-        verify(mockPromoBoxData).setImageWidth(EXPECTED_IMAGE_WIDTH);
-        verify(mockPromoBoxData).setImageAlt(EXPECTED_IMAGE_ALT);
-        
-        verify(mockPromoBoxData).setImageCaption(EXPECTED_IMAGE_CAPTION);
-        verify(mockPromoBoxData).setImageSource(EXPECTED_IMAGE_SOURCE);
-        verify(mockPromoBoxData).setImageMediaType(EXPECTED_IMAGE_MEDIA_TYPE);
-        
+        verifyPromoboxImageFields();
     }
     
     @Test
@@ -260,19 +223,18 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         when(mockPromoBoxData.getHeadline()).thenReturn(EXPECTED_PARSED_HEADLINE);
         when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
         when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
-        when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF_NO_UUID);
+        when(mockPromoBoxData.getPromoboxImages()).thenReturn(Arrays.asList(mockPromoBoxImageData));
+        
+        when(mockPromoBoxImageData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF_NO_UUID);
 
         promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
 
-        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
+        verifyStAXTransformingBodyProcessor();
 
-        verify(mockPromoBoxData, never()).setImageType(EXPECTED_IMAGE_TYPE);
-        verify(mockPromoBoxData, never()).setImageHeight(EXPECTED_IMAGE_HEIGHT);
-        verify(mockPromoBoxData, never()).setImageWidth(EXPECTED_IMAGE_WIDTH);
-        verify(mockPromoBoxData, never()).setImageAlt(EXPECTED_IMAGE_ALT);
+        verify(mockPromoBoxImageData, never()).setImageType(EXPECTED_IMAGE_TYPE);
+        verify(mockPromoBoxImageData, never()).setImageHeight(EXPECTED_IMAGE_HEIGHT);
+        verify(mockPromoBoxImageData, never()).setImageWidth(EXPECTED_IMAGE_WIDTH);
+        verify(mockPromoBoxImageData, never()).setImageAlt(EXPECTED_IMAGE_ALT);
     }
     
     @Test
@@ -281,21 +243,19 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         when(mockPromoBoxData.getHeadline()).thenReturn(EXPECTED_PARSED_HEADLINE);
         when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
         when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
-        when(mockPromoBoxData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF);
+        when(mockPromoBoxData.getPromoboxImages()).thenReturn(Arrays.asList(mockPromoBoxImageData));
         
+        when(mockPromoBoxImageData.getImageFileRef()).thenReturn(EXPECTED_PARSED_IMAGE_FILE_REF);
         when(mockBodyProcessingContext.imageExists(uuid)).thenReturn(false);
                 
         promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
 
-        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
+        verifyStAXTransformingBodyProcessor();
 
-        verify(mockPromoBoxData, never()).setImageType(EXPECTED_IMAGE_TYPE);
-        verify(mockPromoBoxData, never()).setImageHeight(EXPECTED_IMAGE_HEIGHT);
-        verify(mockPromoBoxData, never()).setImageWidth(EXPECTED_IMAGE_WIDTH);
-        verify(mockPromoBoxData, never()).setImageAlt(EXPECTED_IMAGE_ALT);
+        verify(mockPromoBoxImageData, never()).setImageType(EXPECTED_IMAGE_TYPE);
+        verify(mockPromoBoxImageData, never()).setImageHeight(EXPECTED_IMAGE_HEIGHT);
+        verify(mockPromoBoxImageData, never()).setImageWidth(EXPECTED_IMAGE_WIDTH);
+        verify(mockPromoBoxImageData, never()).setImageAlt(EXPECTED_IMAGE_ALT);
     }
     
     @Test
@@ -304,21 +264,19 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         when(mockPromoBoxData.getHeadline()).thenReturn(EXPECTED_PARSED_HEADLINE);
         when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
         when(mockPromoBoxData.getLink()).thenReturn(EXPECTED_PARSED_LINK);
-        when(mockPromoBoxData.getImageFileRef()).thenReturn(null);
+        when(mockPromoBoxData.getPromoboxImages()).thenReturn(Arrays.asList(mockPromoBoxImageData));
         
+        when(mockPromoBoxImageData.getImageFileRef()).thenReturn(null);
         when(mockBodyProcessingContext.imageExists(uuid)).thenReturn(false);
                 
         promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
 
-        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_TITLE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(EXPECTED_PARSED_HEADLINE, mockBodyProcessingContext);
-        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_INTRO), Matchers.eq(mockBodyProcessingContext));
-        verify(mockStAXTransformingBodyProcessor).process(Matchers.eq(EXPECTED_PARSED_LINK), Matchers.eq(mockBodyProcessingContext));
+        verifyStAXTransformingBodyProcessor();
 
-        verify(mockPromoBoxData, never()).setImageType(EXPECTED_IMAGE_TYPE);
-        verify(mockPromoBoxData, never()).setImageHeight(EXPECTED_IMAGE_HEIGHT);
-        verify(mockPromoBoxData, never()).setImageWidth(EXPECTED_IMAGE_WIDTH);
-        verify(mockPromoBoxData, never()).setImageAlt(EXPECTED_IMAGE_ALT);
+        verify(mockPromoBoxImageData, never()).setImageType(EXPECTED_IMAGE_TYPE);
+        verify(mockPromoBoxImageData, never()).setImageHeight(EXPECTED_IMAGE_HEIGHT);
+        verify(mockPromoBoxImageData, never()).setImageWidth(EXPECTED_IMAGE_WIDTH);
+        verify(mockPromoBoxImageData, never()).setImageAlt(EXPECTED_IMAGE_ALT);
     }
     
     @Test
@@ -340,5 +298,16 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         
         assertEquals("Headline was not as expected.", EXPECTED_PARSED_HEADLINE, promoBoxData.getHeadline());
         assertEquals("Intro was not as expected.", EXPECTED_PARSED_INTRO, promoBoxData.getIntro());
+    }
+    
+    private void verifyPromoboxImageFields() {
+        verify(mockPromoBoxImageData).setImageType(EXPECTED_IMAGE_TYPE);
+        verify(mockPromoBoxImageData).setImageHeight(EXPECTED_IMAGE_HEIGHT);
+        verify(mockPromoBoxImageData).setImageWidth(EXPECTED_IMAGE_WIDTH);
+        verify(mockPromoBoxImageData).setImageAlt(EXPECTED_IMAGE_ALT);
+
+        verify(mockPromoBoxImageData).setImageCaption(EXPECTED_IMAGE_CAPTION);
+        verify(mockPromoBoxImageData).setImageSource(EXPECTED_IMAGE_SOURCE);
+        verify(mockPromoBoxImageData).setImageMediaType(EXPECTED_IMAGE_MEDIA_TYPE);
     }
 }

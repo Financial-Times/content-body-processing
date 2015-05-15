@@ -14,7 +14,7 @@
     <artifactId>content-body-processing</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <version>1.10.0-SNAPSHOT</version>
+    <version>1.10.0</version>
 
     <description>Content body processing</description>
 
@@ -28,7 +28,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <ft-unifiedContentModel.version>0.39.0</ft-unifiedContentModel.version>
+        <ft-unifiedContentModel.version>0.40.0</ft-unifiedContentModel.version>
         <commons-lang.version>2.6</commons-lang.version>
         <guava.version>r09</guava.version>
         <hamcrest.version>1.1</hamcrest.version>

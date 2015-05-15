@@ -39,7 +39,7 @@ public class PromoBoxDataTest {
     
     @Test
     public void testIsAllRequiredDataPresentWhenImageFileRefPresent() {
-        promoBoxData.setImageFileRef(imageFileRef);
+        promoBoxData.addImageToPromobox(imageFileRef);
         assertTrue(promoBoxData.isAllRequiredDataPresent());
     }
     
@@ -68,13 +68,8 @@ public class PromoBoxDataTest {
     }
     
     @Test
-    public void testIsAllRequiredDataPresentWhenImageFileRefWithDataPresent() {
-        assertFalse(promoBoxData.isAllRequiredDataPresent());
-    }
-    
-    @Test
     public void testIsAllRequiredDataPresentWhenImageFileRefIsNewLineData() {
-        promoBoxData.setImageFileRef("\n");   
+        promoBoxData.addImageToPromobox("\n");   
         assertFalse(promoBoxData.isAllRequiredDataPresent());
     }
     
@@ -91,28 +86,28 @@ public class PromoBoxDataTest {
     
     @Test
     public void testIsAllRequiredDataPresentWhenNoDataPresentBothNewLineData() {
-        promoBoxData.setImageFileRef("\n"); 
+        promoBoxData.addImageToPromobox("\n"); 
         promoBoxData.setTitle("\n"); 
         assertFalse(promoBoxData.isAllRequiredDataPresent());
     }
     
     @Test
     public void testGetAssetIsValid() {
+        PromoboxImageData imageData = promoBoxData.addImageToPromobox(imageFileRef);
         promoBoxData.setTitle(title);
-        promoBoxData.setImageFileRef(imageFileRef);
         promoBoxData.setHeadline(headline);
         promoBoxData.setIntro(intro);
         promoBoxData.setLink(link);
         
-        promoBoxData.setImageType(imageType);
-        promoBoxData.setImageHeight(imageHeight);
-        promoBoxData.setImageWidth(imageWidth);
-        promoBoxData.setImageAlt(imageAlt);
-        promoBoxData.setImageUrl(imageUrl);
+        imageData.setImageType(imageType);
+        imageData.setImageHeight(imageHeight);
+        imageData.setImageWidth(imageWidth);
+        imageData.setImageAlt(imageAlt);
+        imageData.setImageUrl(imageUrl);
         
-        promoBoxData.setImageSource(imageSource);
-        promoBoxData.setImageCaption(imageCaption);
-        promoBoxData.setImageMediaType(imageMediaType);
+        imageData.setImageSource(imageSource);
+        imageData.setImageCaption(imageCaption);
+        imageData.setImageMediaType(imageMediaType);
         
         Asset actualAsset = promoBoxData.getAsset();
         assertNotNull("The asset should not be null.", actualAsset);
@@ -125,7 +120,7 @@ public class PromoBoxDataTest {
         Assert.assertEquals("The headline was not as expected.", actualFields.getIntro(), intro);
         Assert.assertEquals("The headline was not as expected.", actualFields.getLink(), link);
         
-        TypeBasedImage actualPromoBoxImage = actualFields.getImage();
+        TypeBasedImage actualPromoBoxImage = actualFields.getImages().get(0);
         Assert.assertEquals("The image url was not as expected.", actualPromoBoxImage.getUrl(), imageUrl);
         Assert.assertEquals("The image type was not as expected.", actualPromoBoxImage.getType(), imageType);
         Assert.assertEquals("The image height was not as expected.", actualPromoBoxImage.getHeight(), new Integer(imageHeight));
@@ -139,8 +134,8 @@ public class PromoBoxDataTest {
     
     @Test
     public void testGetAssetIsValidNoImage() {
+        promoBoxData.addImageToPromobox(imageFileRef);
         promoBoxData.setTitle(title);
-        promoBoxData.setImageFileRef(imageFileRef);
         promoBoxData.setHeadline(headline);
         promoBoxData.setIntro(intro);
         promoBoxData.setLink(link);
@@ -156,8 +151,7 @@ public class PromoBoxDataTest {
         Assert.assertEquals("The headline was not as expected.", actualFields.getIntro(), intro);
         Assert.assertEquals("The headline was not as expected.", actualFields.getLink(), link);
         
-        TypeBasedImage actualPromoBoxImage = actualFields.getImage();
-        assertNull("The PromoBoxImage should be null.", actualPromoBoxImage);
+        assertNull("The PromoBoxImage should be null.", actualFields.getImages());
     }
 
     @Test(expected = BodyProcessingException.class)

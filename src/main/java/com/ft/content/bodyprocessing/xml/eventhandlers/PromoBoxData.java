@@ -1,8 +1,10 @@
 package com.ft.content.bodyprocessing.xml.eventhandlers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
-import com.ft.content.bodyprocessing.BodyProcessingException;
 import com.ft.api.ucm.model.v1.Asset;
 import com.ft.api.ucm.model.v1.NumbersComponent;
 import com.ft.api.ucm.model.v1.NumbersComponentFields;
@@ -10,6 +12,8 @@ import com.ft.api.ucm.model.v1.PromoBox;
 import com.ft.api.ucm.model.v1.PromoBoxFields;
 import com.ft.api.ucm.model.v1.TypeBasedImage;
 import com.ft.api.ucm.model.v1.TypeBasedImage.ImageType;
+import com.ft.content.bodyprocessing.BodyProcessingException;
+import com.google.common.collect.Lists;
 
 public class PromoBoxData extends BaseData implements AssetAware {
 
@@ -17,62 +21,9 @@ public class PromoBoxData extends BaseData implements AssetAware {
     private String headline;
     private String intro;
     private String link;
-
-    private String imageUrl;
-    private String imageType;
-    private String imageHeight;
-    private String imageWidth;
-    private String imageAlt;
-    private String imageFileRef;
-    private String imageCaption;
-    private String imageSource;
-    private String imageMediaType;
     
+    private List<PromoboxImageData> promoboxImages;
     private boolean numbersComponent = false;
-    
-    public String getImageCaption() {
-        return imageCaption;
-    }
-
-    public void setImageCaption(String imageCaption) {
-        this.imageCaption = imageCaption;
-    }
-
-    public String getImageSource() {
-        return imageSource;
-    }
-
-    public void setImageSource(String imageSource) {
-        this.imageSource = imageSource;
-    }
-
-    public String getImageMediaType() {
-        return imageMediaType;
-    }
-
-    public void setImageMediaType(String imageMediaType) {
-        this.imageMediaType = imageMediaType;
-    }
-    
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public void setImageType(String imageType) {
-        this.imageType = imageType;
-    }
-
-    public void setImageHeight(String imageHeight) {
-        this.imageHeight = imageHeight;
-    }
-
-    public void setImageWidth(String imageWidth) {
-        this.imageWidth = imageWidth;
-    }
-
-    public void setImageAlt(String imageAlt) {
-        this.imageAlt = imageAlt;
-    }
     
     public String getLink() {
         return link;
@@ -105,34 +56,6 @@ public class PromoBoxData extends BaseData implements AssetAware {
     public String getIntro() {
         return intro;
     }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public String getImageType() {
-        return imageType;
-    }
-
-    public String getImageHeight() {
-        return imageHeight;
-    }
-
-    public String getImageWidth() {
-        return imageWidth;
-    }
-
-    public String getImageFileRef() {
-        return imageFileRef;
-    }
-
-    public String getImageAlt() {
-        return imageAlt;
-    }
-
-    public void setImageFileRef(String imageFileRef) {
-        this.imageFileRef = imageFileRef;
-    }
     
     public boolean isNumbersComponent() {
         return numbersComponent;
@@ -142,19 +65,60 @@ public class PromoBoxData extends BaseData implements AssetAware {
         this.numbersComponent = true;
     }
     
+    public List<PromoboxImageData> getPromoboxImages() {
+        return new ArrayList<PromoboxImageData>(promoboxImages);
+    }
+    
+    public PromoboxImageData addImageToPromobox(String imageFileRef) {
+        if (promoboxImages == null) {
+            promoboxImages = Lists.newArrayList();
+        }
+        
+        PromoboxImageData promoboxImage = new PromoboxImageData();
+        promoboxImage.setImageFileRef(imageFileRef);
+        promoboxImages.add(promoboxImage);
+
+        return promoboxImage;
+    }
+
+    public void addMasterImageToPromobox(String masterImageUuid) {
+        if (promoboxImages == null) {
+            promoboxImages = Lists.newArrayList();
+        }
+        
+        PromoboxImageData promoboxImage = new PromoboxImageData();
+        promoboxImage.setMasterImageFileRef(masterImageUuid);
+
+        promoboxImages.add(promoboxImage);
+    }
+    
     @Override
     public boolean isAllRequiredDataPresent() {
         return isNumbersComponent() ? validateNumbersComponent() : validateNormalPromoBox();
     }
     
     private boolean validateNormalPromoBox() {
-        return containsValidData(this.title) || containsValidData(this.imageFileRef)
+        return containsValidData(this.title) || validateFileRefForImages()
                 || containsValidData(this.headline) || containsValidData(this.intro)
                 || containsValidData(this.link);
     }
     
     private boolean validateNumbersComponent() {
         return containsValidData(this.headline) || containsValidData(this.intro);
+    }
+    
+    private boolean validateFileRefForImages() {
+        if (this.promoboxImages == null) {
+            return false;
+        }
+        
+        for (PromoboxImageData imageData : this.promoboxImages) {
+            if (!containsValidData(imageData.getImageFileRef())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -174,21 +138,32 @@ public class PromoBoxData extends BaseData implements AssetAware {
 
     private Asset getPromoBoxAsset() {
         PromoBox promoBox = new PromoBox();
-        TypeBasedImage promoImage = createPromoImage();
-        
-        PromoBoxFields fields = new PromoBoxFields(nullIfEmpty(this.title), nullIfEmpty(this.headline), 
-                                                   nullIfEmpty(intro), nullIfEmpty(this.link), promoImage);
+        List<TypeBasedImage> promoboxAssetImages = Lists.newArrayList();
+
+        if (this.promoboxImages != null) {
+            for (PromoboxImageData promoboxImage : this.promoboxImages) {
+                TypeBasedImage assetImage = createPromoImage(promoboxImage);
+                if (assetImage != null) {
+                    promoboxAssetImages.add(assetImage);
+                }
+            }
+        }
+
+        PromoBoxFields fields = new PromoBoxFields(nullIfEmpty(this.title), nullIfEmpty(this.headline),
+                nullIfEmpty(intro), nullIfEmpty(this.link), nullIfEmpty(promoboxAssetImages));
         promoBox.setFields(fields);
+        
         return promoBox;
     }
-
    
-    private TypeBasedImage createPromoImage() {
-        if(!StringUtils.isBlank(this.imageUrl)) {
-            Integer imageWidthAsInt = convertToInt(imageWidth);
-            Integer imageHeightAsInt = convertToInt(imageHeight);
-            return new TypeBasedImage(nullIfEmpty(imageUrl), ImageType.PROMO, nullIfEmpty(imageSource),  nullIfEmpty(imageAlt), 
-                    nullIfEmpty(imageCaption), imageHeightAsInt, imageWidthAsInt, nullIfEmpty(imageMediaType));
+    private TypeBasedImage createPromoImage(PromoboxImageData promoboxImage) {
+        if (!StringUtils.isBlank(promoboxImage.getImageUrl())) {
+            Integer imageWidthAsInt = convertToInt(promoboxImage.getImageWidth());
+            Integer imageHeightAsInt = convertToInt(promoboxImage.getImageHeight());
+            return new TypeBasedImage(nullIfEmpty(promoboxImage.getImageUrl()), ImageType.PROMO,
+                    nullIfEmpty(promoboxImage.getImageSource()), nullIfEmpty(promoboxImage.getImageAlt()),
+                    nullIfEmpty(promoboxImage.getImageCaption()), imageHeightAsInt, imageWidthAsInt,
+                    nullIfEmpty(promoboxImage.getImageMediaType()));
         }
         return null;
     }
@@ -199,5 +174,17 @@ public class PromoBoxData extends BaseData implements AssetAware {
             return Integer.parseInt(valueToConvert);
         }
         return null;
+    }
+    
+    private List<TypeBasedImage> nullIfEmpty(List<TypeBasedImage> list) {
+        if (list == null) {
+            return null;
+        }
+        
+        if (list.size() == 0) {
+            return null;
+        }
+        
+        return list;
     }
 }

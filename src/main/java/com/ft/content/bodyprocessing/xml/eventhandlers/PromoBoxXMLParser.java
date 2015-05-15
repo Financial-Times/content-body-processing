@@ -2,6 +2,8 @@ package com.ft.content.bodyprocessing.xml.eventhandlers;
 
 import static org.springframework.util.Assert.notNull;
 
+import java.util.List;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.events.Attribute;
@@ -23,6 +25,7 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
     private static final String PROMO_INTRO = "promo-intro";
     private static final String PROMO_LINK= "promo-link";
     private static final String PROMO_IMAGE= "promo-image";
+    private static final String PROMO_MASTER_IMAGE = "web-master";
     private static final String PROMO_CLASS_ATTRIBUTE = "class";
     private static final String NUMBERS_COMPONENT_IDENTIFIER = "numbers-component";
 
@@ -42,21 +45,44 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
         dataBean.setIntro(transformRawContentToStructuredFormat(dataBean.getIntro(), bodyProcessingContext));
         dataBean.setLink(transformRawContentToStructuredFormat(dataBean.getLink(), bodyProcessingContext));
         
-        // populate image attributes
-        String imageUuid = parseImageUuid(dataBean.getImageFileRef());
-        boolean imageExists = bodyProcessingContext.imageExists(imageUuid);
-        if(imageExists && !StringUtils.isBlank(imageUuid)) {
-            dataBean.setImageType(PROMO_TYPE);
-            dataBean.setImageHeight(bodyProcessingContext.getAttributeForImage(ImageAttribute.HEIGHT, imageUuid));
-            dataBean.setImageWidth(bodyProcessingContext.getAttributeForImage(ImageAttribute.WIDTH, imageUuid));
-            dataBean.setImageAlt(bodyProcessingContext.getAttributeForImage(ImageAttribute.ALT, imageUuid));
-            dataBean.setImageUrl(bodyProcessingContext.getAttributeForImage(ImageAttribute.SRC, imageUuid));
-            dataBean.setImageCaption(bodyProcessingContext.getAttributeForImage(ImageAttribute.CAPTION, imageUuid));
-            dataBean.setImageSource(bodyProcessingContext.getAttributeForImage(ImageAttribute.SOURCE, imageUuid));
-            dataBean.setImageMediaType(bodyProcessingContext.getAttributeForImage(ImageAttribute.MEDIA_TYPE, imageUuid));
+        transformImagesToStructuredFormat(dataBean, bodyProcessingContext);
+    }
+    
+    private void transformImagesToStructuredFormat(PromoBoxData dataBean, BodyProcessingContext bodyProcessingContext) {
+        for (PromoboxImageData promoboxImage : dataBean.getPromoboxImages()) {
+            if (isMasterImage(promoboxImage)) {
+                String masterImageUuidFromXml = parseImageUuid(promoboxImage.getMasterImageFileRef());
+                List<String> formatsForMasterImage = bodyProcessingContext
+                        .retrieveFormatsForMasterImage(masterImageUuidFromXml);
+                for (String imageUuid : formatsForMasterImage) {
+                    PromoboxImageData newImageFormat = dataBean.addImageToPromobox(imageUuid);
+                    populateImageAttributes(newImageFormat, bodyProcessingContext, imageUuid);
+                }
+            } else {
+                String imageUuidExtractedFromXML = parseImageUuid(promoboxImage.getImageFileRef());
+                populateImageAttributes(promoboxImage, bodyProcessingContext, imageUuidExtractedFromXML);
+            }
+        }
+    }
+
+    private boolean isMasterImage(PromoboxImageData promoboxImage) {
+        return promoboxImage.getMasterImageFileRef() != null;
+    }
+
+    private void populateImageAttributes(PromoboxImageData promoboxImage, BodyProcessingContext bodyProcessingContext, String imageUuidExtractedFromXML) {
+        boolean imageExists = bodyProcessingContext.imageExists(imageUuidExtractedFromXML);
+        if(imageExists && !StringUtils.isBlank(imageUuidExtractedFromXML)) {
+            promoboxImage.setImageType(PROMO_TYPE);
+            promoboxImage.setImageHeight(bodyProcessingContext.getAttributeForImage(ImageAttribute.HEIGHT, imageUuidExtractedFromXML));
+            promoboxImage.setImageWidth(bodyProcessingContext.getAttributeForImage(ImageAttribute.WIDTH, imageUuidExtractedFromXML));
+            promoboxImage.setImageAlt(bodyProcessingContext.getAttributeForImage(ImageAttribute.ALT, imageUuidExtractedFromXML));
+            promoboxImage.setImageUrl(bodyProcessingContext.getAttributeForImage(ImageAttribute.SRC, imageUuidExtractedFromXML));
+            promoboxImage.setImageCaption(bodyProcessingContext.getAttributeForImage(ImageAttribute.CAPTION, imageUuidExtractedFromXML));
+            promoboxImage.setImageSource(bodyProcessingContext.getAttributeForImage(ImageAttribute.SOURCE, imageUuidExtractedFromXML));
+            promoboxImage.setImageMediaType(bodyProcessingContext.getAttributeForImage(ImageAttribute.MEDIA_TYPE, imageUuidExtractedFromXML));
         } else  {
             // Setting to an empty string so the bean knows that there isn't a valid image available
-            dataBean.setImageFileRef(StringUtils.EMPTY);
+            promoboxImage.setImageFileRef(StringUtils.EMPTY);
         }
     }
 
@@ -107,7 +133,10 @@ public class PromoBoxXMLParser extends BaseXMLParser<PromoBoxData> implements Xm
         } 
         else if (isElementNamed(nextStartElement.getName(), PROMO_IMAGE)) {
             String fileRef = parseAttribute("fileref", nextStartElement);
-            promoBoxData.setImageFileRef(fileRef);  
+            promoBoxData.addImageToPromobox(fileRef);  
+        } else if (isElementNamed(nextStartElement.getName(), PROMO_MASTER_IMAGE)) {
+            String fileRef = parseAttribute("fileref", nextStartElement);
+            promoBoxData.addMasterImageToPromobox(fileRef);
         }
     }
 

@@ -1,12 +1,11 @@
 package com.ft.content.bodyprocessing;
 
+import java.util.List;
+import java.util.Map;
+
 import com.ft.api.ucm.model.v1.Asset;
 import com.ft.api.ucm.model.v1.Image;
 import com.ft.api.ucm.model.v1.TypeBasedImage;
-
-
-import java.util.List;
-import java.util.Map;
 
 
 public interface BodyProcessingContext {
@@ -27,4 +26,6 @@ public interface BodyProcessingContext {
     public void addAttributesToExistingImageWithId(String imageId, Map<String, String> attributes);
     
     List<Image> retrieveProcessedImages();
+    
+    List<String> retrieveFormatsForMasterImage(String masterImageUuid);
 }
