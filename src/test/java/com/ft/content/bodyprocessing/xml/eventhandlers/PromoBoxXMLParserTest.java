@@ -288,7 +288,7 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
     }
     
     @Test
-    public void testNumbersComponent() throws Exception {
+    public void testParseNumbersComponent() throws Exception {
         xmlEventReader = createReaderForXml(numbersComponentXml);
         StartElement startElement = getStartElement(xmlEventReader);
         PromoBoxData promoBoxData = promoBoxXMLParser.parseElementData(startElement, xmlEventReader);
@@ -298,6 +298,17 @@ public class PromoBoxXMLParserTest extends BaseXMLParserTest {
         
         assertEquals("Headline was not as expected.", EXPECTED_PARSED_HEADLINE, promoBoxData.getHeadline());
         assertEquals("Intro was not as expected.", EXPECTED_PARSED_INTRO, promoBoxData.getIntro());
+    }
+    
+    @Test
+    public void transformFieldContentToStructuredFormatNumbersComponent() {
+        when(mockPromoBoxData.getHeadline()).thenReturn(EXPECTED_PARSED_HEADLINE);
+        when(mockPromoBoxData.getIntro()).thenReturn(EXPECTED_PARSED_INTRO);
+        when(mockPromoBoxData.isNumbersComponent()).thenReturn(true);
+        
+        promoBoxXMLParser.transformFieldContentToStructuredFormat(mockPromoBoxData, mockBodyProcessingContext);
+        assertNotNull(mockPromoBoxData.getPromoboxImages());
+        assertEquals(0, mockPromoBoxData.getPromoboxImages().size());
     }
     
     private void verifyPromoboxImageFields() {

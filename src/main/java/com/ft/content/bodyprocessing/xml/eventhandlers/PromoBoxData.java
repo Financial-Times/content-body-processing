@@ -66,13 +66,12 @@ public class PromoBoxData extends BaseData implements AssetAware {
     }
     
     public List<PromoboxImageData> getPromoboxImages() {
+        initializePromoboxImagesIfNull();
         return new ArrayList<PromoboxImageData>(promoboxImages);
     }
     
     public PromoboxImageData addImageToPromobox(String imageFileRef) {
-        if (promoboxImages == null) {
-            promoboxImages = Lists.newArrayList();
-        }
+        initializePromoboxImagesIfNull();
         
         PromoboxImageData promoboxImage = new PromoboxImageData();
         promoboxImage.setImageFileRef(imageFileRef);
@@ -82,9 +81,7 @@ public class PromoBoxData extends BaseData implements AssetAware {
     }
 
     public void addMasterImageToPromobox(String masterImageUuid) {
-        if (promoboxImages == null) {
-            promoboxImages = Lists.newArrayList();
-        }
+        initializePromoboxImagesIfNull();
         
         PromoboxImageData promoboxImage = new PromoboxImageData();
         promoboxImage.setMasterImageFileRef(masterImageUuid);
@@ -186,5 +183,11 @@ public class PromoBoxData extends BaseData implements AssetAware {
         }
         
         return list;
+    }
+    
+    private void initializePromoboxImagesIfNull() {
+        if (promoboxImages == null) {
+            promoboxImages = Lists.newArrayList();
+        }
     }
 }
