@@ -4,37 +4,17 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.ft.parent</groupId>
-        <artifactId>parentPom</artifactId>
-        <version>2.12</version>
-    </parent>
-
     <groupId>com.ft.content</groupId>
     <artifactId>content-body-processing</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <version>1.2.0</version>
-
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
+    <version>1.2.2</version>
 
     <description>Content body processing</description>
-
-    <scm>
-        <connection>scm:git:http://git.svc.ft.com:9080/git/content-api/content-body-processing.git</connection>
-        <developerConnection>scm:git:http://git.svc.ft.com:9080/git/content-api/content-body-processing.git</developerConnection>
-        <url>http://git.svc.ft.com/summary/content-api%2Fcontent-body-processing.git</url>
-    </scm>
-
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <ft-unifiedContentModel.version>0.24.0</ft-unifiedContentModel.version>
         <commons-lang.version>2.6</commons-lang.version>
         <guava.version>r09</guava.version>
         <hamcrest.version>1.1</hamcrest.version>
