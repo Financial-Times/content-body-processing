@@ -3,32 +3,18 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.ft.parent</groupId>
-        <artifactId>parentPom</artifactId>
-        <version>2.12</version>
-    </parent>
-
     <!--contentAPI, ft-cms and ft-feeds depend on this module-->
     <groupId>com.ft.content</groupId>
     <artifactId>content-body-processing</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <version>1.11.0</version>
+    <version>1.11.1</version>
 
     <description>Content body processing</description>
-
-    <scm>
-        <connection> scm:git:http://MVN-Release:mTRSZkG5E@git.svc.ft.com:8080/scm/ftfal/content-body-processing.git</connection>
-        <developerConnection>scm:git:http://MVN-Release:mTRSZkG5E@git.svc.ft.com:8080/scm/ftfal/content-body-processing.git</developerConnection>
-        <url>scm:git:http://MVN-Release:mTRSZkG5E@git.svc.ft.com:8080/scm/ftfal/content-body-processing.git</url>
-      <tag>HEAD</tag>
-  </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <ft-unifiedContentModel.version>0.40.0</ft-unifiedContentModel.version>
         <commons-lang.version>2.6</commons-lang.version>
         <guava.version>r09</guava.version>
         <hamcrest.version>1.1</hamcrest.version>
@@ -40,15 +26,15 @@
         <woodstox.version>4.2.0</woodstox.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
-            
-            <!-- Unified Content Model -->
-            <dependency>
-                <groupId>com.ft.unifiedContentModel</groupId>
-                <artifactId>ft-unifiedContentModel-model</artifactId>
-                <version>${ft-unifiedContentModel.version}</version>
-            </dependency>
 
             <!--  Spring -->
             <dependency>
@@ -111,8 +97,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.ft.unifiedContentModel</groupId>
-            <artifactId>ft-unifiedContentModel-model</artifactId>
+            <groupId>com.github.Financial-Times</groupId>
+            <artifactId>unified-content-model</artifactId>
+            <version>2.41.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
