@@ -16,6 +16,13 @@
     <name>${project.artifactId}</name>
     <version>1.2.0</version>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <description>Content body processing</description>
 
     <scm>
@@ -42,13 +49,6 @@
     <dependencyManagement>
         <dependencies>
             
-            <!-- Unified Content Model -->
-            <dependency>
-                <groupId>com.ft.unifiedContentModel</groupId>
-                <artifactId>ft-unifiedContentModel-model</artifactId>
-                <version>${ft-unifiedContentModel.version}</version>
-            </dependency>
-
             <!--  Spring -->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -110,8 +110,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.ft.unifiedContentModel</groupId>
-            <artifactId>ft-unifiedContentModel-model</artifactId>
+            <groupId>com.github.Financial-Times</groupId>
+            <artifactId>unified-content-model</artifactId>
+            <version>2.41.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
